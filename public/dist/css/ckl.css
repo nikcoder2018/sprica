@@ -1,0 +1,19 @@
+.card {
+			  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+			  transition: 0.3s;
+			  border-radius: 15px; /* 5px rounded corners */
+	
+			}
+	
+
+.card-header {
+			  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+			  transition: 0.3s;
+			  border-radius: 15px; /* 5px rounded corners */
+			  
+	
+			}	
+
+
+			
+
