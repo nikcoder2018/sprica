@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::group(['middleware' => ['auth','employee']], function(){
-    Route::get('/', 'TimeTrackingController@index');
-    Route::get('/messages', 'ChatSystemController@index')->name('messages.index');
-    Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking.index');
+    Route::get('/', 'DashboardController@index');
+    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/messages', 'ChatSystemController@index')->name('messages');
+    Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking');
 });
 
 Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){

@@ -36,32 +36,40 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true" >
-
-                @if(\App\Role::where('id', Auth::user()->role)->first()->name == 'admin')
+                @if(\App\Role::where('id', Auth::user()->role)->first()->name == 'employee')
+                
                 <li class="nav-item">
-                    <a  href="{{route('admin.dashboard')}}" class="nav-link">
+                    <a  href="{{route('dashboard')}}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>{{App\Helpers\Language::settings('_Isci_Paneli_DashBoard')}}</p>
                     </a>
                 </li>
-                @endif
+                
+                
                 <li class="nav-item">
-                    <a href="{{route('timetracking.index')}}" class="nav-link">
+                    <a href="{{route('timetracking')}}" class="nav-link">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>My times</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('messages.index')}}" class="nav-link">
+                    <a href="{{route('messages')}}" class="nav-link">
                         <i class="nav-icon fas fa-comments"></i>
                         <p>Messages</p>
                     </a>
                 </li>
-
+                @endif
                 @if(\App\Role::where('id', Auth::user()->role)->first()->name == 'admin')
 
                 <li class="nav-header">Administrator</li>
+                <li class="nav-item">
+                    <a  href="{{route('admin.dashboard')}}" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>{{App\Helpers\Language::settings('_Isci_Paneli_DashBoard')}}</p>
+                    </a>
+                </li>
+                
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-bars"></i>
