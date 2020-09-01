@@ -174,7 +174,25 @@ class HRController extends Controller
                 'good_hours' => Watches::where('UyeID', $request->UyeID)->where('Onay', 1)->sum('Saat') - RemainingPayment::where('UyeID', $request->UyeID)->sum('KalanODEME'),
                 'current_month_kug' => $current_month_kug->sum('saat')
             );
+            
+            $release = 0;
+            $release2 = 0;
+            foreach($current_month->get() as $current){
+                $parabir = Code::where('KodID', $current->Kod)->first()->Parabir;
+                $paraiki = Code::where('KodID', $current->Kod)->first()->Paraiki;
 
+                if($parabir != "")
+                $release += $parabir;
+
+                if($paraiki != "")
+                $release2 += $paraiki;
+                
+            }
+            $data['release'] = array(
+                'release' => $release,
+                'release2' => $release2,
+                'total' => $release + $release2
+            );
         }
 
         #return response()->json($data);

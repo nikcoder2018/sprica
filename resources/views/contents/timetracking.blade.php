@@ -27,12 +27,5 @@
     </section>
     <!-- /.content -->
 
-</div>
-<!-- ./wrapper -->
-
-
 @endsection
 
-@section('modals')
-
-@endsection

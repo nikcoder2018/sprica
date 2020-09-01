@@ -1,3 +1,8 @@
+<?php 
+use App\Helpers\Language;
+$lang = new Language;
+?>
+
 @extends('layouts.admin.main')
 
 @section('content')
@@ -177,10 +182,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                                 {{--
                                 <div class="col-md-4">
                                     <div class="card text-black bg-light mb-3">
                                         <div class="card-header bg-light text-center"><b>Zuschläge</b></div>
+
+                                        @php 
+                                        $aydakigunler=cal_days_in_month(CAL_GREGORIAN,Request::get('ay'),Request::get('Yil'));
+                                        $isgunleri=0;
+
+                                        for($i=1 ;$i<=$aydakigunler ;$i++)
+                                        {
+                                            if(\App\Helpers\System::tatilmi_bak("$i-".Request::get('ay')."-".Request::get('Yil'))==false)
+                                            {
+                                                $isgunleri++;
+                                            }
+                                        }
+                                        
+                                        $calismasigereken=$isgunleri*8;
+
+                                        $uyesaatleri     =0;
+                                        @endphp
                                         <?php
                                         $aydakigunler=cal_days_in_month(CAL_GREGORIAN,$_GET["Ay"],$_GET["Yil"]);
                                         $isgunleri   =0;
@@ -273,57 +296,36 @@
                                         </div>
                                     </div>
                                 </div>
+                                --}}
+                                
                                 <div class="col-md-4">
                                     <div class="card text-black bg-light mb-3">
                                         <div class="card-header bg-light text-center"><b>Auslöse</b></div>
                                         <div class="card-body">
                                             <table style="color: #424242" class="table table-sm table-striped ttable-responsive-xl table-hover">
                                                 <tr>
-                                                    <td><?=Dokum_Tablosu_Bir_Puan_Toplamlari?></td>
-                                                    <?php
-                                                    $parabirler=0;
-                                                    $db->VeriOkuCokluSorgu("SELECT * FROM saatler WHERE  Tarih >= '$yil-$ay-01' AND Tarih<='$yil-$ay-31'  AND Onay=1 AND UyeID=$_GET[UyeID]");
-                                                    foreach($db->bilgial as $row)
-                                                    {
-                                                        $parabirler+=$db->VeriOkuTek("kodlar","Parabir","KodID",$row->Kod);
-                                                    }
-                                                    ?>
-                                                    <td><?=$parabirler?>
-                                                        €
-                                                    </td>
+                                                    <td>{!!$lang::settings('Dokum_Tablosu_Bir_Puan_Toplamlari')!!}</td>
+                                                    <td>{{$release['release']}} €</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><?=Dokum_Tablosu_Iki_Puan_Toplamlari?></td>
-                                                    <?php
-                                                    $paraikiler=0;
-                                                    $db->VeriOkuCokluSorgu("SELECT * FROM saatler WHERE Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31'  AND Onay=1 AND UyeID=$_GET[UyeID]");
-                                                    foreach($db->bilgial as $row)
-                                                    {
-                                                        if($db->VeriOkuTek("kodlar","Paraiki","KodID",$row->Kod)!="")
-                                                        {
-                                                            $paraikiler+=$db->VeriOkuTek("kodlar","Paraiki","KodID",$row->Kod);
-                                                        }
-                                                    }
-                                                    ?>
-                                                    <td><?=$paraikiler?>
-                                                        €
-                                                    </td>
+                                                    <td>{!!$lang::settings('Dokum_Tablosu_Iki_Puan_Toplamlari')!!}</td>
+                                                    <td>{{$release['release']}} €</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><?=Dokum_Tablosu_Puan_Bir_ve_Iki_Puan_Toplamlari?>
+                                                    <td>{!!$lang::settings('Dokum_Tablosu_Puan_Bir_ve_Iki_Puan_Toplamlari')!!}
                                                     </td>
-                                                    <td><?=$parabirler+$paraikiler?>
-                                                        €
-                                                    </td>
+                                                    <td>{{$release['total']}} €</td>
                                                 </tr>
                                             </table>
                                         </div>
 
                                     </div>
                                 </div>
+
+                                {{--
                                 <div class="col-md-4">
                                     <div class="card text-black bg-light mb-4">
-                                        <div class="card-header bg-light text-center"><b><?=Dokum_Odenecek_Tutari_Giriniz?> / <?=Benzin_Tutarini_Giriniz?></b></div>
+                                        <div class="card-header bg-light text-center"><b>{{$lang::settings('Dokum_Odenecek_Tutari_Giriniz')}} / {{$lang::settings('Benzin_Tutarini_Giriniz')}}</b></div>
                                         <div class="card-body">
                                             <table style="color: #424242" class="table ttable-striped table-sm table-responsive-xl ttable-hover">
                                                 <tr>
@@ -383,6 +385,7 @@
                                     </div>
                                 </div>
 
+                                
                                 <div class="col-md-12">
                                     <div class="clearfix"></div>
                                     <form method="POST" class="table-responsive-xl">

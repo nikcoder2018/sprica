@@ -15,7 +15,13 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth','employee']], function(){
+    Route::get('/', 'TimeTrackingController@index');
+    Route::get('/messages', 'ChatSystemController@index')->name('messages.index');
+    Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking.index');
+});
+
+Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/', 'Admin\DashboardController@show');
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
@@ -51,8 +57,4 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/vacationdays_settings/edit', 'Admin\SettingsController@vacationdays_settings_edit')->name('admin.settings.vacationdays-edit');
     Route::post('/vacationdays_settings/update', 'Admin\SettingsController@vacationdays_settings_update')->name('admin.settings.vacationdays-update');
     Route::post('/vacationdays_settings/delete', 'Admin\SettingsController@vacationdays_settings_delete')->name('admin.settings.vacationdays-delete');
-
-
-    Route::get('/messages', 'ChatSystemController@index')->name('messages.index');
-    Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking.index');
 });
