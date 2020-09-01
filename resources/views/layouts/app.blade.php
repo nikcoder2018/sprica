@@ -57,6 +57,30 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{{asset('dist/js/demo.js')}}"></script>
     <script type="text/javascript">
+        $(document).ready(function(){
+            $(".nav-link.ana").click(function(){
+                $(this).parent("has-treeview").addClass("menu-open");
+            })
+        });
+        
+        var pathname = window.location.pathname;
+        var result = pathname.split('/');
+        var lastEl = result[result.length-1];
+
+        var url ="";
+        var urlend ="";
+        $( ".nav-sidebar .nav-link").each(function( index ) {
+            url = $(this).attr("href").split('/');
+            urlend = url[url.length-1];
+            if(lastEl==urlend)
+            {
+                $(this).parents(".has-treeview").addClass("menu-open");
+                $(this).parent(".nav-treeview").css("display","block");
+                $(".nav-sidebar .nav-link").removeClass("active");
+                $(this).addClass("active");
+            }
+        });
+
         $(document).ready(function()
         {
             bsCustomFileInput.init();
