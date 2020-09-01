@@ -33,7 +33,7 @@ class HRController extends Controller
             'all' => Language::settings('Tumunu_Goster')
         );
 
-        $data['total_confirmations'] = Watches::sum('Onay');
+        $data['total_confirmations'] = Watches::where('Onay', 0)->count();
         $data['all_members'] = Members::where('role', $role->id)->orderBy('display_name', 'ASC')->get();
         $data['projects'] = Project::orderBy('projeKODU', 'ASC')->get();
         $data['codes'] = Code::orderBy('Kod', 'ASC')->get();
