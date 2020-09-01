@@ -19,6 +19,11 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/', 'Admin\DashboardController@show');
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
+    Route::post('/control/add', 'Admin\HRController@control_addtime')->name('admin.hr-control.add');
+    Route::post('/control/edit', 'Admin\HRController@control_edittime')->name('admin.hr-control.edit');
+    Route::post('/control/update', 'Admin\HRController@control_updatetime')->name('admin.hr-control.update');
+    Route::post('/control/delete', 'Admin\HRController@control_deletetime')->name('admin.hr-control.delete');
+
     Route::get('/wages', 'Admin\HRController@wages')->name('admin.hr-wage');
     Route::get('/wages_total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');
     Route::get('/wages_advance', 'Admin\HRController@wages_advance')->name('admin.hr-wages-advance');

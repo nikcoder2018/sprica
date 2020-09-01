@@ -11,6 +11,9 @@ use App\Members;
 use App\RemainingPayment;
 use App\AdvancePayment;
 use App\Role;
+use App\Project;
+use App\Code;
+
 use Carbon\Carbon;
 
 class HRController extends Controller
@@ -32,6 +35,8 @@ class HRController extends Controller
 
         $data['total_confirmations'] = Watches::sum('Onay');
         $data['all_members'] = Members::where('role', $role->id)->orderBy('display_name', 'ASC')->get();
+        $data['projects'] = Project::orderBy('projeKODU', 'ASC')->get();
+        $data['codes'] = Code::orderBy('Kod', 'ASC')->get();
         $data['table_data'] = array();
         $data['table_data_saat'] = 0;
         if($request->UyeID){
@@ -58,6 +63,58 @@ class HRController extends Controller
         #return response()->json($data);
         return view('admin.contents.control', $data);
     }
+
+    public function control_addtime(Request $request){
+        $saat = $request->Saat; 
+        $code = $request->Kod; 
+
+        if($request->ProjeID == 1 || $request->ProjeID == 2){
+            $saat = 8;
+            $kod = 12;
+        }
+
+        $time = Watches::create([
+            'UyeID' => $request->UyeID,
+            'ProjeID' => $request->ProjeID,
+            'ProjeBASLIK' => $request->ProjeBASLIK,
+            'Tarih' => $request->Tarih,
+            'Saat' => $saat,
+            'Onay' => 0,
+            'Odenecek' => 0,
+            'Gunduz' => $request->Gunduz,
+            'Kod' => $code,
+            'Calisti' => 0
+        ]);
+
+        if($time){
+            return response()->json(array('success' => true, 'msg' => 'New Time Added'));
+        }else{
+            return response()->json(array('success' => false, 'msg' => 'Something went wrong!'));
+        }    
+    }
+
+    public function control_edittime(Request $request){
+        $time = Watches::where('SaatID', $request->SaatID)->first();
+        return response()->json($time);
+    }
+
+    public function control_updatetime(Request $request){
+        $time = Watches::where('SaatID', $request->SaatID)->first();
+        $time->ProjeID = $request->ProjeID;
+        $time->ProjeBASLIK = $request->ProjeBASLIK;
+        $time->Gunduz = $request->Gunduz;
+        $time->Saat = $request->Saat;
+        $time->Tarih = $request->Tarih;
+        $time->save();
+
+        if($time){
+            return response()->json(array('success' => true, 'msg' => 'Time Updated'));
+        }else{
+            return response()->json(array('success' => false, 'msg' => 'Something went wrong!'));
+        }   
+    }
+
+    
 
     public function wages(Request $request){
         $role = Role::where('name', 'employee')->first();

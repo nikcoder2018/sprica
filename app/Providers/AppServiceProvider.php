@@ -27,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Cache::forever('settings', \App\Language::all());
+        Cache::forever('tatilmi_bak', \App\Language::all());
     }
 }
