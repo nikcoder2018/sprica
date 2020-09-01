@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/control/edit', 'Admin\HRController@control_edittime')->name('admin.hr-control.edit');
     Route::post('/control/update', 'Admin\HRController@control_updatetime')->name('admin.hr-control.update');
     Route::post('/control/delete', 'Admin\HRController@control_deletetime')->name('admin.hr-control.delete');
+    Route::post('/control/confirmall', 'Admin\HRController@control_confirmall')->name('admin.hr-control.confirmall');
 
     Route::get('/wages', 'Admin\HRController@wages')->name('admin.hr-wage');
     Route::get('/wages_total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');

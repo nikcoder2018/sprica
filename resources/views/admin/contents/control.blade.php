@@ -48,7 +48,7 @@ $lang = new Language;
                                                     </option>
                                                     @foreach($all_members as $member)
                                                         <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                                            {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->sum('Onay')}})
+                                                            {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -96,8 +96,8 @@ $lang = new Language;
                             </div>
                         </div>
 
-                        <form method="POST" class="table-responsive-xl">
-                            
+                        <form method="POST" class="table-responsive-xl form-confirmall-time" action="{{route('admin.hr-control.confirmall')}}">
+                            @csrf
                             <table id="example1" class="table  table-hover table-striped" data-page-length='50' data-order='[[1, "asc"]]'>
                                 <thead>
                                     <tr style="background-color: #D3D3D3">
@@ -201,7 +201,7 @@ $lang = new Language;
 
 
                             <div class="col-md-12">
-                                <input style="height: 37px; width: 170px;" type="submit" name="secilenleri_onayla" class="btn btn-success" value="{{$lang::settings('Isci_Paneli_Secilenleri_Onayla')}}">
+                                <input style="height: 37px; width: 170px;" type="submit" class="btn btn-success" value="{{$lang::settings('Isci_Paneli_Secilenleri_Onayla')}}">
                             </div>  
                         </form>
                         
@@ -239,7 +239,7 @@ $lang = new Language;
                         <select class="form-control " required name="UyeID">
                             @foreach($all_members as $member)
                                 <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                    {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->sum('Onay')}})
+                                    {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
                                 </option>
                             @endforeach
                         </select>
@@ -339,7 +339,7 @@ $lang = new Language;
                         <select class="form-control " required name="UyeID">
                             @foreach($all_members as $member)
                                 <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                    {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->sum('Onay')}})
+                                    {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
                                 </option>
                             @endforeach
                         </select>
@@ -482,6 +482,21 @@ $lang = new Language;
                             showConfirmButton: false,
                         });
 
+                        setTimeout(function() { location.reload() }, 1000)
+                    }
+                }
+            })
+        });
+
+        $('.form-confirmall-time').on('submit', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(resp){
+                    if(resp.success){
                         setTimeout(function() { location.reload() }, 1000)
                     }
                 }

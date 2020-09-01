@@ -52,6 +52,7 @@ class HRController extends Controller
                     case 1: 
                         $query = $query->where('Onay', 0);
                     break;
+    
                     case 3:
                         $query = $query->where('Onay', 1);
                     break;
@@ -114,7 +115,17 @@ class HRController extends Controller
         }   
     }
 
-    
+    public function control_confirmall(Request $request){
+        if($request->SilID){
+            foreach($request->SilID as $id){
+                $time = Watches::find($id);
+                $time->Onay = 1;
+                $time->save();
+            }
+        }
+
+        return response()->json(array('success' => 1));
+    }
 
     public function wages(Request $request){
         $role = Role::where('name', 'employee')->first();
