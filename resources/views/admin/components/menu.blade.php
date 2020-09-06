@@ -54,9 +54,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('messenger')}}" class="nav-link">
+                    <a href="{{route('messages')}}" class="nav-link">
                         <i class="nav-icon fas fa-comments"></i>
-                        <p>Messenger</p>
+                        <p>Messages</p>
                     </a>
                 </li>
                 @endif
@@ -77,9 +77,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('messenger')}}" class="nav-link">
+                    <a href="{{route('admin.messages')}}" class="nav-link">
                         <i class="nav-icon fas fa-comments"></i>
-                        <p>Messenger</p>
+                        <p>Messages</p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview">

@@ -18,12 +18,14 @@ Auth::routes();
 Route::group(['middleware' => ['auth','employee']], function(){
     Route::get('/', 'DashboardController@index')->name('home');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/messages', 'ChatSystemController@index')->name('messages');
     Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking');
 });
 
 Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/', 'Admin\DashboardController@show')->name('home');
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
+    Route::get('/messages', 'ChatSystemController@index')->name('admin.messages');
     Route::get('/timesheet', 'TimeTrackingController@index')->name('admin.timetracking');
 
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');

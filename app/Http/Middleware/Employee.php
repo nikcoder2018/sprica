@@ -20,6 +20,10 @@ class Employee
         $role = Role::where('id', Auth::user()->role)->first();
 
         if($role->name != 'employee'){
+            if($role->name == 'admin'){
+                return redirect('/admin');
+            }
+
             return back();
         }
 
