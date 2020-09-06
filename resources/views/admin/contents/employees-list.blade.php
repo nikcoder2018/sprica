@@ -48,7 +48,7 @@ $lang = new Language;
                                 @if(count($employees) > 0)
                                     @foreach($employees as $employee)
                                     <tr>
-                                        <td>{{$employee->display_name}}</td>
+                                        <td>{{$employee->name}}</td>
                                         <td>{{$employee->number}}</td>
                                         <td>{{$employee->day_off}}</td>
                                         <td>{{$employee->username}}</td>
@@ -98,7 +98,7 @@ $lang = new Language;
                     <div class="row">
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Adi')}}</label>
-                            <input class="form-control " required name="display_name"/>
+                            <input class="form-control " required name="name"/>
                         </div>
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Kullanici_Adi')}}</label>

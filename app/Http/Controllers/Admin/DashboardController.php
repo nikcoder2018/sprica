@@ -14,20 +14,16 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    //
     public function show(){
         $data['page_title'] = Language::settings('_Isci_Paneli_DashBoard');
 
-        $data['text'] = array(
-            'hours_worked_today' => Language::settings('_Bugun_Calisilan_Saatler'),
-            'general_time' => Language::settings('Genel_Saat'),
-            'this_month' => Language::settings('_Bu_Ay_Ne_Kadar_Calismis'),
-            'this_year' => Language::settings('_Bu_Yil_Ne_Kadar_Calismis'),
-            'hours' => Language::settings('_DashBoard_Odenmemis_Saatler'),
-            'vacation' => Language::settings('_DashBoard_Kalan_Izın_Gunu'),
-            'tag' => Language::settings('Genel_Gun')
-        );
-        
+        $data['me_this_month'] = Watches::where('Tarih', '>=', Carbon::today()->firstOfMonth()->toDateString())
+                                     ->where('Tarih', '<=', Carbon::today()->endOfMonth()->toDateString())
+                                     ->where('UyeID', Auth()->user()->id)
+                                     ->sum('Saat');
+
+        $data['me_total'] =    Watches::where('UyeID', Auth()->user()->id)->sum('Saat'); 
+
         $data['hours_worked_today'] = Watches::where('Tarih', Carbon::today()->toDateString())->sum('Saat');
         $data['this_month'] = Watches::where('Tarih', '>=', Carbon::today()->firstOfMonth()->toDateString())
                                      ->where('Tarih', '<=', Carbon::today()->endOfMonth()->toDateString())

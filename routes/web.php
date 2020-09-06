@@ -16,15 +16,16 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::group(['middleware' => ['auth','employee']], function(){
-    Route::get('/', 'DashboardController@index');
+    Route::get('/', 'DashboardController@index')->name('home');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('/messages', 'ChatSystemController@index')->name('messages');
     Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking');
 });
 
 Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
-    Route::get('/', 'Admin\DashboardController@show');
+    Route::get('/', 'Admin\DashboardController@show')->name('home');
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
+    Route::get('/timesheet', 'TimeTrackingController@index')->name('admin.timetracking');
+
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
     Route::post('/control/add', 'Admin\HRController@control_addtime')->name('admin.hr-control.add');
     Route::post('/control/edit', 'Admin\HRController@control_edittime')->name('admin.hr-control.edit');

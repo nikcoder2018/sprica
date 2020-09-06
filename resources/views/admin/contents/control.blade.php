@@ -48,7 +48,7 @@ $lang = new Language;
                                                     </option>
                                                     @foreach($all_members as $member)
                                                         <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                                            {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
+                                                            {{$member->name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -239,7 +239,7 @@ $lang = new Language;
                         <select class="form-control " required name="UyeID">
                             @foreach($all_members as $member)
                                 <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                    {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
+                                    {{$member->name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
                                 </option>
                             @endforeach
                         </select>
@@ -339,7 +339,7 @@ $lang = new Language;
                         <select class="form-control " required name="UyeID">
                             @foreach($all_members as $member)
                                 <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                    {{$member->display_name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
+                                    {{$member->name}} ({{\App\Watches::where('UyeID', $member->id)->where('Onay', 0)->count()}})
                                 </option>
                             @endforeach
                         </select>

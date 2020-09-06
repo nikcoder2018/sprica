@@ -1,3 +1,7 @@
+<?php 
+use App\Helpers\Language;
+$lang = new Language;
+?>
 @extends('layouts.admin.main')
 
 @section('content')
@@ -25,16 +29,39 @@
             </ul>
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-    
+                    <h5 class="mb-2">Your statistics</h5>
                     <div class="row" style="margin-left:0px; margin-right: 0px;">
+                        <div class="col-lg-6 col-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-blue"><i class="fas fa-hourglass-end"></i></span>
 
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Working hours this month</span>
+                                    <span class="info-box-number">{{$me_this_month}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-red"><i class="fas fa-hourglass-end"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Working hours total</span>
+                                    <span class="info-box-number">{{$me_total}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <h5 class="mb-2">All users</h5>
+                    <div class="row" style="margin-left:0px; margin-right: 0px;">
                         <div class="col-lg-3 col-12">
                             <div class="info-box">
                                 <span class="info-box-icon bg-blue"><i class="fas fa-hourglass-end"></i></span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{$text['hours_worked_today']}}</span>
-                                    <span class="info-box-number">{{$hours_worked_today}} {{$text['general_time']}}</span>
+                                    <span class="info-box-text">{{$lang::settings('_Bugun_Calisilan_Saatler')}}</span>
+                                    <span class="info-box-number">{{$hours_worked_today}} {{$lang::settings('Genel_Saat')}}</span>
                                 </div>
                             </div>
                         </div>
@@ -43,8 +70,8 @@
                                 <span class="info-box-icon bg-blue"><i class="fas fa-hourglass-end"></i></span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{$text['this_month']}}</span>
-                                    <span class="info-box-number">{{$this_month}} {{$text['general_time']}}</span>
+                                    <span class="info-box-text">{{$lang::settings('_Bu_Ay_Ne_Kadar_Calismis')}}</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                                    <span class="info-box-number">{{$this_month}} {{$lang::settings('Genel_Saat')}}</span>
                                 </div>
                             </div>
                         </div>
@@ -53,8 +80,8 @@
                                 <span class="info-box-icon bg-blue"><i class="fas fa-hourglass-end"></i></span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{$text['this_year']}}</span>
-                                    <span class="info-box-number">{{$this_year}} {{$text['general_time']}}</span>
+                                    <span class="info-box-text">{{$lang::settings('_Bu_Yil_Ne_Kadar_Calismis')}}</span>
+                                    <span class="info-box-number">{{$this_year}} {{$lang::settings('Genel_Saat')}}</span>
                                 </div>
                             </div>
                         </div>
@@ -65,8 +92,8 @@
                                 <span class="info-box-icon bg-green"><i class="fas fa-clock"></i></span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{$text['hours']}}</span>
-                                    <span class="info-box-number">{{$hours}} {{$text['general_time']}}</span>
+                                    <span class="info-box-text">{{$lang::settings('_DashBoard_Odenmemis_Saatler')}}</span>
+                                    <span class="info-box-number">{{$hours}} {{$lang::settings('Genel_Saat')}}</span>
                                 </div>
                             </div>
                         </div>
@@ -75,15 +102,14 @@
                                 <span class="info-box-icon bg-yellow"><i class="fas fa-plane"></i></span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{$text['vacation']}}</span>
-                                    <span class="info-box-number">{{$vacation}} {{$text['tag']}}</span>
+                                    <span class="info-box-text">{{$lang::settings('_DashBoard_Kalan_Izın_Gunu')}}</span>
+                                    <span class="info-box-number">{{$vacation}} {{$lang::settings('Genel_Gun')}}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-12">
                         </div>
                     </div> 
-
                 </div>  <!-- erster Tab ender hier -->
     
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
@@ -365,11 +391,6 @@
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-
-</div>
-<!-- ./wrapper -->
-
-
 @endsection
 
 @section('modals')

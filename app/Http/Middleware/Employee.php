@@ -17,10 +17,6 @@ class Employee
      */
     public function handle($request, Closure $next)
     {
-        if(!Auth::user()){
-            return route('login');
-        }
-
         $role = Role::where('id', Auth::user()->role)->first();
 
         if($role->name != 'employee'){

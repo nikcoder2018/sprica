@@ -40,7 +40,7 @@ $lang = new Language;
                                                 <option disabled selected>Wähle Mitarbeiter</option>
                                                 @foreach($employees as $employee)
                                                     <option @if(\Request::get('id') == $employee->id) selected @endif value="{{$employee->id}}">
-                                                        {{$employee->display_name}}
+                                                        {{$employee->name}}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -78,7 +78,7 @@ $lang = new Language;
                                     <table style="text-align:left" class="table table-sm table-striped table-responsive-md table-hover">
                                             <tr>
                                                 <td><b>{{$lang::settings('Personel_Adi')}}</b></td>
-                                                <td>{{$user_details->display_name}}</td>
+                                                <td>{{$user_details->name}}</td>
                                                 
                                             </tr>
                                             <tr>
@@ -262,7 +262,7 @@ $lang = new Language;
                     <div class="row">
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Adi')}}</label>
-                            <input class="form-control"  name="display_name" required/>
+                            <input class="form-control"  name="name" required/>
                         </div>
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Kullanici_Adi')}}</label>
@@ -432,7 +432,7 @@ $lang = new Language;
                     let user = resp.user; 
                     let codes = resp.codes;
                     form.find('input[name=id]').val(user.id);
-                    form.find('input[name=display_name]').val(user.display_name);
+                    form.find('input[name=name]').val(user.name);
                     form.find('input[name=username]').val(user.username);
                     form.find('input[name=password]').val(user.password);
                     form.find('select[name=role]').val(user.role);

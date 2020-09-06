@@ -33,7 +33,7 @@ $lang = new Language;
                                                     <option value="" disabled selected>Mitarbeiter auswählen</option>
                                                     @foreach($all_members as $member)
                                                         <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
-                                                            {{$member->display_name}}
+                                                            {{$member->name}}
                                                         </option>
                                                     @endforeach
                                                 </select>

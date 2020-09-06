@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Watches;
+use App\Role;
 use Carbon\Carbon;
-
+use Auth;
 class DashboardController extends Controller
 {
     public function index(){

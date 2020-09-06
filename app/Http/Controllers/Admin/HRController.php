@@ -34,7 +34,7 @@ class HRController extends Controller
         );
 
         $data['total_confirmations'] = Watches::where('Onay', 0)->count();
-        $data['all_members'] = Members::where('role', $role->id)->orderBy('display_name', 'ASC')->get();
+        $data['all_members'] = Members::where('role', $role->id)->orderBy('name', 'ASC')->get();
         $data['projects'] = Project::orderBy('projeKODU', 'ASC')->get();
         $data['codes'] = Code::orderBy('Kod', 'ASC')->get();
         $data['table_data'] = array();
@@ -134,7 +134,7 @@ class HRController extends Controller
             'select_employees' => Language::settings('Isci_Seciniz'),
         );
 
-        $data['all_members'] = Members::where('role', $role->id)->orderBy('display_name', 'ASC')->get();
+        $data['all_members'] = Members::where('role', $role->id)->orderBy('name', 'ASC')->get();
         $year_first = Carbon::create(Carbon::now()->year, 1,1)->toDateString();
        
         if($request->UyeID){
@@ -200,7 +200,7 @@ class HRController extends Controller
     }
 
     public function wages_total(Request $request){
-        $data['all_members'] = Members::orderBy('display_name', 'ASC')->get();
+        $data['all_members'] = Members::orderBy('name', 'ASC')->get();
 
         return view('admin.contents.wages_total', $data);
     }

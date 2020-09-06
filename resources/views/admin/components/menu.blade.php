@@ -54,9 +54,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('messages')}}" class="nav-link">
+                    <a href="{{route('messenger')}}" class="nav-link">
                         <i class="nav-icon fas fa-comments"></i>
-                        <p>Messages</p>
+                        <p>Messenger</p>
                     </a>
                 </li>
                 @endif
@@ -69,7 +69,19 @@
                         <p>{{App\Helpers\Language::settings('_Isci_Paneli_DashBoard')}}</p>
                     </a>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="{{route('admin.timetracking')}}" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>My times</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{route('messenger')}}" class="nav-link">
+                        <i class="nav-icon fas fa-comments"></i>
+                        <p>Messenger</p>
+                    </a>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-bars"></i>
