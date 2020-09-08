@@ -77,7 +77,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('admin.messages')}}" class="nav-link">
+                    <a href="{{route('messages')}}" class="nav-link">
                         <i class="nav-icon fas fa-comments"></i>
                         <p>Messages</p>
                     </a>

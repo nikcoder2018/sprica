@@ -167,61 +167,44 @@ $lang = new Language;
                             </div>
                             <div class="col-md-4">
                                 <div class="card text-black bg-light mb-4">
-                                    <div class="card-header bg-light text-center"><b>Login Daten</b></div>
-                                    <div>
-                                        <table style="color: #424242" class="table table-sm table-striped table-responsive-md table-hover">
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Kullanici_Adi')}}</b></td>
-                                                <td>{{$user_details->username}}</td> 
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Sifresi')}}</b></td>
-                                                <td>{{$user_details->password}}</td> 
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div class="card text-black bg-light mb-4">
                                     <div class="card-header bg-light text-center"><b>Auslöse</b></div>
-                                        <div style="width: 100%">
-                                            <table style="width: 100%" class="table table-striped ttable-responsive-xl ttable-hover">
-                                                <tr style="width: 100%">
-                                                    <th style="font-size:15px;text-align:left">
-                                                        @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
-                                                        <div>
-                                                            <input @if(count(App\EmployeeCode::where('PersonelID', Request::get('id'))->where('KodID', $code->KodID)->get()) > 0) checked @endif value="{{$code->KodID}}" type="checkbox" name="Kod-{{$code->KodID}}" disabled> {{$code->KodBASLIK}}
-                                                        </div>
-                                                        @endforeach
-                                                    </th>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="card text-black bg-light">
-                                        <div class="card-header bg-light text-center"><b>{{$lang::settings('Admin_Personel_Ekle_Banka_Baglantisi')}}</b></div>
-                                        <table style="color: #424242" class="table table-sm table-striped table-responsive-md table-hover">
-                                            
-                                            <tr>
-                                            
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Banka')}}</b></td>
-                                                <td>{{$user_details->Banka}}</td>
+                                    <div style="width: 100%">
+                                        <table style="width: 100%" class="table table-striped ttable-responsive-xl ttable-hover">
+                                            <tr style="width: 100%">
+                                                <th style="font-size:15px;text-align:left">
+                                                    @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
+                                                    <div>
+                                                        <input @if(count(App\EmployeeCode::where('PersonelID', Request::get('id'))->where('KodID', $code->KodID)->get()) > 0) checked @endif value="{{$code->KodID}}" type="checkbox" name="Kod-{{$code->KodID}}" disabled> {{$code->KodBASLIK}}
+                                                    </div>
+                                                    @endforeach
+                                                </th>
                                             </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Iban')}}</b></td>
-                                                <td>{{$user_details->IBAN}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Bic')}}</b></td>
-                                                <td>{{$user_details->BIC}}</td>
-                                            </tr>
-                                            
                                         </table>
                                     </div>
                                 </div>
+                                <div class="card text-black bg-light">
+                                    <div class="card-header bg-light text-center"><b>{{$lang::settings('Admin_Personel_Ekle_Banka_Baglantisi')}}</b></div>
+                                    <table style="color: #424242" class="table table-sm table-striped table-responsive-md table-hover">
+                                        
+                                        <tr>
+                                        
+                                            <td><b>{{$lang::settings('Admin_Personel_Ekle_Banka')}}</b></td>
+                                            <td>{{$user_details->Banka}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>{{$lang::settings('Admin_Personel_Ekle_Iban')}}</b></td>
+                                            <td>{{$user_details->IBAN}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>{{$lang::settings('Admin_Personel_Ekle_Bic')}}</b></td>
+                                            <td>{{$user_details->BIC}}</td>
+                                        </tr>
+                                        
+                                    </table>
+                                </div>
+                            </div>
+
+                               
                                 
                                 <div class="col-md-1">
                                 </div>

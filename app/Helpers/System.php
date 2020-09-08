@@ -1,6 +1,10 @@
 <?php 
 
 namespace App\Helpers;
+
+
+use Illuminate\Support\Facades\Auth;
+use App\Message;
 use Cache;
 
 class System
@@ -26,5 +30,16 @@ class System
                 return false;
             }
         }
+    }
+
+    public static function getLatestMessages(){
+        $messages = Message::with(['from','to'])
+                        ->where('messages.seen', 0)
+                        ->Where('messages.to_id', Auth::user()->id)
+                        ->orderBy('messages.created_at', 'desc')
+                        ->latest()
+                        ->get()
+                        ->unique('from_id');
+        return $messages;
     }
 }

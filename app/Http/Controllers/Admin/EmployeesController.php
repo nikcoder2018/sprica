@@ -15,7 +15,7 @@ class EmployeesController extends Controller
 {
     public function index(Request $request){
         $role = Role::where('name', 'employee')->first();
-        $data['employees'] = User::where('role', $role->id)->get();
+        $data['employees'] = User::all();
         $data['roles'] = Role::all();
 
         if($request->get('id') != ''){

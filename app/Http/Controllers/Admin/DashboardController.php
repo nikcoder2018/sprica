@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Helpers\Language;
+use App\Helpers\System;
+
 use App\Watches;
 use App\RemainingPayment;
 use App\Members;
@@ -15,6 +17,9 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function show(){
+        #$latest_messages = System::getLatestMessages();
+        
+        #return response()->json($latest_messages); exit;
         $data['page_title'] = Language::settings('_Isci_Paneli_DashBoard');
 
         $data['me_this_month'] = Watches::where('Tarih', '>=', Carbon::today()->firstOfMonth()->toDateString())
