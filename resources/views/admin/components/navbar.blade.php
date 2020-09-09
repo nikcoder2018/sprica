@@ -23,7 +23,7 @@ $messages = System::getLatestMessages();
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 @if($messages_count > 0)
                     @foreach($messages as $message)
-                    <a href="#" class="dropdown-item">
+                    <a href="{{route('messages.hasSender', $message->from->id)}}" class="dropdown-item">
                         <!-- Message Start -->
                         <div class="media">
                         <img src="{{ asset('/storage/'.config('chatify.user_avatar.folder').'/'.$message->from->avatar) }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">

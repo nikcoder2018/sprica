@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 Route::get('/messages', 'ChatSystemController@index')->name('messages')->middleware('auth');
+Route::get('/messages/{sender}', 'ChatSystemController@index2')->name('messages.hasSender')->middleware('auth');
+
 Route::group(['middleware' => ['auth','employee']], function(){
     Route::get('/', 'DashboardController@index')->name('home');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

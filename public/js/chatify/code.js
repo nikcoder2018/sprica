@@ -278,6 +278,7 @@ function errorMessageCard(id) {
  *-------------------------------------------------------------
  */
 function IDinfo(id, type) {
+    console.log(id);
     // clear temporary message id
     temporaryMsgId = 0;
     // clear typing now
@@ -931,6 +932,12 @@ $(document).ready(function () {
         // listening for pusher:subscription_succeeded
         channel.bind('pusher:subscription_succeeded', function () {
             // On connection state change [Updating] and get [info & msgs]
+            var urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.has('sender')){
+                messenger = 'user_' + urlParams.get('sender');
+                $('table[data-contact='+urlParams.get('sender')+']').addClass('m-list-active');
+            }
+
             IDinfo(messenger.split('_')[1], messenger.split('_')[0]);
         });
     });
