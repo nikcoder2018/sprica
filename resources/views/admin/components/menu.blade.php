@@ -70,7 +70,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('admin.timetracking')}}" class="nav-link">
+                    <a href="{{route('timetracking')}}" class="nav-link">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>My times</p>
                     </a>

@@ -16,17 +16,19 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::get('/messages', 'ChatSystemController@index')->name('messages')->middleware('auth');
 Route::get('/messages/{sender}', 'ChatSystemController@index2')->name('messages.hasSender')->middleware('auth');
+Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking')->middleware('auth');
+Route::post('/timesheet/store', 'TimeTrackingController@store')->name('timetracking.store')->middleware('auth');
+Route::post('/timesheet/delete', 'TimeTrackingController@destroy')->name('timetracking.destroy')->middleware('auth');
 
 Route::group(['middleware' => ['auth','employee']], function(){
     Route::get('/', 'DashboardController@index')->name('home');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking');
 });
 
 Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/', 'Admin\DashboardController@show')->name('home');
+    Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
-    Route::get('/timesheet', 'TimeTrackingController@index')->name('admin.timetracking');
 
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
     Route::post('/control/add', 'Admin\HRController@control_addtime')->name('admin.hr-control.add');

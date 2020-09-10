@@ -42,4 +42,21 @@ class System
                         ->unique('from_id');
         return $messages;
     }
+
+    function cevir($tarih)
+    {
+        $parcala = explode("-",$tarih);
+        $yeni_tarih= $parcala[2].".".$parcala[1].".".$parcala[0];
+        return $yeni_tarih;
+    }
+
+    function gun_bas_kisa($tarih){
+        $tarih=explode ("-",$tarih);
+        $gun = date("l",mktime(0,0,0,$tarih[1],$tarih[2],$tarih[0]));
+        $gun_ingilizce = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+        $turkce_gun = array('Mo','Di','Mi','Do','Fr','Sa','So');
+        $gun_degis = str_replace($gun_ingilizce,$turkce_gun,$gun);
+        return $gun_degis;
+
+    }
 }

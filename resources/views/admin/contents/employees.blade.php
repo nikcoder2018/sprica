@@ -70,151 +70,159 @@ $lang = new Language;
                         </div>
                     </div>
                     @if(isset($user_details))
-                    <div style="margin-top: 15px" class="col-md-12">
-                        <div class="row">                 
-                            <div class="col-md-6">
-                                <div class="card text-black bg-light">
-                                    <div class="card-header bg-light text-center"><b>Personaldaten</b></div>
-                                    <table style="text-align:left" class="table table-sm table-striped table-responsive-md table-hover">
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Adi')}}</b></td>
-                                                <td>{{$user_details->name}}</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Ekle_Personel_Numarasi')}}</b></td>
-                                                <td>{{$user_details->number}}</td>
-                                              
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Ekle_Personel_Departman')}}</b></td>
-                                                <td>{{$user_details->department}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Ekle_Personel_Saat_Ucreti')}}</b></td>
-                                                <td>{{$user_details->hour_fee}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Ekle_Vergi_Durumu')}}</b></td>
-                                                <td>{{$user_details->tax_status}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Personel_Ekle_Ise_Giris_Tarihi')}}</b></td>
-                                                <td><time datetime="{{$user_details->login_date}}">{{$user_details->login_date}}</time></td>
-                                            </tr>
-                                             <tr>
-                                                <td><b>{{$lang::settings('Personel_Ekle_Izin_Gunu')}}</b></td>
-                                                <td>{{$user_details->day_off}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Sokak_ve_Ev_Numarasi')}}</b></td>
-                                                <td>{{$user_details->street}}</td>
-                                            </tr>
+                    <section class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card card-primary card-outline">
+                                        <div class="card-body box-profile">
+                                          <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle img-bordered-sm" src="{{ asset('/storage/'.config('chatify.user_avatar.folder').'/'.$user_details->avatar) }}" alt="Bild">
+                                          </div>
+                          
+                                          <h3 class="profile-username text-center">{{$user_details->name}}</h3>
+                          
+                                          <p class="text-muted text-center">{{$user_details->username}}</p>
+                          
+                                          <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                              <b>Personalnummer</b> <a class="float-right">-</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                              <b>Funktion</b><a class="float-right">{{$user_details->department}}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                              <b>Eintrittsdatum</b> <a class="float-right"><time datetime="{{$user_details->login_date}}">{{$user_details->login_date}}</time></a>
+                                            </li>
+                                          <li class="list-group-item">
+                                              <b>Austrittsdatum</b> <a class="float-right">-</a>
+                                            </li>
+                                              <li class="list-group-item"><br>
+                                              <b>Adresse</b> <a class="float-right">{{$user_details->street}} {{$user_details->postal_code}}</a>
+                                            </li>
+                                              <li class="list-group-item">
+                                              <b>Geburtsdatum</b> <a class="float-right">{{date('Y-m-d', strtotime($user_details->date_of_birth))}}</a>
+                                            </li>
+                                          <li class="list-group-item">
+                                              <b>Nationalität</b> <a class="float-right">{{$user_details->nationality}}</a>
+                                            </li>
+                                          </ul>
 
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Posta_Kodu_ve_Yer')}}</b></td>
-                                                <td>{{$user_details->postal_code}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Dogum_Tarihi')}}</b></td>
-                                                <td>{{$user_details->date_of_birth}}</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Dogum_Yeri')}}</b></td>
-                                                <td>{{$user_details->place_of_birth}}</td>
-                                            </tr>
-                                             <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Milliyet')}}</b></td>
-                                                <td>{{$user_details->nationality}}</td>
-                                            </tr>
-                                             <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Sosyal_Guvenlik_Numarasi')}}</b></td>
-                                                <td>{{$user_details->sg_number}}</td>
-                                            </tr>
-                                             <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Saglik_Sigortasi')}}</b></td>
-                                                <td>{{$user_details->health_insurance}}</td>
-                                            </tr>
-                                            
-                                             <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Cikis')}}</b></td>
-                                                <td>{{$user_details->exit}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Islev')}}</b></td>
-                                                <td>{{$user_details->function}}</td>
-                                            </tr>
-                                             <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_ST_Id_Num')}}</b></td>
-                                                <td>{{$user_details->STIDNUM}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_Ehliyet')}}</b></td>
-                                                <td>{{$user_details->driving_license}}</td>
-                                            </tr>
-                                             <tr>
-                                                <td><b>{{$lang::settings('Admin_Personel_Ekle_VDS_Kimligi')}}</b></td>
-                                                <td>{{$user_details->vds_identity}}</td>
-                                            </tr>
-
-                                            
-                                    </table>
+                                        </div>
+                                        <!-- /.card-body -->
+                                      </div>
                                 </div>
-                            </div>
-                            <div class="col-md-1">
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-black bg-light mb-4">
-                                    <div class="card-header bg-light text-center"><b>Auslöse</b></div>
-                                    <div style="width: 100%">
-                                        <table style="width: 100%" class="table table-striped ttable-responsive-xl ttable-hover">
-                                            <tr style="width: 100%">
-                                                <th style="font-size:15px;text-align:left">
+                                <div class="col-md-8">
+                                    <div style="height:" class=" card-info card-outline card-tabs">
+                                        <div class="card-header p-0 pt-1 border-bottom-0">
+                                          <ul class="nav nav-tabs border-bottom-0" id="custom-tabs-two-tab" role="tablist">
+                                            <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link active" id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Home</a>
+                                            </li>
+                                            <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Gehalt</a>
+                                            </li>
+                                            <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill" href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages" aria-selected="false">Bank</a>
+                                            </li>
+                                              <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-settings-tab2" data-toggle="pill" href="#custom-tabs-two-settings2" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Auslöse</a>
+                                            </li>
+                                            <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-settings-tab" data-toggle="pill" href="#custom-tabs-two-settings" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Sonstige</a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div class="card-body">
+                                          <div class="tab-content" id="custom-tabs-two-tabContent">
+                                            <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                                               
+                                             <div class="col-md-6">   
+                                                <ul class="list-group list-group-unbordered mb-3">
+                                                    <li class="list-group-item">
+                                                        <b>Steuerklasse</b> <a class="float-right">{{$user_details->tax_status}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>St. ID Nr.</b> <a class="float-right">{{$user_details->STIDNUM}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>Sozialvers. Nr.</b><a class="float-right">{{$user_details->sg_number}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>Krankenkasse</b> <a class="float-right">{{$user_details->health_insurance}}</a>
+                                                    </li>
+                                                </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab"> 
+                                              <div class="row">  
+                                                    <div class="col-md-6"> 
+                                                        <div class="card-body">
+                                                            <strong><i class="fa fa-book mr-1"></i> Gehalt</strong>
+                                                            <p class="text-muted">{{$user_details->hour_fee}} €</p>
+                                                            <hr>
+                                                            <strong><i class="fa fa-map-marker mr-1"></i> Urlaubsanspruch</strong>
+                                                            <p class="text-muted">{{$user_details->day_off}} Tage</p>
+                                                        </div> 
+                                                    </div>  
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
+                                                <div class="col-md-7">   
+                                                    <ul class="list-group list-group-unbordered mb-3">
+                                                        <li class="list-group-item">
+                                                            <b>Bankname</b> <a class="float-right">{{$user_details->Banka}}</a>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <b>IBAN</b><a class="float-right">{{$user_details->IBAN}}</a>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <b>BIC</b> <a class="float-right">{{$user_details->BIC}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                              <div class="tab-pane fade" id="custom-tabs-two-settings2" role="tabpanel" aria-labelledby="custom-tabs-two-settings-ta2b">
+                                                <div class="col-md-6">  
                                                     @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
                                                     <div>
                                                         <input @if(count(App\EmployeeCode::where('PersonelID', Request::get('id'))->where('KodID', $code->KodID)->get()) > 0) checked @endif value="{{$code->KodID}}" type="checkbox" name="Kod-{{$code->KodID}}" disabled> {{$code->KodBASLIK}}
                                                     </div>
-                                                    @endforeach
-                                                </th>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="card text-black bg-light">
-                                    <div class="card-header bg-light text-center"><b>{{$lang::settings('Admin_Personel_Ekle_Banka_Baglantisi')}}</b></div>
-                                    <table style="color: #424242" class="table table-sm table-striped table-responsive-md table-hover">
-                                        
-                                        <tr>
-                                        
-                                            <td><b>{{$lang::settings('Admin_Personel_Ekle_Banka')}}</b></td>
-                                            <td>{{$user_details->Banka}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>{{$lang::settings('Admin_Personel_Ekle_Iban')}}</b></td>
-                                            <td>{{$user_details->IBAN}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>{{$lang::settings('Admin_Personel_Ekle_Bic')}}</b></td>
-                                            <td>{{$user_details->BIC}}</td>
-                                        </tr>
-                                        
-                                    </table>
-                                </div>
-                            </div>
+                                                    @endforeach                                                                                                 
+                                                </div>
+                                            </div>
 
-                               
-                                
-                                <div class="col-md-1">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="col-md-12 text-right" style="margin-bottom: 15px; padding-right: 0px">
-                                    <button data-id="{{Request::get('id')}}" class="btn btn-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i>{{$lang::settings('Admin_Duzenle')}}</button>
+                                            <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
+                                                <div class="row">
+                                                    <div class="col-md-6">   
+                                                        <ul class="list-group list-group-unbordered mb-3">
+                                                            <li class="list-group-item">
+                                                                <b>Führerschein</b> <a class="float-right">{{$user_details->driving_license}}</a>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <b>VdS Ausweis</b><a class="float-right">{{$user_details->vds_identity}}</a>
+                                                            </li>
+                                                        </ul>
+                                                     </div>
+                                                    <br><br>
+                                                    <div class="col-md-6">
+                                                        <div class="col-md-12 text-right" style="margin-bottom: 15px; padding-right: 0px">
+                                                            <button data-id="{{Request::get('id')}}" class="btn btn-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i>{{$lang::settings('Admin_Duzenle')}}</button>
+                                                        </div>      
+                                                    </div>
+                                               </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!-- /.card -->
+                                      </div>
                                 </div>
                             </div>
                         </div>
+                    </section>
                     @endif
                 </div>
             </div>
