@@ -49,6 +49,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('/employees/edit', 'Admin\EmployeesController@edit')->name('admin.employees.edit');
     Route::post('/employees/update', 'Admin\EmployeesController@update')->name('admin.employees.update');
     Route::post('/employees/filters', 'Admin\EmployeesController@filters')->name('admin.employees.filter');
+    Route::post('/employees/delete', 'Admin\EmployeesController@destroy')->name('admin.employees.destroy');
     
 
     Route::get('/general_settings', 'Admin\SettingsController@general_settings')->name('admin.settings.general');

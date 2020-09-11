@@ -12,12 +12,37 @@ $lang = new Language;
         .dataTables_length, .dataTables_filter, .dataTables_iinfo, .ddataTables_paginate {
             display: none;
         }
+
+        .card-header:first-child {
+            border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+        }
+        .card-header {
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
+            transition: 0.3s;
+            border-radius: 0px 0px 9px 9px;
+        }
+
+        .card-header {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
     </style>
 @endsection
 
 @section('content')
+<div style="height:51px" class="card card-default color-palette-bo">
+    <div style="height:51px" class="card-header">
+        <div class="d-inline-block">
+          <h3 class="card-title"><i class="fa fa-user"></i> {{$user_details->name}}</h3>
+        </div>
+        <div class="d-inline-block float-right">
+            <a href="{{route('admin.employees')}}" class="btn btn-sm btn-outline-primary"><i class="fa fa-undo"></i></a>
+        </div>
+    </div>
+</div>
 <div class="container" style="margin-left: 0px">
-
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
@@ -30,7 +55,7 @@ $lang = new Language;
                     <section class="content">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="card card-primary card-outline">
                                         <div class="card-body box-profile">
                                           <div class="text-center">
@@ -69,8 +94,8 @@ $lang = new Language;
                                         <!-- /.card-body -->
                                       </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <div style="height:" class=" card-info card-outline card-tabs">
+                                <div class="col-md-9">
+                                    <div class="card card-primary card-outline card-tabs">
                                         <div class="card-header p-0 pt-1 border-bottom-0">
                                           <ul class="nav nav-tabs border-bottom-0" id="custom-tabs-two-tab" role="tablist">
                                             <li style="width:99px;text-align:center" class="nav-item">
@@ -93,8 +118,6 @@ $lang = new Language;
                                         <div class="card-body">
                                           <div class="tab-content" id="custom-tabs-two-tabContent">
                                             <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
-                                               
-                                             <div class="col-md-6">   
                                                 <ul class="list-group list-group-unbordered mb-3">
                                                     <li class="list-group-item">
                                                         <b>Steuerklasse</b> <a class="float-right">{{$user_details->tax_status}}</a>
@@ -109,68 +132,47 @@ $lang = new Language;
                                                         <b>Krankenkasse</b> <a class="float-right">{{$user_details->health_insurance}}</a>
                                                     </li>
                                                 </ul>
-                                                </div>
                                             </div>
-
                                             <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab"> 
-                                              <div class="row">  
-                                                    <div class="col-md-6"> 
-                                                        <div class="card-body">
-                                                            <strong><i class="fa fa-book mr-1"></i> Gehalt</strong>
-                                                            <p class="text-muted">{{$user_details->hour_fee}} €</p>
-                                                            <hr>
-                                                            <strong><i class="fa fa-map-marker mr-1"></i> Urlaubsanspruch</strong>
-                                                            <p class="text-muted">{{$user_details->day_off}} Tage</p>
-                                                        </div> 
-                                                    </div>  
-                                                </div>
+                                                <strong><i class="fa fa-book mr-1"></i> Gehalt</strong>
+                                                <p class="text-muted">{{$user_details->hour_fee}} €</p>
+                                                <hr>
+                                                <strong><i class="fa fa-map-marker mr-1"></i> Urlaubsanspruch</strong>
+                                                <p class="text-muted">{{$user_details->day_off}} Tage</p>
                                             </div>
-
                                             <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
-                                                <div class="col-md-7">   
-                                                    <ul class="list-group list-group-unbordered mb-3">
-                                                        <li class="list-group-item">
-                                                            <b>Bankname</b> <a class="float-right">{{$user_details->Banka}}</a>
-                                                        </li>
-                                                        <li class="list-group-item">
-                                                            <b>IBAN</b><a class="float-right">{{$user_details->IBAN}}</a>
-                                                        </li>
-                                                        <li class="list-group-item">
-                                                            <b>BIC</b> <a class="float-right">{{$user_details->BIC}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                <ul class="list-group list-group-unbordered mb-3">
+                                                    <li class="list-group-item">
+                                                        <b>Bankname</b> <a class="float-right">{{$user_details->Banka}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>IBAN</b><a class="float-right">{{$user_details->IBAN}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>BIC</b> <a class="float-right">{{$user_details->BIC}}</a>
+                                                    </li>
+                                                </ul>
                                             </div>
-
-                                              <div class="tab-pane fade" id="custom-tabs-two-settings2" role="tabpanel" aria-labelledby="custom-tabs-two-settings-ta2b">
-                                                <div class="col-md-6">  
-                                                    @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
+                                            <div class="tab-pane fade" id="custom-tabs-two-settings2" role="tabpanel" aria-labelledby="custom-tabs-two-settings-ta2b">
+                                                @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
                                                     <div>
                                                         <input @if(count(App\EmployeeCode::where('PersonelID', $user_details->id)->where('KodID', $code->KodID)->get()) > 0) checked @endif value="{{$code->KodID}}" type="checkbox" name="Kod-{{$code->KodID}}" disabled> {{$code->KodBASLIK}}
                                                     </div>
-                                                    @endforeach                                                                                                 
-                                                </div>
+                                                @endforeach   
                                             </div>
-
                                             <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
-                                                <div class="row">
-                                                    <div class="col-md-6">   
-                                                        <ul class="list-group list-group-unbordered mb-3">
-                                                            <li class="list-group-item">
-                                                                <b>Führerschein</b> <a class="float-right">{{$user_details->driving_license}}</a>
-                                                            </li>
-                                                            <li class="list-group-item">
-                                                                <b>VdS Ausweis</b><a class="float-right">{{$user_details->vds_identity}}</a>
-                                                            </li>
-                                                        </ul>
-                                                     </div>
-                                                    <br><br>
-                                                    <div class="col-md-6">
-                                                        <div class="col-md-12 text-right" style="margin-bottom: 15px; padding-right: 0px">
-                                                            <button data-id="{{$user_details->id}}" class="btn btn-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i>{{$lang::settings('Admin_Duzenle')}}</button>
-                                                        </div>      
-                                                    </div>
-                                               </div>
+                                                <ul class="list-group list-group-unbordered mb-3">
+                                                    <li class="list-group-item">
+                                                        <b>Führerschein</b> <a class="float-right">{{$user_details->driving_license}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>VdS Ausweis</b><a class="float-right">{{$user_details->vds_identity}}</a>
+                                                    </li>
+                                                </ul>
+                                                <br><br>
+                                                <div class="col-md-12 text-right" style="margin-bottom: 15px; padding-right: 0px">
+                                                    <button data-id="{{$user_details->id}}" class="btn btn-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i>{{$lang::settings('Admin_Duzenle')}}</button>
+                                                </div>  
                                             </div>
                                           </div>
                                         </div>
@@ -218,7 +220,7 @@ $lang = new Language;
                         </div>
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Sifresi')}}</label>
-                            <input class="form-control "  name="password" required/>
+                            <input class="form-control" name="password"/>
                         </div>
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">Role</label>

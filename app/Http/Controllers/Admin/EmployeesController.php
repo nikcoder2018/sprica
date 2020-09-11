@@ -27,7 +27,7 @@ class EmployeesController extends Controller
     }
 
     public function list(){
-        $data['employees'] = User::with('myrole')->orderBy('name', 'ASC')->get();
+        $data['employees'] = User::with('myrole')->where('status', 1)->orderBy('name', 'ASC')->get();
         $data['roles'] = Role::all();
 
         return view('admin.contents.employees-list', $data);
@@ -82,7 +82,7 @@ class EmployeesController extends Controller
         $user = User::create([
             'name' => $request->display_name,  
             'username' => $request->username , 
-            'password' => Hash::make($request->password) , 
+            'password' => Hash::make($request->password), 
             'number' => $request->number , 
             'department' => $request->department , 
             'hour_fee' => $request->hour_fee , 
@@ -140,8 +140,10 @@ class EmployeesController extends Controller
         $user = User::find($request->id);
         $user->name = $request->name;
         $user->username = $request->username;
-        $user->password = $request->password;
         $user->number = $request->number;
+        if($request->password != '' || $request->password != null){
+            $user->password = Hash::make($request->password);
+        }
         $user->department = $request->department; 
         $user->hour_fee = $request->hour_fee;
         $user->tax_status = $request->tax_status;
@@ -189,6 +191,15 @@ class EmployeesController extends Controller
         }else{
             $message = "Something went wrong!";
             return response()->json(array('success' => false, 'msg' => $message));
+        }
+    }
+
+    public function destroy(Request $request){
+        $user = User::find($request->GunID);
+        $user->delete();
+
+        if($user){
+            return response()->json(array('success' => true, 'msg' => 'User Deleted!'));
         }
     }
 }

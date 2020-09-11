@@ -67,7 +67,7 @@ $lang = new Language;
                 </div>
             </div>
         </div>
-       </div>
+       
    </div>
 </div>
 
@@ -251,7 +251,7 @@ $lang = new Language;
                         </div>
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Sifresi')}}</label>
-                            <input class="form-control "  name="password" required/>
+                            <input class="form-control "  name="password"/>
                         </div>
                         <div class="form-group col-md-6 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">Role</label>
@@ -388,6 +388,28 @@ $lang = new Language;
     <!-- /.modal-content -->
 </div>
 
+<div class="modal fade" id="modal-danger">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">{{$lang::settings('Isci_Paneli_Kaydi_Sil')}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>{{$lang::settings('Isci_Paneli_Emin_Misiniz')}}</strong></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">{{$lang::settings('Isci_Paneli_Hayir')}}</button>
+                <button class="btn btn-outline-light btn-delete-go">{{$lang::settings('Isci_Paneli_Evet_Sil')}}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 @endsection
 @section('scripts')
 <script src="{{asset('plugins/datatables/jquery.dataTables.js')}}"></script>
@@ -396,7 +418,8 @@ $lang = new Language;
     $(document).ready(function(){
         bsCustomFileInput.init();
         $("#example1").DataTable({
-            "order": [[ 1,"asc"]]
+            "order": [[ 1,"asc"]],
+            "pageLength": 25
         });
 
         $(".silbtn").click(function(){
@@ -496,32 +519,60 @@ $lang = new Language;
             success: function(resp){
                 $('.datalist').html(resp.result);
                 $("#example1").DataTable({
-                    "order": [[ 1, "asc" ]]
+                    "order": [[ 1, "asc" ]],
+                    "pageLength": 25
                 });
             }
         }); 
     }
 
     $('.form-update-user').on('submit', function(e){
-            e.preventDefault();
+        e.preventDefault();
 
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(resp){
-                    if(resp.success){
-                        Toast.fire({
-                            icon: 'success',
-                            title: resp.msg,
-                            showConfirmButton: false,
-                        });
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(resp){
+                if(resp.success){
+                    Toast.fire({
+                        icon: 'success',
+                        title: resp.msg,
+                        showConfirmButton: false,
+                    });
 
-                        setTimeout(function() { location.reload(); }, 1000)
-                    }
+                    setTimeout(function() { location.reload(); }, 1000)
                 }
-            })
+            }
         });
+    });
+
+    $('.btn-delete').on('click', function(){
+        $('#modal-danger').modal('show');
+        $('.btn-delete-go').attr('data-id', $(this).data('id'));
+    });
+
+    $('.btn-delete-go').on('click', function(){
+        $.ajax({
+            url: "{{route('admin.employees.destroy')}}",
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                GunID : $(this).data('id')
+            },
+            success: function(resp){
+                if(resp.success){
+                    Toast.fire({
+                        icon: 'success',
+                        title: resp.msg,
+                        showConfirmButton: false,
+                    });
+
+                    setTimeout(function() { location.reload(); }, 1000)
+                }
+            }
+        })
+    });
 </script>
 
 

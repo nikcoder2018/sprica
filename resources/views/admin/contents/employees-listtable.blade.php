@@ -34,6 +34,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 <button class="dropdown-item btn-edit" data-id="{{$employee->id}}">Bearbeiten</button>
+                                <button class="dropdown-item btn-delete" data-id="{{$employee->id}}">Löschen</button>
                             </div>
                         </div>
                     </td>
