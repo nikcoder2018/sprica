@@ -22,10 +22,7 @@ $lang = new Language;
         <!-- left column -->
         <div class="col-md-12">
             <!-- jquery validation -->
-            <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">Personal</h3>
-                </div>
+            <div class="card card-info mt-3">
                 <!-- /.card-header -->
                 <!-- form start -->
                 <div class="card-body">
