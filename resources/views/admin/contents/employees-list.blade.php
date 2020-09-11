@@ -262,6 +262,13 @@ $lang = new Language;
                             </select>
                         </div>
                         <div class="form-group col-md-4 m05">
+                            <label class="form-control-label plabelno" for="inputBasicLastName">Status</label>
+                            <select name="status" class="form-control">
+                                <option value="1">Active</option>
+                                <option value="0">Not Active</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Ekle_Personel_Numarasi')}}</label>
                             <input class="form-control "  name="number"/>
                         </div>
@@ -388,7 +395,9 @@ $lang = new Language;
 <script type="text/javascript">
     $(document).ready(function(){
         bsCustomFileInput.init();
-        $("#example1").DataTable();
+        $("#example1").DataTable({
+            "order": [[ 1,"asc"]]
+        });
 
         $(".silbtn").click(function(){
             var href = $(this).attr("data-href");
@@ -403,7 +412,15 @@ $lang = new Language;
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(resp){
+                    if(resp.success){
+                        Toast.fire({
+                            icon: 'success',
+                            title: resp.msg,
+                            showConfirmButton: false,
+                        });
 
+                        setTimeout(function() { location.reload(); }, 1000)
+                    }
                 }
             })
         });
@@ -427,6 +444,7 @@ $lang = new Language;
                     form.find('input[name=username]').val(user.username);
                     form.find('input[name=password]').val(user.password);
                     form.find('select[name=role]').val(user.role);
+                    form.find('select[name=status]').val(user.status);
                     form.find('input[name=number]').val(user.number);
                     form.find('input[name=department]').val(user.department);
                     form.find('input[name=hour_fee]').val(user.hour_fee);
@@ -477,10 +495,33 @@ $lang = new Language;
             data: $('.filterdata').serialize(),
             success: function(resp){
                 $('.datalist').html(resp.result);
-                $("#example1").DataTable();
+                $("#example1").DataTable({
+                    "order": [[ 1, "asc" ]]
+                });
             }
         }); 
     }
+
+    $('.form-update-user').on('submit', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(resp){
+                    if(resp.success){
+                        Toast.fire({
+                            icon: 'success',
+                            title: resp.msg,
+                            showConfirmButton: false,
+                        });
+
+                        setTimeout(function() { location.reload(); }, 1000)
+                    }
+                }
+            })
+        });
 </script>
 
 

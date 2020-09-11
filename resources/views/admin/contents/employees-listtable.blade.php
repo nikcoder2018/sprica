@@ -18,7 +18,7 @@
                     <td><a style="color:black" href="{{route('admin.employees.details', $employee->id)}}">{{$employee->name}}</a></td>
                     <td>{{$employee->username}}</td> 
                     <td>{{$employee->email}}</td>
-                    <td><button class="btn btn-sm btn-info" disabled="">{{$employee->myrole->name}}</button></td> 
+                    <td><button class="btn btn-sm @if($employee->myrole->name == 'admin') btn-warning @else btn-info @endif" disabled="">{{ucfirst($employee->myrole->name)}}</button></td> 
                     <td>
                         @if($employee->status == 1)
                             <button class="btn btn-sm btn-success" disabled title="Active"><i class="fas fa-power-off"></i></button>

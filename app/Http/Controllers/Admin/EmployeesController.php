@@ -27,7 +27,7 @@ class EmployeesController extends Controller
     }
 
     public function list(){
-        $data['employees'] = User::with('myrole')->get();
+        $data['employees'] = User::with('myrole')->orderBy('name', 'ASC')->get();
         $data['roles'] = Role::all();
 
         return view('admin.contents.employees-list', $data);
@@ -40,7 +40,7 @@ class EmployeesController extends Controller
     }
 
     public function filters(Request $request){
-        $employees = User::with('myrole');
+        $employees = User::with('myrole')->orderBy('name', 'ASC');
         if($request->type != 'all'){
             switch($request->type){
                 case 'admin': 
@@ -105,7 +105,7 @@ class EmployeesController extends Controller
             'bank' => $request->bank , 
             'IBAN' => $request->IBAN , 
             'BIC' => $request->BIC , 
-            'role' => $request->role 
+            'role' => $request->role,
         ]);
         
         if($request->codes){
@@ -164,6 +164,7 @@ class EmployeesController extends Controller
         $user->IBAN = $request->IBAN;
         $user->BIC = $request->BIC;
         $user->role = $request->role;
+        $user->status = $request->status;
         $user->save();
 
         if($request->codes){

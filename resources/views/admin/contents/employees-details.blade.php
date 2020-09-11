@@ -229,6 +229,13 @@ $lang = new Language;
                             </select>
                         </div>
                         <div class="form-group col-md-4 m05">
+                            <label class="form-control-label plabelno" for="inputBasicLastName">Status</label>
+                            <select name="status" class="form-control">
+                                <option value="1">Active</option>
+                                <option value="0">Not Active</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Ekle_Personel_Numarasi')}}</label>
                             <input class="form-control "  name="number"/>
                         </div>
@@ -384,6 +391,7 @@ $lang = new Language;
                     form.find('input[name=username]').val(user.username);
                     form.find('input[name=password]').val(user.password);
                     form.find('select[name=role]').val(user.role);
+                    form.find('select[name=status]').val(user.status);
                     form.find('input[name=number]').val(user.number);
                     form.find('input[name=department]').val(user.department);
                     form.find('input[name=hour_fee]').val(user.hour_fee);
