@@ -151,8 +151,9 @@ $system = new System;
                       <div class="form-group col-md-4">
                           <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Admin_Saatler_Ekle_Kod_Seciniz')}}</label>
                           <select class="form-control" name="Kod">
+                              <option value="99">Keine Auslöse</option>
                               @foreach($codes as $code)
-                                @if(\App\EmployeeCode::where('PersonelID', Auth::user()->id)->where('KodID', $code->KodID)->exists())
+                                @if(\App\EmployeeCode::where('PersonelID', Auth::user()->id)->where('KodID', $code->KodID)->exists() && $code->Kod != '99')
                                   <option value="{{$code->KodID}}">{{$code->KodBASLIK}}</option>
                                 @endif
                               @endforeach

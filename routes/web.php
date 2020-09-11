@@ -43,12 +43,14 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
     Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
 
-    Route::get('/employees', 'Admin\EmployeesController@index')->name('admin.employees');
-    Route::get('/employees_list', 'Admin\EmployeesController@list')->name('admin.employees.list');
+    Route::get('/employees', 'Admin\EmployeesController@list')->name('admin.employees');
+    Route::get('/employees/details/{id}', 'Admin\EmployeesController@details')->name('admin.employees.details');
     Route::post('/employees/store', 'Admin\EmployeesController@store')->name('admin.employees.store');
     Route::post('/employees/edit', 'Admin\EmployeesController@edit')->name('admin.employees.edit');
     Route::post('/employees/update', 'Admin\EmployeesController@update')->name('admin.employees.update');
+    Route::post('/employees/filters', 'Admin\EmployeesController@filters')->name('admin.employees.filter');
     
+
     Route::get('/general_settings', 'Admin\SettingsController@general_settings')->name('admin.settings.general');
     Route::post('/general_settings/update', 'Admin\SettingsController@general_settings_update')->name('admin.settings.general-update');
 

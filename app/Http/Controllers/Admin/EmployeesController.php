@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Helpers\Language;
 
 use App\User;
@@ -26,18 +27,62 @@ class EmployeesController extends Controller
     }
 
     public function list(){
-        $role = Role::where('name', 'employee')->first();
-        $data['employees'] = User::where('role', $role->id)->get();
-
+        $data['employees'] = User::with('myrole')->get();
         $data['roles'] = Role::all();
+
         return view('admin.contents.employees-list', $data);
+    }
+
+    public function details($id){
+        $data['roles'] = Role::all();
+        $data['user_details'] = User::where('id', $id)->first();
+        return view('admin.contents.employees-details', $data);
+    }
+
+    public function filters(Request $request){
+        $employees = User::with('myrole');
+        if($request->type != 'all'){
+            switch($request->type){
+                case 'admin': 
+                    $role = Role::where('name', 'admin')->first();
+                    $employees = $employees->where('role', $role->id);
+                break;
+                case 'employee': 
+                    $role = Role::where('name', 'employee')->first();
+                    $employees = $employees->where('role', $role->id);
+                break;
+            }
+        }
+
+        if($request->status != 'all'){
+            switch($request->status){
+                case 0: 
+                    $employees = $employees->where('status', 0);
+                break;
+                
+                case 1: 
+                    $employees = $employees->where('status', 1);
+                break;
+                
+            }
+        }
+
+        if($request->keyword){
+            $keyword = $request->keyword;
+            $employees = $employees->where('name', 'like', "%{$keyword}%");
+        }
+
+        
+        $result = view('admin.contents.employees-listtable', ['employees' => $employees->get()])->render();
+
+        return response()->json(array('result' => $result));
     }
 
     public function store(Request $request){
         $user = User::create([
-            'display_name' => $request->display_name,  
+            'name' => $request->display_name,  
             'username' => $request->username , 
-            'password' => $request->password , 
+            'password' => Hash::make($request->password) , 
             'number' => $request->number , 
             'department' => $request->department , 
             'hour_fee' => $request->hour_fee , 
@@ -93,7 +138,7 @@ class EmployeesController extends Controller
     public function update(Request $request){
 
         $user = User::find($request->id);
-        $user->display_name = $request->display_name;
+        $user->name = $request->name;
         $user->username = $request->username;
         $user->password = $request->password;
         $user->number = $request->number;
@@ -120,6 +165,22 @@ class EmployeesController extends Controller
         $user->BIC = $request->BIC;
         $user->role = $request->role;
         $user->save();
+
+        if($request->codes){
+            $newCodes = array();
+            foreach($request->codes as $code){
+                array_push($newCodes, $code);
+                if(Code::where('KodID', $code)->exists() ){
+                    if(!EmployeeCode::where('PersonelID', $user->id)->where('KodID', $code)->exists()){
+                        EmployeeCode::create([
+                            'PersonelID' => $user->id, 
+                            'KodID' => $code
+                        ]);
+                    }
+                }
+            }
+            EmployeeCode::where('PersonelID', $user->id)->whereNotIn('KodID', $newCodes)->delete();
+        }
 
         if($user){
             $message = "Account updated successfully.";
