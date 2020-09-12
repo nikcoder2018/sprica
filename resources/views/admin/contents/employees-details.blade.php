@@ -39,6 +39,7 @@ $lang = new Language;
         </div>
         <div class="d-inline-block float-right">
             <a href="{{route('admin.employees')}}" class="btn btn-sm btn-outline-primary"><i class="fa fa-undo"></i></a>
+            <button data-id="{{$user_details->id}}" class="btn btn-sm btn-outline-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i><i class="fa fa-edit"></i></button>
         </div>
     </div>
 </div>
@@ -169,10 +170,6 @@ $lang = new Language;
                                                         <b>VdS Ausweis</b><a class="float-right">{{$user_details->vds_identity}}</a>
                                                     </li>
                                                 </ul>
-                                                <br><br>
-                                                <div class="col-md-12 text-right" style="margin-bottom: 15px; padding-right: 0px">
-                                                    <button data-id="{{$user_details->id}}" class="btn btn-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i>{{$lang::settings('Admin_Duzenle')}}</button>
-                                                </div>  
                                             </div>
                                           </div>
                                         </div>
@@ -265,8 +262,6 @@ $lang = new Language;
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Personel_Ekle_Izin_Gunu')}}</label>
                             <input class="form-control "  name="day_off"/>
                         </div>
-
-
                         <div class="form-group col-md-4 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Admin_Personel_Ekle_Sokak_ve_Ev_Numarasi')}}</label>
                             <input class="form-control "  name="street"/>
@@ -294,8 +289,7 @@ $lang = new Language;
                         <div class="form-group col-md-4 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Admin_Personel_Ekle_Saglik_Sigortasi')}}</label>
                             <input class="form-control "  name="health_insurance"/>
-                        </div>
-                        
+                        </div>      
                         <div class="form-group col-md-4 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Admin_Personel_Ekle_Cikis')}}</label>
                             <input class="form-control "  name="exit"/>
@@ -318,11 +312,6 @@ $lang = new Language;
                             <select class="form-control "  name="vds_identity">
                             <option>Nein</option> <option>Ja</option></select>
                         </div>
-                            <div class="form-group col-md-12 m05">
-                            
-                            </div>
-                
-                        
                         <div class="form-group col-md-4 m05">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Admin_Personel_Ekle_Banka')}}</label>
                             <input class="form-control "  name="bank" required/>
@@ -335,7 +324,6 @@ $lang = new Language;
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Admin_Personel_Ekle_Bic')}}</label>
                             <input class="form-control "  name="BIC"/>
                         </div>
-
                         <div class="col-md-12 vCheck">
                             <label class="form-control-label plabelno" for="inputBasicLastName">{{$lang::settings('Admin_Personel_Ekle_Bic')}}</label>
 
@@ -351,9 +339,32 @@ $lang = new Language;
                     <button data-dismiss="modal" type="button" class="btn btn-default">Close</button>
                     <button  type="submit" class="btn btn-primary">{{$lang::settings('Isci_Paneli_Kaydet')}}</button>
                 </div>
+            </div>
         </form>
     </div>
     <!-- /.modal-content -->
+</div>
+
+<div class="modal fade" id="modal-danger">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">{{$lang::settings('Isci_Paneli_Kaydi_Sil')}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>{{$lang::settings('Isci_Paneli_Emin_Misiniz')}}</strong></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">{{$lang::settings('Isci_Paneli_Hayir')}}</button>
+                <button class="btn btn-outline-light btn-delete-go">{{$lang::settings('Isci_Paneli_Evet_Sil')}}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
 @endsection
 @section('scripts')
@@ -443,6 +454,35 @@ $lang = new Language;
                 }
             })
         });
+
+        $('.btn-delete').on('click', function(){
+            $('#modal-danger').modal('show');
+            $('.btn-delete-go').attr('data-id', $(this).data('id'));
+        });
+
+        $('.btn-delete-go').on('click', function(){
+            $.ajax({
+                url: "{{route('admin.employees.destroy')}}",
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    GunID : $(this).data('id')
+                },
+                success: function(resp){
+                    if(resp.success){
+                        Toast.fire({
+                            icon: 'success',
+                            title: resp.msg,
+                            showConfirmButton: false,
+                        });
+
+                        setTimeout(function() { location.reload(); }, 1000)
+                    }
+                }
+            })
+        });
     });
+
+    
 </script>
 @endsection
