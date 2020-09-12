@@ -1,6 +1,6 @@
 <table id="example1" class="table table-responsive-md table-striped table-hover">
     <thead>
-        <tr style="background-color:grey">
+        <tr>
             <th width="50">ID</th>
             <th>Name</th>
             <th>Benutzername</th>
@@ -23,7 +23,7 @@
                         @if($employee->status == 1)
                             <button class="btn btn-sm btn-success" disabled title="Active"><i class="fas fa-power-off"></i></button>
                         @else 
-                            <button class="btn btn-sm btn-danger" disabled title="Disabled"><i class="fas fa-power-off"></i></button>
+                            <button class="btn btn-sm btn-danger" style="background-color: red !important" disabled title="Disabled"><i class="fas fa-power-off"></i></button>
                         @endif
                     </td>
                     <td width="139" href="javascript:void(0);">
