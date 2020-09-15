@@ -20,16 +20,6 @@
 
 
 <body class="hold-transition login-page">
-<div style="margin-top:-0px;margin-bottom:0" class="login-box">
-    <div class="login-logo">
-        <img style="text-align:center; width: 73%" src="{{asset('dist/img/logo.jpg')}}"> <br>
-			 
-        <a href=""><b>Intranet</b></a>
-    </div>
-    <!-- /.login-logo -->
-    
-</div>
-<!-- /.login-box -->
 
 @yield('content')
 
