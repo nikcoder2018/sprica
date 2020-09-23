@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     //
+    protected $primaryKey = 'ProjeID';
     protected $table = 'projeler';
     protected $fillable = ['ProjeBASLIK', 'ProjeKODU'];
 
-    public $timestamps = false;
+    // function members(){
+    //     return $this->hasMany(User::class, 'ProjeID', '')
+    // }
 }

@@ -59,6 +59,13 @@
                         <p>Messages</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{route('mailbox')}}" class="nav-link">
+                        <i class="nav-icon fas fa-envelope"></i>
+                        <p>Mailbox</p>
+                    </a>
+                </li>
                 @endif
                 @if(\App\Role::where('id', Auth::user()->role)->first()->name == 'admin')
 
@@ -82,6 +89,14 @@
                         <p>Messages</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{route('mailbox')}}" class="nav-link">
+                        <i class="nav-icon fas fa-envelope"></i>
+                        <p>Mailbox</p>
+                    </a>
+                </li>
+
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-bars"></i>

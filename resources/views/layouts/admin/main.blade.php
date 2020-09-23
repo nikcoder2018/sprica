@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    @yield('external_css')
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
     <!-- Google Font: Source Sans Pro -->
@@ -47,6 +50,8 @@
     <!-- APP WRAPPER -->
     <!-- jQuery -->
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+    <!-- jQuery UI -->
+    <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- bs-custom-file-input -->
@@ -54,6 +59,9 @@
     <!-- AdminLTE App -->
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
     <script src="{{asset('plugins/sweetalert2/zsweet.all.min.js')}}"></script>
+    
+    @yield('external_js')
+
     <!-- AdminLTE for demo purposes -->
     <script src="{{asset('dist/js/demo.js')}}"></script>
     <script type="text/javascript">

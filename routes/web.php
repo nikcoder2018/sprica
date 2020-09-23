@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth','employee']], function(){
 
 Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/', 'Admin\DashboardController@show')->name('home');
-    Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
+   
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
 
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
@@ -40,9 +40,15 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/wages', 'Admin\HRController@wages')->name('admin.hr-wage');
     Route::get('/wages_total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');
     Route::get('/wages_advance', 'Admin\HRController@wages_advance')->name('admin.hr-wages-advance');
-    Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
-    Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
 
+    Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
+    Route::post('/projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');
+    Route::post('/projects/update', 'Admin\ProjectsController@update')->name('admin.projects.update');
+    Route::post('/projects/delete', 'Admin\ProjectsController@destroy')->name('admin.projects.destroy');
+
+    Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
+    Route::get('/projects/calendar', 'Admin\ProjectsController@calendar')->name('admin.projects.calendar');
+    
     Route::get('/employees', 'Admin\EmployeesController@list')->name('admin.employees');
     Route::get('/employees/details/{id}', 'Admin\EmployeesController@details')->name('admin.employees.details');
     Route::post('/employees/store', 'Admin\EmployeesController@store')->name('admin.employees.store');
@@ -51,7 +57,9 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('/employees/filters', 'Admin\EmployeesController@filters')->name('admin.employees.filter');
     Route::post('/employees/delete', 'Admin\EmployeesController@destroy')->name('admin.employees.destroy');
     
-
+    Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
+    Route::post('/profile/update', 'Admin\ProfileController@update')->name('admin.profile.update');
+    
     Route::get('/general_settings', 'Admin\SettingsController@general_settings')->name('admin.settings.general');
     Route::post('/general_settings/update', 'Admin\SettingsController@general_settings_update')->name('admin.settings.general-update');
 
@@ -66,4 +74,8 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('/vacationdays_settings/edit', 'Admin\SettingsController@vacationdays_settings_edit')->name('admin.settings.vacationdays-edit');
     Route::post('/vacationdays_settings/update', 'Admin\SettingsController@vacationdays_settings_update')->name('admin.settings.vacationdays-update');
     Route::post('/vacationdays_settings/delete', 'Admin\SettingsController@vacationdays_settings_delete')->name('admin.settings.vacationdays-delete');
+
+    Route::get('/mailbox', 'MailboxController@index')->name('mailbox');
+    Route::get('/mailbox/compose', 'MailboxController@compose')->name('mailbox.compose');
+    
 });

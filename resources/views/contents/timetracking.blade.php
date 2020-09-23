@@ -206,6 +206,7 @@ $system = new System;
         "ordering": true,
         "info": true,
         "autoWidth": false,
+        "order": [[0, "desc"]]
     });
 
     $('.form-add-time').on('submit', function(e){
