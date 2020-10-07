@@ -130,12 +130,32 @@
                         </li>            
                     </ul>
                 </li>
-				<li class="nav-item">
+				<li class="nav-item has-treeview">
                     <a data-parents="projeler" href="{{route('admin.projects')}}" class="nav-link">
                         <i class="fas fa-suitcase nav-icon"></i>
-                        {{-- <p>{{App\Helpers\Language::settings('Admin_Projeler')}}</p> --}}
-                        <p>Projects</p>
+                        <p>Projects <i class="right fas fa-angle-left"></i> </p>
+                        
                     </a>
+                    <ul class="nav nav-treeview" style="background-color:#555555">
+                        <li class="nav-item">
+                            <a data-parents="genelayarlar" href="{{route('admin.projects')}}" class="nav-link">
+                                <i class="fas fa-suitcase nav-icon"></i>
+                                <p>
+                                    All Projects
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a data-parents="genelayarlar" href="{{route('tasks.index')}}" class="nav-link">
+                                <i class="fas fa-suitcase nav-icon"></i>
+                                <p>
+                                    Tasks
+                                </p>
+                            </a>
+                        </li>
+                        
+                    </ul>
                 </li>
 
                 <li class="nav-item">
