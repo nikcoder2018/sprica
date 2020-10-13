@@ -10,7 +10,7 @@ use App\Task;
 use App\TaskAssignment;
 use App\User;
 use App\Role;
-
+use App\EmailTrigger;
 class TasksController extends Controller
 {
     /**
@@ -60,6 +60,8 @@ class TasksController extends Controller
                 'task_id' => $task->id,
                 'assign_to' => $employee
             ]);
+
+            EmailTrigger::Execute('NEW_TASK_CREATED', array('user_id' => $employee));   
         }
 
 

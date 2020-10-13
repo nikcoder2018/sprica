@@ -11,7 +11,9 @@ class Project extends Model
     protected $table = 'projeler';
     protected $fillable = ['ProjeBASLIK', 'ProjeKODU'];
 
-    // function members(){
-    //     return $this->hasMany(User::class, 'ProjeID', '')
-    // }
+    function tasks(){
+        return $this->hasMany(Task::class, 'project_id', 'ProjeID')->with('assigned');
+    }
+
+    
 }

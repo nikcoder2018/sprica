@@ -7,11 +7,39 @@ use Illuminate\Http\Request;
 use App\Helpers\Language;
 
 use App\Project;
+use App\User;
 class ProjectsController extends Controller
 {
     public function index(){
-        $data['projects'] = Project::orderBy('ProjeID', 'DESC')->get();
+        $projects = Project::with('tasks')->orderBy('ProjeID', 'DESC')->get();
+        
 
+        foreach($projects as $project){
+            $members = array();
+            $tasks = $project->tasks;
+            if(count($tasks) > 0){
+                foreach($tasks as $task){
+                    $assigns = $task->assigned;
+                    if(count($assigns) > 0){
+                        foreach($assigns as $assign){
+                            array_push($members, $assign->assign_to);
+                        }
+                    }
+                }
+            }
+            $members = array_unique($members);
+            $members_data = array();
+            foreach($members as $key=>$member){
+                if(User::where('id', $member)->exists()){
+                    array_push($members_data,User::find($member));
+                }
+                
+            }
+
+            $project['members'] = $members_data;
+        }
+        $data['projects'] = $projects;
+        #return response()->json($data); exit;
         return view('admin.contents.projects', $data);
     }
 

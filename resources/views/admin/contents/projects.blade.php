@@ -68,18 +68,17 @@ $lang = new Language;
                             <td>{{$project->ProjeKODU}}</td>
                             <td>
                                 <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar.png">
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar2.png">
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar3.png">
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar04.png">
-                                    </li>
+                                    @if(count($project->members) > 0)
+                                        @foreach($project->members as $member)
+                                            <li class="list-inline-item">
+                                                @if($member->avatar != '')
+                                                <img alt="Avatar" class="table-avatar" title="{{$member->name}}" src="{{asset($member->avatar)}}">
+                                                @else
+                                                <img alt="Avatar" class="table-avatar" title="{{$member->name}}" src="{{asset('dist/img/avatar.png')}}">
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </td>
                             <td class="project_progress">

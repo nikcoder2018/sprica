@@ -85,4 +85,46 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::resource('tasks', 'Admin\TasksController', ['except'=>['update', 'destroy']]);
     Route::post('task/update', 'Admin\TasksController@update')->name('tasks.update');
     Route::post('task/destroy', 'Admin\TasksController@destroy')->name('tasks.destroy');
-});
+
+    Route::resource('emailtemplates', 'Admin\EmailTemplatesController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('emailtemplates/edit', 'Admin\EmailTemplatesController@edit')->name('emailtemplates.edit');
+    Route::post('emailtemplates/update', 'Admin\EmailTemplatesController@update')->name('emailtemplates.update');
+    Route::post('emailtemplates/destroy', 'Admin\EmailTemplatesController@destroy')->name('emailtemplates.destroy');
+
+    Route::resource('emailtriggers', 'Admin\EmailTriggersController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('emailtriggers/edit', 'Admin\EmailTriggersController@edit')->name('emailtriggers.edit');
+    Route::post('emailtriggers/update', 'Admin\EmailTriggersController@update')->name('emailtriggers.update');
+    Route::post('emailtriggers/destroy', 'Admin\EmailTriggersController@destroy')->name('emailtriggers.destroy');
+
+    Route::resource('emailactions', 'Admin\EmailActionsController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('emailactions/edit', 'Admin\EmailActionsController@edit')->name('emailactions.edit');
+    Route::post('emailactions/update', 'Admin\EmailActionsController@update')->name('emailactions.update');
+    Route::post('emailactions/destroy', 'Admin\EmailActionsController@destroy')->name('emailactions.destroy');
+
+    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('tickets.edit');
+    Route::post('tickets/update', 'Admin\TicketsController@update')->name('tickets.update');
+    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('tickets.destroy');
+
+    Route::resource('tickettypes', 'Admin\TicketsTypeController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('tickettypes/edit', 'Admin\TicketsTypeController@edit')->name('tickettypes.edit');
+    Route::post('tickettypes/update', 'Admin\TicketsTypeController@update')->name('tickettypes.update');
+    Route::post('tickettypes/destroy', 'Admin\TicketsTypeController@destroy')->name('tickettypes.destroy');
+
+
+    Route::resource('vehicles', 'Admin\VehiclesController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('vehicles/edit', 'Admin\VehiclesController@edit')->name('vehicles.edit');
+    Route::post('vehicles/update', 'Admin\VehiclesController@update')->name('vehicles.update');
+    Route::post('vehicles/destroy', 'Admin\VehiclesController@destroy')->name('vehicles.destroy');
+
+    Route::resource('vehiclegroups', 'Admin\VehicleGroupsController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('vehiclegroups/edit', 'Admin\VehicleGroupsController@edit')->name('vehiclegroups.edit');
+    Route::post('vehiclegroups/update', 'Admin\VehicleGroupsController@update')->name('vehiclegroups.update');
+    Route::post('vehiclegroups/destroy', 'Admin\VehicleGroupsController@destroy')->name('vehiclegroups.destroy');
+
+    Route::resource('fuels', 'Admin\FuelsController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('fuels/edit', 'Admin\FuelsController@edit')->name('fuels.edit');
+    Route::post('fuels/update', 'Admin\FuelsController@update')->name('fuels.update');
+    Route::post('fuels/destroy', 'Admin\FuelsController@destroy')->name('fuels.destroy');
+
+}); 

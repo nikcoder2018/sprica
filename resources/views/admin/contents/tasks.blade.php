@@ -321,7 +321,7 @@ $lang = new Language;
             form.find('input[name=ProjeKODU]').val(project.ProjeKODU);
         });
 
-        $('.form-edit-project').on('submit', function(e){
+        $('.form-edit-task').on('submit', function(e){
             e.preventDefault();
 
             $.ajax({
@@ -349,7 +349,7 @@ $lang = new Language;
 
         $('.btn-delete-go').on('click', function(){
             $.ajax({
-                url: "{{route('admin.projects.destroy')}}",
+                url: "{{route('tasks.destroy')}}",
                 type: 'POST',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),

@@ -8,4 +8,5 @@ class MailBox extends Model
 {
     protected $table = "mailbox";
     
+    
 }

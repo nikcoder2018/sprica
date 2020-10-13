@@ -96,7 +96,32 @@
                         <p>Mailbox</p>
                     </a>
                 </li>
-
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-envelope"></i>
+                        <p>Email<i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview" style="background-color:#555555;">
+                        <li class="nav-item" >
+                            <a  href="{{route('emailtemplates.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-envelope-square"></i>
+                                <p>Templates</p>
+                            </a>
+                        </li>  
+                        <li class="nav-item" >
+                            <a  href="{{route('emailtriggers.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-envelope-open-text"></i>
+                                <p>Triggers</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item" >
+                            <a  href="{{route('emailactions.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-envelope-open"></i>
+                                <p>Actions</p>
+                            </a>
+                        </li>       
+                    </ul>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-bars"></i>
@@ -134,7 +159,6 @@
                     <a data-parents="projeler" href="{{route('admin.projects')}}" class="nav-link">
                         <i class="fas fa-suitcase nav-icon"></i>
                         <p>Projects <i class="right fas fa-angle-left"></i> </p>
-                        
                     </a>
                     <ul class="nav nav-treeview" style="background-color:#555555">
                         <li class="nav-item">
@@ -148,7 +172,7 @@
 
                         <li class="nav-item">
                             <a data-parents="genelayarlar" href="{{route('tasks.index')}}" class="nav-link">
-                                <i class="fas fa-suitcase nav-icon"></i>
+                                <i class="fas fa-tasks nav-icon"></i>
                                 <p>
                                     Tasks
                                 </p>
@@ -165,7 +189,65 @@
                         <p>Employees</p>
                     </a>
                 </li>
+                <li class="nav-item has-treeview">
+                    <a data-parents="projeler" href="{{route('tickets.index')}}" class="nav-link">
+                        <i class="fas fa-ticket-alt nav-icon"></i>
+                        <p>Tickets <i class="right fas fa-angle-left"></i> </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="background-color:#555555">
+                        <li class="nav-item">
+                            <a data-parents="genelayarlar" href="{{route('tickets.index')}}" class="nav-link">
+                                <i class="fas fa-ticket-alt nav-icon"></i>
+                                <p>
+                                    All Tickets
+                                </p>
+                            </a>
+                        </li>
 
+                        <li class="nav-item">
+                            <a data-parents="genelayarlar" href="{{route('tickettypes.index')}}" class="nav-link">
+                                <i class="fas fa-clipboard-list nav-icon"></i>
+                                <p>
+                                    Types
+                                </p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a data-parents="projeler" href="#" class="nav-link">
+                        <i class="fas fa-car nav-icon"></i>
+                        <p>Car Management <i class="right fas fa-angle-left"></i> </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="background-color:#555555">
+                        <li class="nav-item">
+                            <a href="{{route('vehicles.index')}}" class="nav-link">
+                                <i class="fas fa-car nav-icon"></i>
+                                <p>
+                                    Vehicles
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{route('vehiclegroups.index')}}" class="nav-link">
+                                <i class="fas fa-car nav-icon"></i>
+                                <p>
+                                    Vehicle Groups
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('fuels.index')}}" class="nav-link">
+                                <i class="fas fa-gas-pump nav-icon"></i>
+                                <p>
+                                    Fuels
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-cogs"></i>
