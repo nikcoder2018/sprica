@@ -189,31 +189,11 @@
                         <p>Employees</p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item ">
                     <a data-parents="projeler" href="{{route('tickets.index')}}" class="nav-link">
                         <i class="fas fa-ticket-alt nav-icon"></i>
-                        <p>Tickets <i class="right fas fa-angle-left"></i> </p>
+                        <p>Tickets </p>
                     </a>
-                    <ul class="nav nav-treeview" style="background-color:#555555">
-                        <li class="nav-item">
-                            <a data-parents="genelayarlar" href="{{route('tickets.index')}}" class="nav-link">
-                                <i class="fas fa-ticket-alt nav-icon"></i>
-                                <p>
-                                    All Tickets
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a data-parents="genelayarlar" href="{{route('tickettypes.index')}}" class="nav-link">
-                                <i class="fas fa-clipboard-list nav-icon"></i>
-                                <p>
-                                    Types
-                                </p>
-                            </a>
-                        </li>
-                        
-                    </ul>
                 </li>
                 <li class="nav-item has-treeview">
                     <a data-parents="projeler" href="#" class="nav-link">
@@ -248,46 +228,13 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item has-treeview">
+                <li class="nav-item">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
-                            {{-- {{App\Helpers\Language::settings('admin_genel_ayarlar')}} --}}
                             Settings
-                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-
-                    <ul class="nav nav-treeview" style="background-color:#555555">
-            
-                        <li class="nav-item">
-                            <a data-parents="genelayarlar" href="{{route('admin.settings.general')}}" class="nav-link">
-                                <i class="fas fa-cog nav-icon"></i>
-                                <p>
-                                    {{App\Helpers\Language::settings('admin_genel_ayarlar')}}
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a data-parents="genelayarlar"  href="{{route('admin.settings.code')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    {{App\Helpers\Language::settings('Admin_Kodlar')}}
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a data-parents="genelayarlar" href="{{route('admin.settings.vacationdays')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>
-                                    {{App\Helpers\Language::settings('Admin_Tatil_Gunleri')}}
-                                </p>
-                            </a>
-                        </li>
-                        
-                    </ul>
                 </li>
 
                 @endif

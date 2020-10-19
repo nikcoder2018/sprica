@@ -15,5 +15,7 @@ class Project extends Model
         return $this->hasMany(Task::class, 'project_id', 'ProjeID')->with('assigned');
     }
 
-    
+    function tasks_completed(){
+        return $this->hasMany(Task::class, 'project_id', 'ProjeID')->where('status','completed'); 
+    }
 }

@@ -10,12 +10,15 @@ use App\Setting;
 use App\Language;
 use App\Code;
 use App\VacationDay;
-
+use App\TicketType;
 class SettingsController extends Controller
 {
     //
     public function general_settings(){
         $data['genset'] = Setting::orderBy('GenelID', 'DESC')->first();
+        $data['ticket_types'] = TicketType::orderBy('id', 'ASC')->get();
+        $data['vacationdays'] = VacationDay::orderBy('GunID', 'DESC')->get();
+        $data['codes'] = Code::orderBy('KodID', 'DESC')->get();
         return view('admin.contents.settings',$data);
     }
 
@@ -84,7 +87,7 @@ class SettingsController extends Controller
         ]);
 
         if($vd){
-            return response()->json(array('success' => true, 'msg' => 'Vacation Day added!'));
+            return response()->json(array('success' => true, 'msg' => 'Vacation Day added!', 'details' => $vd));
         }
     }
 
@@ -100,7 +103,7 @@ class SettingsController extends Controller
         $vd->save();
 
         if($vd){
-            return response()->json(array('success' => true, 'msg' => 'Vacation Day Updated!'));
+            return response()->json(array('success' => true, 'msg' => 'Vacation Day Updated!', 'details' => $vd));
         }
     }
 
@@ -109,7 +112,7 @@ class SettingsController extends Controller
         $vd->delete();
 
         if($vd){
-            return response()->json(array('success' => true, 'msg' => 'Vacation Day Deleted!'));
+            return response()->json(array('success' => true, 'msg' => 'Vacation Day Deleted!', 'id' => $vd->GunID));
         }
     }
 }

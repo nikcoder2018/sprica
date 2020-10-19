@@ -82,13 +82,29 @@ $lang = new Language;
                                 </ul>
                             </td>
                             <td class="project_progress">
+                                @if(count($project->tasks) > 0)
+                                @php 
+                                    $completed = count($project->tasks_completed);
+                                    $tasks = count($project->tasks);
+                                    $percentage = ($completed/$tasks)*100;
+                                @endphp
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 57%">
+                                    <div class="progress-bar bg-green" role="progressbar" aria-volumenow="{{$percentage}}" aria-volumemin="0" aria-volumemax="100" style="width: {{$percentage}}%">
                                     </div>
                                 </div>
                                 <small>
-                                    57% Complete
+                                    {{$percentage}}% Complete
                                 </small>
+                                @else
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-green" role="progressbar" aria-volumenow="0" aria-volumemin="0" aria-volumemax="100" style="width: 0%">
+                                    </div>
+                                </div>
+                                <small>
+                                    0% Complete
+                                </small>
+                                @endif
+
                             </td>
                             <td>
                                 {{\App\Watches::where('Tarih', '>=', Carbon\Carbon::create(date('Y'), 1,1)->toDateString())->where('Tarih', '<=', Carbon\Carbon::create(date('Y'),12,31)->toDateString())->where('ProjeID', $project->ProjeID)->sum('Saat')}}

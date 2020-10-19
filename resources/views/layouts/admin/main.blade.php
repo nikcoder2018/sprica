@@ -40,8 +40,6 @@
         <!-- /.content-wrapper -->
         
         @include('admin.components.footer')
-
-        @yield('modals')
     </div>
     <!-- ./wrapper -->
 

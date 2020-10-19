@@ -11,7 +11,7 @@ use App\User;
 class ProjectsController extends Controller
 {
     public function index(){
-        $projects = Project::with('tasks')->orderBy('ProjeID', 'DESC')->get();
+        $projects = Project::with(['tasks','tasks_completed'])->orderBy('ProjeID', 'DESC')->get();
         
 
         foreach($projects as $project){
@@ -39,7 +39,7 @@ class ProjectsController extends Controller
             $project['members'] = $members_data;
         }
         $data['projects'] = $projects;
-        #return response()->json($data); exit;
+        //return response()->json($data); exit;
         return view('admin.contents.projects', $data);
     }
 
