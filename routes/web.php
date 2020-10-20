@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/wages', 'Admin\HRController@wages')->name('admin.hr-wage');
     Route::get('/wages_total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');
     Route::get('/wages_advance', 'Admin\HRController@wages_advance')->name('admin.hr-wages-advance');
+    Route::post('/wages_advance', 'Admin\HRController@wages_advance_store')->name('admin.hr-wages-advance');
 
     Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
     Route::post('/projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');

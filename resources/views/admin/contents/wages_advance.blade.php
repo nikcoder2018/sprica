@@ -1,6 +1,8 @@
 <?php 
 use App\Helpers\Language;
+use App\Helpers\System;
 $lang = new Language;
+$system = new System;
 ?>
 @extends('layouts.admin.main')
 
@@ -50,14 +52,10 @@ $lang = new Language;
                                     @if(count($all_advances) > 0)
                                         @foreach($all_advances as $advance)
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            {{--
-                                            <td><?=$db->cevir ($row->Tarih2)?></td>
-                                            <td><?=$db->cevir ($row->Tarih)?></td>
-                                            --}}
+                                            <td>{{$system::cevir($advance->Tarih2)}}</td>
+                                            <td>{{$system::cevir($advance->Tarih)}}</td>
                                             <td>{{$advance->Tutar}}</td>
-                                            <td>{{App\Watches::where('UyeID', $advance->UyeID)->first()->UyeADISOYADI}}</td>
+                                            <td>{{App\User::where('id', $advance->UyeID)->first()->name}}</td>
                                             <td>
                                                 @if($advance->Eldenmi==1)
                                                     {{$lang::settings('Avanslar_Bankadan')}}
@@ -98,4 +96,106 @@ $lang = new Language;
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+@endsection
+
+@section('modals')
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <form class="form-add" method="POST" action="{{route('admin.hr-wages-advance')}}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Hinzufügen</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Avans_Uye_Seciniz')}}</label>
+                                <select class="form-control" name="UyeID">
+                                    @foreach($all_members as $member)
+                                        <option @if(\Request::get('UyeID') == $member->id) selected @endif value="{{$member->id}}">
+                                            {{$member->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                
+                            </div>
+                            @php 
+                                $yil = date("Y");
+                                $ay = date("m");
+                                $yill = date("Y")-1;
+                            @endphp
+
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Avans_Tarih_iki_Giriniz')}}</label>
+                                <input type="date" required class="form-control" id="inputBasicFirstName" name="Tarih2" placeholder="">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Avans_Tarih_Giriniz')}}</label>
+                                <select type="date" required class="form-control" id="inputBasicFirstName" name="Tarih" placeholder="">                              
+                                    <option value="{{$yil}}-01-01">Januar</option>
+                                    <option value="{{$yil}}-02-01">Februar</option>
+                                    <option value="{{$yil}}-03-01">März</option>
+                                    <option value="{{$yil}}-04-01">April</option>
+                                    <option value="{{$yil}}-05-01">Mai</option>
+                                    <option value="{{$yil}}-06-01">Juni</option>
+                                    <option value="{{$yil}}-07-01">Juli</option>
+                                    <option value="{{$yil}}-08-01">August</option>
+                                    <option value="{{$yil}}-09-01">September</option>
+                                    <option value="{{$yil}}-10-01">Oktober</option>
+                                    <option value="{{$yil}}-11-01">November</option>
+                                    <option value="{{$yil}}-12-01">Dezember {{$yil}}</option>
+                                    <option value="{{$yill}}-12-01">Dezember {{$yill}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Avans_Tutar_Giriniz')}}</label>
+                                <input type="text" required class="form-control" id="inputBasicFirstName" name="Tutar" placeholder="">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Avaslar_Eldenmi')}}</label>
+                                <select class="form-control" name="Eldenmi">
+                                    <option value="1">{{$lang::settings('Avanslar_Bankadan')}}</option>
+                                    <option value="2">{{$lang::settings('Avanslar_Elden')}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <a href="{{route('admin.hr-wages-advance')}}" class="btn btn-default" >Abbrechen</a>
+                        <button type="submit" class="btn btn-primary">{{$lang::settings('Isci_Paneli_Kaydet')}}</button>
+                    </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>   
+@endsection
+
+@section('scripts')
+    <script>
+        $('.form-add').on('submit', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(resp){
+                    if(resp.success){
+                        Toast.fire({
+                            icon: 'success',
+                            title: resp.msg,
+                            showConfirmButton: false,
+                        });
+
+                        setTimeout(function() { location.reload(); }, 1000)
+                    }
+                }
+            })
+        });
+    </script>
 @endsection

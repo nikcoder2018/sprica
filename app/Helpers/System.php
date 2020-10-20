@@ -43,7 +43,7 @@ class System
         return $messages;
     }
 
-    function cevir($tarih)
+    public static function cevir($tarih)
     {
         $parcala = explode("-",$tarih);
         $yeni_tarih= $parcala[2].".".$parcala[1].".".$parcala[0];
@@ -58,5 +58,24 @@ class System
         $gun_degis = str_replace($gun_ingilizce,$turkce_gun,$gun);
         return $gun_degis;
 
+    }
+
+    function pazarmibak($girilentarih)
+    {
+        global $db;
+        $tarih=explode ("-",$girilentarih);
+        $gun = date("l",mktime(0,0,0,$tarih[1],$tarih[2],$tarih[0]));
+        $gun_ingilizce = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+        $turkce_gun = array('Pazartesi','Salı;','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar');
+        $gun_degis = str_replace($gun_ingilizce,$turkce_gun,$gun);
+
+        if( $gun_degis=="Pazar")
+        {
+            return true;
+        }else
+        {
+            return false;
+
+        }
     }
 }

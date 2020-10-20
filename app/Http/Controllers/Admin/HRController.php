@@ -207,7 +207,22 @@ class HRController extends Controller
 
     public function wages_advance(){
         $data['all_advances'] = AdvancePayment::orderBy('AvansID', 'DESC')->get();
-        
+        $data['all_members'] = Members::orderBy('name', 'ASC')->get();
+
         return view('admin.contents.wages_advance', $data);
+    }
+
+    public function wages_advance_store(Request $request){
+        $create = AdvancePayment::create([
+            'UyeID' => $request->UyeID,
+            'Tutar' => $request->Tutar,
+            'Tarih' => $request->Tarih,
+            'Tarih2' => $request->Tarih2,
+            'Eldenmi' => $request->Eldenmi
+        ]);
+
+        if($create){
+            return response()->json(array('success' => true, 'msg' => 'Request Successfully Saved'));
+        }
     }
 }

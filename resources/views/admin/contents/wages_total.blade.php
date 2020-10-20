@@ -1,8 +1,9 @@
 <?php 
 use App\Helpers\Language;
+use App\Helpers\System;
 $lang = new Language;
+$system = new System;
 ?>
-
 @extends('layouts.admin.main')
 
 @section('content')
@@ -139,155 +140,151 @@ $lang = new Language;
                                         $last_day_month = Carbon\Carbon::create(Request::get('Yil'), Request::get('Ay'), 1)->endOfMonth()->toDateString();
                                     ?>
                                         <tr>
-                                            <td class="text-center">{{$member->UyeADISOYADI}}</td>
-                                            <td class="text-center">{{$member->UyeNUMARASI}}</td>
-                                            <td class="text-center">{{$member->UyeVERGIDURUMU}}</td>
-                                            <td class="text-center">{{$member->UyeSAATUCRETI}}</td>
-                                            <td class="text-center">{{$member->UyeISEGIRISTARIHI}}</td>
+                                            <td class="text-center">{{$member->name}}</td>
+                                            <td class="text-center">{{$member->number}}</td>
+                                            <td class="text-center">{{$member->tax_status}}</td>
+                                            <td class="text-center">{{$member->hour_fee}}</td>
+                                            <td class="text-center">{{$member->login_date}}</td>
                                             <td class="text-center">
                                                 {{App\RemainingPayment::where('Yil',Request::get('Yil'))->where('Ay',Request::get('Ay'))->where('UyeID',$member->UyeID)->sum('KalanODEME')}}
                                             </td>
-                                            
                                             <td class="text-center">
                                                 {{$tatilsaatleri = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('ProjeID', 7)->where('UyeID', $member->UyeID)->sum('Saat')}}
                                             </td>
-                                            
                                             <td class="text-center">
                                                 {{$buayizinkullandigisayis = 8*App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('ProjeID', 2)->where('UyeID',$member->UyeID)->count()}}
                                             </td>
-                                            
                                             <td class="text-center">
                                                 {{$buayizinkullandigisayi = 8*App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('ProjeID', 1)->where('UyeID',$member->UyeID)->count()}}
                                             </td>
-
-                                            
                                             <!-- KUG -->
                                             <td class="text-center">
                                                 {{$buaysaatlerkug = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('ProjeID', 10)->where('UyeID',$member->UyeID)->sum('Saat')}}
                                             </td>
-                                            
                                             <!-- Arbeitsstunden - KUG -->
                                             <td class="text-center">
                                                 {{App\RemainingPayment::where('Yil',Request::get('Yil'))->where('Ay',Request::get('Ay'))->where('UyeID',$member->UyeID)->sum('KalanODEME')-$buayizinkullandigisayi-$buayizinkullandigisayis-$tatilsaatleri-$buaysaatlerkug}}
                                             </td>
-                                            <td>
-                                                {{cal_days_in_month(CAL_GREGORIAN , $_GET["Ay"], $_GET["Yil"])}}
-                                            </td>
-                                            <td></td>
-                                            {{--
                                             <td class="text-center">
-                                                <?php
+                                                @php
                                                 $aydakigunler = cal_days_in_month(CAL_GREGORIAN , $_GET["Ay"], $_GET["Yil"]);
                                                 $isgunleri =0;
                                                 for($i =1; $i<=$aydakigunler; $i++)
                                                 {
-                                                    if($sistem->tatilmi_bak("$i-".$_GET["Ay"]."-".$_GET["Yil"])==false)
+                                                    if($system::tatilmi_bak("$i-".$_GET["Ay"]."-".$_GET["Yil"])==false)
                                                     {
                                                         $isgunleri++;
                                                     }
                                                 }
                                                 $calismasigereken = $isgunleri*8;
                                                 $uyesaatleri =0;
-                                                ?>
-
-                                                $db->VeriOkuCokluSorgu ("SELECT * FROM saatler WHERE  Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31'  AND Onay=1 AND UyeID=$uyebilgileri->UyeID");
-                                                foreach ($db->bilgial as $row)
+                                                
+                                                $watches = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('UyeID', $member->UyeID)->get();
+                                                foreach ($watches as $row)
                                                 {
                                                     $uyesaatleri +=$row->Saat;
                                                 }
-                                                ?>
-                                                <?=$uyesaatleri-$calismasigereken<1?'0':$uyesaatleri-$calismasigereken?>
+                                                
+                                                echo $uyesaatleri-$calismasigereken<1?'0':$uyesaatleri-$calismasigereken;
+                                                @endphp
+
+                                             
                                             </td>
-                                            --}}
+                                            
 
 
                                             <td class="text-center">
                                                 {{$gecesaatleri = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('Gunduz', 2)->where('UyeID',$member->UyeID)->sum('Saat')}}
                                             </td>
                                             
-                                            {{--
+                                            
                                             <td class="text-center">
-                                                <?php
+                                                @php
                                                 $pazarsaatleri =0;
-                                                $db->VeriOkuCokluSorgu ("SELECT * FROM saatler WHERE  Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND Onay=1 AND UyeID=$uyebilgileri->UyeID");
-                                                foreach ($db->bilgial as $row)
+                                                $watches = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('UyeID', $member->UyeID)->get();
+                                                foreach ($watches as $row)
                                                 {
-                                                    if($sistem->pazarmibak  ($row->Tarih)==true)
+                                                    if($sysstem::pazarmibak  ($row->Tarih)==true)
                                                     {
                                                         $pazarsaatleri+=$row->Saat;
                                                     }
                                                 }
                                                 echo $pazarsaatleri;
-                                                ?>
+                                                @endphp
                                             </td>
-                                            --}}
-                                            {{--
+                                            
+                                            
                                             <td class="text-center">
-                                                <?php
+                                                @php
                                                 $tatilsaatleri =0;
-                                                if($db->veriSaydirSorgu("SELECT * FROM saatler WHERE  Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND Calisti=1  AND Onay=1 AND UyeID=$uyebilgileri->UyeID")>0)
+                                                $watches = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('UyeID', $member->UyeID);
+                                                if($watches->exists())
                                                 {
-                                                    $db->VeriOkuCokluSorgu ("SELECT * FROM saatler WHERE  Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND Calisti=1  AND Onay=1 AND UyeID=$uyebilgileri->UyeID");
-                                                    foreach ($db->bilgial as $row)
+                                                    foreach ($watches->get() as $row)
                                                     {
-                                                        if($sistem->tatilmibak  ($row->Tarih)==true)
+                                                        if($system::tatilmibak  ($row->Tarih)==true)
                                                         {
                                                             $tatilsaatleri+=$row->Saat;
                                                         }
                                                     }
                                                 }
                                                 echo $tatilsaatleri;
-                                                ?>
+                                                @endphp
                                             </td>
+                                            
                                             <td class="text-center">
                                                 <?php
                                                 $parabirler =0;
-                                                $db->VeriOkuCokluSorgu ("SELECT * FROM saatler WHERE   Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND Onay=1 AND UyeID=$uyebilgileri->UyeID");
-                                                foreach ($db->bilgial as $row)
+                                                $watches = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('UyeID', $member->UyeID);
+                                                foreach ($watches->get() as $row)
                                                 {
-                                                    @$parabirler+=$db->VeriOkuTek ("kodlar","Parabir","KodID",$row->Kod);
+                                                    @$parabirler+= App\Code::where('KodID', $row->Kod)->first()->Parabir;
                                                 }
                                                 echo $parabirler;
                                                 ?>
                                             </td>
+                                            
                                             <td class="text-center">
-                                                <?php
+                                                @php
                                                 $paraikiler =0;
-                                                $db->VeriOkuCokluSorgu ("SELECT * FROM saatler WHERE   Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND Onay=1 AND UyeID=$uyebilgileri->UyeID");
-                                                foreach ($db->bilgial as $row)
+                                                $watches = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('UyeID', $member->UyeID);
+                                                foreach ($watches->get() as $row)
                                                 {
                                                     if($db->VeriOkuTek ("kodlar","Paraiki","KodID",$row->Kod)!="")
                                                     {
-                                                        $paraikiler+=$db->VeriOkuTek ("kodlar","Paraiki","KodID",$row->Kod);
+                                                        $paraikiler+=App\Code::where('KodID', $row->Kod)->first()->Paraiki;
                                                     }
                                                 }
                                                 echo $paraikiler;
-                                                ?>
+                                                @endphp
                                             </td>
+                                            
                                             <td class="text-center">
-                                                <?php
+                                                @php
                                                 $avanslar =0;
-                                                if($db->veriSaydirSorgu("SELECT * FROM avanslar WHERE Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND UyeID=$uyebilgileri->UyeID")>0)
+                                                $watches = App\Watches::where('Tarih', '>=', $first_day_month)->where('Tarih', '<=', $last_day_month)->where('Onay', 1)->where('UyeID', $member->UyeID);
+                                                if($watches->exists())
                                                 {
-                                                    $db->VeriOkuCokluSorgu ("SELECT * FROM avanslar WHERE Tarih >='$yil-$ay-01' AND Tarih<='$yil-$ay-31' AND UyeID=$uyebilgileri->UyeID");
-                                                    foreach ($db->bilgial as $row)
+                                                    foreach ($watches->get() as $row)
                                                     {
                                                         $avanslar+=$row->Tutar;
                                                     }
                                                 }
                                                 echo $avanslar;
-                                                ?>
+                                                @endphp
                                             </td>
+                                            
                                             <td class="text-center">
-                                                <?=@$db->VeriOkuTekCoklu ("benzinodemesiay","KalanODEME",array("Yil","Ay","UyeID"),array($_GET["Yil"],$_GET["Ay"],$uye->UyeID),"AND","=")?>
+                                                {{@App\Gasoline::where('Yil', $_GET["Yil"])->where('Ay', $_GET["Ay"])->where('UyeID', $member->UyeID)->first()->KalanODEME}}
                                             </td>
+                                            
                                             <td class="text-center">
-                                                <?=$db->veriSaydir("islemyapildi",array("Yil","Ay","UyeID"),array($_GET["Yil"],$_GET["Ay"],$uye->UyeID))>0?_İslem_Yapildi_Evet:_İslem_Yapildi_Hayır?>
+                                                {!!@App\Islemyapildi::where('Yil', $_GET["Yil"])->where('Ay', $_GET["Ay"])->where('UyeID', $member->UyeID)->exists() ? $lang::settings('_İslem_Yapildi_Evet') : $lang::settings('_İslem_Yapildi_Hayır')!!}
                                             </td>
-                                            --}}
+                                            
                                         </tr>
                                     @endforeach
-                                    </tbody> {{--<caption>Arbeitsstunden (Soll) <?php echo $isgunleri*8?></caption>--}}
+                                    </tbody> <caption>Arbeitsstunden (Soll) {{$isgunleri*8}}</caption>
                                 </table>
                             </div>
                         @endif
