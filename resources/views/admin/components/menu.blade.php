@@ -229,7 +229,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link ana">
+                    <a href="{{route('admin.settings.general')}}" class="nav-link ana">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Settings
