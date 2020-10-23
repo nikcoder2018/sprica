@@ -12,7 +12,6 @@ $lang = new Language;
         .dataTables_length, .dataTables_filter, .dataTables_iinfo, .ddataTables_paginate {
             display: none;
         }
-        
     </style>
 @endsection
 
@@ -20,95 +19,47 @@ $lang = new Language;
 <div style="height:51px" class="card card-default color-palette-bo">
     <div style="height:51px" class="card-header">
         <div class="d-inline-block">
-          <h3 class="card-title"><i class="fa fa-users"></i> Personal &nbsp; &nbsp; &nbsp;</h3>
+          <h3 class="card-title"><i class="fa fa-users"></i> Personal</h3>
         </div>
-        
-        
-        
-         <div class="d-inline-block">
-             
-             
-             <form  action="{{route('admin.employees.filter')}}" class="filterdata" method="post" accept-charset="utf-8">
-                 @csrf
-
-                <div class="dropdown">
-        <div class="form-group">
-            <div class="input-group">
-                
-                           
-                <input type="text" name="keyword" placeholder=" Suchen..." autocomplete="off" data-toggle="dropdown" class="dropdown-toggle input-sm form-control form-control-sm" aria-haspopup="true" aria-expanded="true" /> 
-                
-        <!--        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div> -->
-                
-                <ul class="dropdown-menu" role="menu" aria-labelledby="searchTerm">
-                    <li>
-                        <div class="container-fluid">
-                                                        <div class="row col-12">
-                                                            
-                                                            
-                                                            
-                                                            
-                  <div class="form-group"><label class="col-12 control-label" for="role">Role</label><div class="col-12">                           
-                                                                
-                                                    
-                                                                
-   <select name="type" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                            <option value="all" selected>All</option>
-                            <option value="admin">Admin</option>
-                            <option value="employee">Employee</option>
-                        </select>
-    </div>
-</div>
-<div class="form-group"><label class="col-12 control-label" for="visibility">Status</label><div class="col-12">                                                            
-    <select name="status" class="custom-select mr-sm-2" id="inlineFormCustomSelect">                            
-                            <option value="1" selected>Active</option>
-                            <option value="0">Disabled</option>
-                            <option value="all">All Status</option>
-                        </select>
-    </div>
-</div>
-    
-
-</div>
-  
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            
-      
-            
-            
-            
-        </div>
-    </div>
-    </form>
-             
-             
-             
-             
-             
-    
-    </div>
-        
         <div class="d-inline-block float-right">
             <a data-toggle="modal" data-target="#modal-lg" href="javascript:void(0)"class="btn btn-sm btn-outline-primary"><i class="fa fa-user-plus"></i></a>
         </div>
     </div>
 </div>
-
-
-<section class="content">
-    <div class="container-fluid">
 <div class="content">
+    <div class="card-body">
+        <form action="{{route('admin.employees.filter')}}" class="filterdata" method="post" accept-charset="utf-8">
+            @csrf
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select name="type" class="form-control">
+                            <option value="all">All</option>
+                            <option value="admin">Admin</option>
+                            <option value="employee">Employee</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <select name="status" class="form-control">                            
+                            <option value="1">Active</option>
+                            <option value="0">Disabled</option>
+                            <option value="all">All Status</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Suchen...">
+                    </div>
+                </div>
+            </div>
+        </form> 
+    </div>
 
-
-    <div class="">
-        <div class="card">
+    <div class="card">
+        <div class="card-body">
            <!-- Load Admin list (json request)-->
            <div class="data_container">    
                 <div class="datalist">
@@ -119,8 +70,6 @@ $lang = new Language;
        
    </div>
 </div>
-    </div>
-</section>
 
 @endsection
 
@@ -470,8 +419,7 @@ $lang = new Language;
         bsCustomFileInput.init();
         $("#example1").DataTable({
             "order": [[ 1,"asc"]],
-            "pageLength": 25,
-            "ordering": false 
+            "pageLength": 25
         });
 
         $(".silbtn").click(function(){
@@ -572,8 +520,7 @@ $lang = new Language;
                 $('.datalist').html(resp.result);
                 $("#example1").DataTable({
                     "order": [[ 1, "asc" ]],
-                    "pageLength": 25,
-                    "ordering": false 
+                    "pageLength": 25
                 });
             }
         }); 
@@ -590,7 +537,6 @@ $lang = new Language;
                 if(resp.success){
                     Toast.fire({
                         icon: 'success',
-                        timerProgressBar: false,
                         title: resp.msg,
                         showConfirmButton: false,
                     });
@@ -618,7 +564,6 @@ $lang = new Language;
                 if(resp.success){
                     Toast.fire({
                         icon: 'success',
-                        timerProgressBar: false,
                         title: resp.msg,
                         showConfirmButton: false,
                     });

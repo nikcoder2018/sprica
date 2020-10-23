@@ -152,7 +152,13 @@
                                 <i class="nav-icon far fa-credit-card"></i>
                                 <p>{{App\Helpers\Language::settings('Menu_Avanslar')}}</p>
                             </a>
-                        </li>            
+                        </li>  
+                        <li class="nav-item">
+                            <a href="{{route('admin.employees')}}" class="nav-link">
+                                <i class="fas fa-user nav-icon"></i>
+                                <p>Employees</p>
+                            </a>
+                        </li>          
                     </ul>
                 </li>
 				<li class="nav-item has-treeview">
@@ -182,13 +188,7 @@
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a data-parents="personeller" href="{{route('admin.employees')}}" class="nav-link">
-                        <i class="fas fa-user nav-icon"></i>
-                        {{-- <p>{{App\Helpers\Language::settings('Admin_Personeller')}}</p> --}}
-                        <p>Employees</p>
-                    </a>
-                </li>
+                
                 <li class="nav-item ">
                     <a data-parents="projeler" href="{{route('tickets.index')}}" class="nav-link">
                         <i class="fas fa-ticket-alt nav-icon"></i>

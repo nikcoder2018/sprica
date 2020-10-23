@@ -43,6 +43,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('/wages_advance', 'Admin\HRController@wages_advance_store')->name('admin.hr-wages-advance');
 
     Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
+    Route::get('/projects/{id}/details','Admin\ProjectsController@show')->name('admin.projects.details');
     Route::post('/projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');
     Route::post('/projects/update', 'Admin\ProjectsController@update')->name('admin.projects.update');
     Route::post('/projects/delete', 'Admin\ProjectsController@destroy')->name('admin.projects.destroy');
@@ -80,6 +81,8 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/mailbox/compose', 'MailboxController@compose')->name('mailbox.compose');
     Route::post('/mailbox/compose', 'MailboxController@send')->name('mailbox.compose');
     Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('mailbox.read');
+    Route::get('/mailbox/sent', 'MailboxController@sent')->name('mailbox.sent');
+    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('mailbox.unsent');
     Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('mailbox.drafts');
     Route::get('/mailbox/templates', 'MailboxController@templates')->name('mailbox.templates');
 

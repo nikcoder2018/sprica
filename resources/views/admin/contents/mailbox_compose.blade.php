@@ -1,6 +1,8 @@
 @extends('layouts.admin.main')
 @section('external_css')
   <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 @endsection
 @section('content')
     <!-- Content Header (Page header) -->
@@ -40,17 +42,12 @@
                   <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                       <a href="{{route('mailbox')}}" class="nav-link">
-                        <i class="far fa-envelope"></i> Sent
+                        <i class="far fa-envelope"></i> Inbox
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{route('mailbox.drafts')}}" class="nav-link">
-                        <i class="far fa-file-alt"></i> Drafts
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="{{route('mailbox.templates')}}" class="nav-link">
-                        <i class="far fa-file-alt"></i> Templates
+                      <a href="{{route('mailbox.sent')}}" class="nav-link">
+                        <i class="far fa-file-alt"></i> Sent
                       </a>
                     </li>
                   </ul>
@@ -70,7 +67,11 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                   <div class="form-group">
-                    <input class="form-control" name="to" placeholder="To:" required>
+                    <select class="select2bs4" multiple="multiple" name="recipient[]" data-placeholder="To" style="width: 100%;">
+                      @foreach($users as $user)
+                        <option value="{{$user->email}}">{{$user->name}}</option>
+                      @endforeach
+                    </select>
                   </div>
                   <div class="form-group">
                     <input class="form-control" name="subject" placeholder="Subject:">
@@ -82,7 +83,6 @@
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <div class="float-right">
-                    <button type="submit" name="draft" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Draft</button>
                     <button type="submit" name="send" class="btn btn-primary"><i class="far fa-envelope"></i> Send</button>
                   </div>
                   <button type="reset" class="btn btn-default btn-discard"><i class="fas fa-times"></i> Discard</button>
@@ -100,11 +100,17 @@
 @endsection
 @section('external_js')
   <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
+  <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
 @endsection
 
 @section('scripts')
 <script>
   $(function () {
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
     //Add text editor
     $('#compose-textarea').summernote({
       height: 300
@@ -116,12 +122,16 @@
         $.ajax({
           url: $(this).attr('action'),
           type: 'POST',
-          data: new FormData(this),
-          contentType: false,
-          cache: false,
-          processData:false,
+          data: $(this).serialize(),
           success: function(resp){
-
+            if(resp.success){
+              Toast.fire({
+                  icon: 'success',
+                  title: resp.msg,
+                  showConfirmButton: false,
+              });
+              setTimeout(function() { location.href="{{route('mailbox.sent')}}"; }, 1000);
+            }
           }
         })
     })

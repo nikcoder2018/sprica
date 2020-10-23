@@ -18,4 +18,8 @@ class Project extends Model
     function tasks_completed(){
         return $this->hasMany(Task::class, 'project_id', 'ProjeID')->where('status','completed'); 
     }
+
+    function timelogs(){
+        return $this->hasMany(Watches::class, 'ProjeID', 'ProjeID');
+    }
 }

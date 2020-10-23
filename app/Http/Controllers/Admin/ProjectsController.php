@@ -43,6 +43,35 @@ class ProjectsController extends Controller
         return view('admin.contents.projects', $data);
     }
 
+    public function show($id){
+        $project = Project::with(['tasks','timelogs'])->where('ProjeID', $id)->orderBy('ProjeID', 'DESC')->first();
+        $members = array();
+        $tasks = $project->tasks;
+        if(count($tasks) > 0){
+            foreach($tasks as $task){
+                $assigns = $task->assigned;
+                if(count($assigns) > 0){
+                    foreach($assigns as $assign){
+                        array_push($members, $assign->assign_to);
+                    }
+                }
+            }
+        }
+        $members = array_unique($members);
+        $members_data = array();
+        foreach($members as $key=>$member){
+            if(User::where('id', $member)->exists()){
+                array_push($members_data,User::find($member));
+            }
+            
+        }
+
+        $project['members'] = $members_data;
+        $data['project'] = $project;
+
+        #return response()->json($data); exit;
+        return view('admin.contents.projects_details', $data);
+    }
     public function store(Request $request){
         $project = Project::create([
             'ProjeBASLIK' => $request->ProjeBASLIK,

@@ -48,21 +48,22 @@
       <div class="col-md-9">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h3 class="card-title">Inbox</h3>
+            <h3 class="card-title">Sent</h3>
 
             <!-- /.card-tools -->
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
             <div class="mailbox-controls">
-              <!-- Check all button -->
-              <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="far fa-square"></i>
-              </button>
+              <div class="btn btn-default btn-sm icheck-primary">
+                <input type="checkbox" value="" id="select-all">
+                <label for="select-all"></label>
+              </div>
               <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm"><i class="far fa-trash-alt"></i></button>
+                <button type="button" class="btn btn-default btn-sm btn-delete" disabled><i class="far fa-trash-alt"></i></button>
               </div>
               <!-- /.btn-group -->
-              <button type="button" class="btn btn-default btn-sm"><i class="fas fa-sync-alt"></i></button>
+              <button type="button" class="btn btn-default btn-sm btn-refresh"><i class="fas fa-sync-alt"></i></button>
               <div class="float-right">
                 1-50/200
                 <div class="btn-group">
@@ -74,22 +75,22 @@
               <!-- /.float-right -->
             </div>
             <div class="table-responsive mailbox-messages">
-              <table class="table table-hover table-striped">
+              <table class="table table-hover table-striped table-sent">
                 <tbody>
                   @if(count($mailbox) > 0)
-                    @foreach($mailbox as $email)
+                    @foreach($mailbox as $key=>$email)
                     <tr>
                       <td>
                         <div class="icheck-primary">
-                          <input type="checkbox" value="" id="check1">
-                          <label for="check1"></label>
+                          <input type="checkbox" class="checkbox" value="{{$email->id}}" name="id[]" id="check{{$key}}">
+                          <label for="check{{$key}}"></label>
                         </div>
                       </td>
                       <td class="mailbox-name"><a href="{{route('mailbox.read', $email->id)}}">{{$email->to}}</a></td>
                       <td class="mailbox-subject"><b>{{$email->subject}}</b>
                       </td>
                       <td class="mailbox-attachment"></td>
-                      <td class="mailbox-date">5 mins ago</td>
+                      <td class="mailbox-date">{{Carbon\Carbon::parse($email->created_at)->diffForHumans()}}</td>
                     </tr>
                     @endforeach
                   @endif
@@ -109,4 +110,72 @@
     <!-- /.row -->
   </section>
   <!-- /.content -->
+@endsection
+
+@section('scripts')
+    <script>
+      // Handle click on "Select all" control
+      $('#select-all').on('click', function(){
+          // Check/uncheck checkboxes for all rows in the table
+          $('input[type="checkbox"]').prop('checked', this.checked);
+          handCheckboxes();
+      });
+
+      $('.table-sent').on('click', '.checkbox',function(){
+          handCheckboxes();
+      });
+
+      function handCheckboxes(){
+          var count = 0;
+          $('.checkbox').each(function () {
+              if(this.checked){
+                  count++;
+              }
+          });
+
+          if(count > 0){
+            $('.btn-delete').prop('disabled', false);
+          }else{
+            $('.btn-delete').prop('disabled', true);
+          }
+      }
+
+      $('.btn-delete').on('click', function(){
+        let checked = [];
+        $(".checkbox:checkbox").map(function() {
+            this.checked ? checked.push(this.value) : '';
+        });
+
+        Swal.fire({
+            text: 'Are you sure you want to delete?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-primary",
+            cancelButtonClass: "btn btn-danger ml-1"
+        }).then(async result => {
+            if(result.value){
+                const unsent = await $.ajax({
+                    url: "{{ route('mailbox.unsent') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        ids: checked
+                    }
+                });
+
+                if(unsent.success){
+                    Swal.fire({
+                        text: unsent.msg,
+                        type: 'success',
+                    }).then(()=>{
+                        location.reload();
+                    });
+                }
+            }
+        });
+      });
+    </script>
 @endsection

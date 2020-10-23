@@ -28,6 +28,7 @@ $lang = new Language;
             background-color: rgba(0, 0, 0, 0.03);
             border-bottom: 1px solid rgba(0, 0, 0, 0.125);
         }
+
     </style>
 @endsection
 
@@ -38,26 +39,26 @@ $lang = new Language;
           <h3 class="card-title"><i class="fa fa-user"></i> {{$user_details->name}}</h3>
         </div>
         <div class="d-inline-block float-right">
-            <a href="{{route('admin.employees')}}" class="btn btn-sm btn-outline-primary"><i class="fa fa-undo"></i></a>
+            <a href="{{route('admin.employees')}}" class="btn btn-sm btn-outline-primary"><i class="fa fa-undo"></i></a> &nbsp;
             <button data-id="{{$user_details->id}}" class="btn btn-sm btn-outline-success btn-edit"><i class="icon wb-check" aria-hidden="true"></i><i class="fa fa-edit"></i></button>
         </div>
     </div>
 </div>
-<div class="container" style="margin-left: 0px">
+<div class="container-fluid" style="margin-left: 0px">
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
             <!-- jquery validation -->
-            <div class="card card-info mt-3">
+            <div class=" mt-3">
                 <!-- /.card-header -->
                 <!-- form start -->
-                <div class="card-body">
+                <div class="">
                     @if(isset($user_details))
                     <section class="content">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="card card-primary card-outline">
+                                    <div style="min-height:75vh"class="card card-primary card-outline">
                                         <div class="card-body box-profile">
                                           <div class="text-center">
                                             <img class="profile-user-img img-fluid img-circle img-bordered-sm" src="{{ asset('/storage/'.config('chatify.user_avatar.folder').'/'.$user_details->avatar) }}" alt="Bild">
@@ -67,12 +68,15 @@ $lang = new Language;
                           
                                           <p class="text-muted text-center">{{$user_details->username}}</p>
                           
-                                          <ul class="list-group list-group-unbordered mb-3">
+                                          <ul class="list-group list-group-flush mb-3">
                                             <li class="list-group-item">
                                               <b>Personalnummer</b> <a class="float-right">-</a>
                                             </li>
                                             <li class="list-group-item">
                                               <b>Funktion</b><a class="float-right">{{$user_details->department}}</a>
+                                            </li>
+                                              <li class="list-group-item">
+                                              <b>Abteilung</b><a class="float-right">Büro / Montage</a>
                                             </li>
                                             <li class="list-group-item">
                                               <b>Eintrittsdatum</b> <a class="float-right"><time datetime="{{$user_details->login_date}}">{{$user_details->login_date}}</time></a>
@@ -96,7 +100,7 @@ $lang = new Language;
                                       </div>
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="card card-primary card-outline card-tabs">
+                                    <div style="min-height:75vh" class="card card-primary card-outline card-tabs">
                                         <div class="card-header p-0 pt-1 border-bottom-0">
                                           <ul class="nav nav-tabs border-bottom-0" id="custom-tabs-two-tab" role="tablist">
                                             <li style="width:99px;text-align:center" class="nav-item">
@@ -105,61 +109,324 @@ $lang = new Language;
                                             <li style="width:99px;text-align:center" class="nav-item">
                                               <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Gehalt</a>
                                             </li>
-                                            <li style="width:99px;text-align:center" class="nav-item">
-                                              <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill" href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages" aria-selected="false">Bank</a>
+                                              <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-settings-tab2" data-toggle="pill" href="#custom-tabs-two-settings2" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Leaves</a>
                                             </li>
                                               <li style="width:99px;text-align:center" class="nav-item">
-                                              <a class="nav-link" id="custom-tabs-two-settings-tab2" data-toggle="pill" href="#custom-tabs-two-settings2" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Auslöse</a>
+                                              <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill" href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages" aria-selected="false">Schulung</a>
+                                            </li>
+                                              <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-settings-tab2" data-toggle="pill" href="#custom-tabs-two-settings4" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">PSA</a>
                                             </li>
                                             <li style="width:99px;text-align:center" class="nav-item">
-                                              <a class="nav-link" id="custom-tabs-two-settings-tab" data-toggle="pill" href="#custom-tabs-two-settings" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Sonstige</a>
+                                              <a class="nav-link" id="custom-tabs-two-settings-tab3" data-toggle="pill" href="#custom-tabs-two-settings3" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Lohnv.</a>
+                                            </li>
+                                              <li style="width:99px;text-align:center" class="nav-item">
+                                              <a class="nav-link" id="custom-tabs-two-settings-tab" data-toggle="pill" href="#custom-tabs-two-settings" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Dokum.</a>
                                             </li>
                                           </ul>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body ">
                                           <div class="tab-content" id="custom-tabs-two-tabContent">
-                                            <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
-                                                <ul class="list-group list-group-unbordered mb-3">
-                                                    <li class="list-group-item">
-                                                        <b>Steuerklasse</b> <a class="float-right">{{$user_details->tax_status}}</a>
+                                            <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">  
+                                                <ul class="list-group list-group-flush mb-3">
+                                                    <div class="col-md-12">
+                                                    
+                                                    
+                                                     <label class="col-md-12 control-label list-group-item-primary">
+                                                                    Persönliche Daten
+                                                        </label>   
+                                                    <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Steuerklasse
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->tax_status}}
+                                                            </p>
+                                                                </div>
                                                     </li>
-                                                    <li class="list-group-item">
-                                                        <b>St. ID Nr.</b> <a class="float-right">{{$user_details->STIDNUM}}</a>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    St. ID Nr.
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->STIDNUM}}
+                                                            </p>
+                                                                </div>
                                                     </li>
-                                                    <li class="list-group-item">
-                                                        <b>Sozialvers. Nr.</b><a class="float-right">{{$user_details->sg_number}}</a>
+                                                          <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Sozialvers. Nr.
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->sg_number}}
+                                                            </p>
+                                                                </div>
                                                     </li>
-                                                    <li class="list-group-item">
-                                                        <b>Krankenkasse</b> <a class="float-right">{{$user_details->health_insurance}}</a>
+                                                          <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Krankenkasse
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->health_insurance}}
+                                                            </p>
+                                                                </div>
                                                     </li>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Kinderfreibetrag
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->tax_status}}
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Familienstand
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->STIDNUM}}
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                        
+                                                   </div>
+                                                   
                                                 </ul>
-                                            </div>
-                                            <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab"> 
-                                                <strong><i class="fa fa-book mr-1"></i> Gehalt</strong>
-                                                <p class="text-muted">{{$user_details->hour_fee}} €</p>
-                                                <hr>
-                                                <strong><i class="fa fa-map-marker mr-1"></i> Urlaubsanspruch</strong>
-                                                <p class="text-muted">{{$user_details->day_off}} Tage</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
-                                                <ul class="list-group list-group-unbordered mb-3">
-                                                    <li class="list-group-item">
-                                                        <b>Bankname</b> <a class="float-right">{{$user_details->Banka}}</a>
+                                                <ul class="list-group list-group-flush mb-3">
+                                                    <div class="col-md-12">
+                                                    
+                                                    
+                                                     <label class="col-md-12 control-label list-group-item-primary">
+                                                                    Bankdaten
+                                                        </label>   
+                                                    <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Bankname
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->vds_identity}}
+                                                            </p>
+                                                                </div>
                                                     </li>
-                                                    <li class="list-group-item">
-                                                        <b>IBAN</b><a class="float-right">{{$user_details->IBAN}}</a>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    IBAN
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                               {{$user_details->vds_identity}}
+                                                            </p>
+                                                                </div>
                                                     </li>
-                                                    <li class="list-group-item">
-                                                        <b>BIC</b> <a class="float-right">{{$user_details->BIC}}</a>
+                                                          <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                   BIC
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                               {{$user_details->vds_identity}}
+                                                            </p>
+                                                                </div>
                                                     </li>
+                                                    
+                                                    
+                                                   </div>
+                                                   
                                                 </ul>
+                                               <ul class="list-group list-group-flush mb-3">
+                                                    <div class="col-md-12">
+                                                    
+                                                    
+                                                     <label class="col-md-12 control-label list-group-item-primary">
+                                                                    Sonstiges
+                                                        </label>   
+                                                    <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Führerschein
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->driving_license}}
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    VdS Ausweis
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                               {{$user_details->vds_identity}}
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Hubarbeitsbühne
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                               {{$user_details->vds_identity}}
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Stapler
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                               {{$user_details->vds_identity}}
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                          
+                                                   </div>
+                                                   
+                                                </ul>
+                                                 
+                                                
+                                                
                                             </div>
+                                            <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                                                
+                                                <ul class="list-group list-group-flush mb-3">
+                                                    <div class="col-md-12">
+                                                    
+                                                    
+                                                     <label class="col-md-12 control-label list-group-item-primary">
+                                                                    Gehalt & Urlaub
+                                                        </label>   
+                                                    <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Gehalt
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                                {{$user_details->hour_fee}} €
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                         <li class="col-md-12 row">
+                                                        <label class="col-md-3 control-label">
+                                                                    Urlaubsanspruch
+                                                        </label>
+                                                        <div class="col-md-3">
+                                                            <p class="form-control-static linkify">
+                                                               {{$user_details->day_off}} Tage
+                                                            </p>
+                                                                </div>
+                                                    </li>
+                                                    
+                                                    <label class="col-md-12 control-label list-group-item-primary">
+                                                                    Auslöse
+                                                        </label>  
+                                                @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
+                                                    <div>
+                                                        <input @if(count(App\EmployeeCode::where('PersonelID', $user_details->id)->where('KodID', $code->KodID)->get()) > 0) checked @endif value="{{$code->KodID}}" type="checkbox" name="Kod-{{$code->KodID}}" disabled> {{$code->KodBASLIK}}
+                                                    </div>
+                                                @endforeach 
+                                                    
+                                                   </div>
+                                                    
+                                                     
+                                                </ul>
+                                                
+                                                
+
+                                            </div>
+                                            
                                             <div class="tab-pane fade" id="custom-tabs-two-settings2" role="tabpanel" aria-labelledby="custom-tabs-two-settings-ta2b">
                                                 @foreach(App\Code::orderBy('KOD', 'ASC')->get() as $code)
                                                     <div>
                                                         <input @if(count(App\EmployeeCode::where('PersonelID', $user_details->id)->where('KodID', $code->KodID)->get()) > 0) checked @endif value="{{$code->KodID}}" type="checkbox" name="Kod-{{$code->KodID}}" disabled> {{$code->KodBASLIK}}
                                                     </div>
                                                 @endforeach   
+                                            </div>
+                                              <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
+                <div style="height:51px" class="card card-default color-palette-bo">
+                <div style="height:51px" class="card-header">
+                    <div class="d-inline-block">
+                      <h3 class="card-title"><i class="fa fa-user-graduate"></i> Schulung</h3>
+                    </div>
+                    <div class="d-inline-block float-right">
+                        <a data-toggle="modal" data-target="#modal-add" href="javascript:void(0)"class="btn btn-sm btn-outline-primary"><i class="fa fa-play-circle"></i></a>
+                    </div>
+                </div>
+            </div>
+                                                                <table class="table table-responsive-md table-striped table-hover">
+                                                  <th>Datum</th><th>Schulung</th>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>100,00 €</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>100,00 €</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>100,00 €</td>
+                                                    </tr>
+                                                  </table>
+                                            </div>
+                                               <div class="tab-pane fade" id="custom-tabs-two-settings4" role="tabpanel" aria-labelledby="custom-tabs-two-settings-ta2b">
+                                                   <div style="height:51px" class="card card-default color-palette-bo">
+                <div style="height:51px" class="card-header">
+                    <div class="d-inline-block">
+                      <h3 class="card-title"><i class="fa fa-tshirt"></i> Persönliche Schutzausrüstung</h3>
+                    </div>
+                    <div class="d-inline-block float-right">
+                        <a data-toggle="modal" data-target="#modal-add" href="javascript:void(0)"class="btn btn-sm btn-outline-primary"><i class="fa fa-play-circle"></i></a>
+                    </div>
+                </div>
+            </div>
+                                                <table class="table table-responsive-md table-striped table-hover">
+                                                  <th>Datum</th><th>PSA</th>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>Jacke</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>Schuhe</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>Hose</td>
+                                                    </tr>
+                                                  </table>  
+                                            </div>
+                                              <div class="tab-pane fade" id="custom-tabs-two-settings3" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
+                                                  <div style="height:51px" class="card card-default color-palette-bo">
+                <div style="height:51px" class="card-header">
+                    <div class="d-inline-block">
+                      <h3 class="card-title"><i class="fa fa-credit-card"></i> Lohnvorschuss</h3>
+                    </div>
+                    <div class="d-inline-block float-right">
+                        <a data-toggle="modal" data-target="#modal-add" href="javascript:void(0)"class="btn btn-sm btn-outline-primary"><i class="fa fa-play-circle"></i></a>
+                    </div>
+                </div>
+            </div>
+                                                <table class="table table-responsive-md table-striped table-hover">
+                                                  <th>Datum</th><th>Bewegung</th>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>100,00 €</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>100,00 €</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>01.01.2020</td><td>100,00 €</td>
+                                                    </tr>
+                                                    
+                                                    
+                                                  </table>
+                                                  
+                                                  
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
                                                 <ul class="list-group list-group-unbordered mb-3">
@@ -168,6 +435,12 @@ $lang = new Language;
                                                     </li>
                                                     <li class="list-group-item">
                                                         <b>VdS Ausweis</b><a class="float-right">{{$user_details->vds_identity}}</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>Hubarbeitsbühnenschein</b><a class="float-right">Ja</a>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <b>Stapler</b><a class="float-right">Nein</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -445,14 +718,18 @@ $lang = new Language;
                     if(resp.success){
                     Toast.fire({
                         icon: 'success',
+                        toast: true,
+                        timerProgressBar: false,
                         title: resp.msg,
+                        timer:1000,
                         showConfirmButton: false,
                     });
 
-                    setTimeout(function() { location.reload(); }, 1000)
+                    setTimeout(function() { location.reload(); }, 963)
                     }
-                }
-            })
+                    
+                } 
+            }) 
         });
 
         $('.btn-delete').on('click', function(){
@@ -472,6 +749,7 @@ $lang = new Language;
                     if(resp.success){
                         Toast.fire({
                             icon: 'success',
+                            timerProgressBar: false,
                             title: resp.msg,
                             showConfirmButton: false,
                         });
