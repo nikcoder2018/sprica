@@ -7,6 +7,8 @@ $system = new System;
 @extends('layouts.admin.main')
 @section('stylesheets')
 <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 @endsection
 @section('content')
 <section class="content-header">
@@ -112,127 +114,157 @@ $system = new System;
                               </div>
                         </div>
                         <div class="tab-pane fade" id="project-members" role="tabpanel" aria-labelledby="#project-tabs-members">
-                            <table class="table table-striped projects">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 30%">
-                                            Name
-                                        </th>
-                                        <th>Hourly Rate</th>
-                                        <th>User Role</th>
-                                        <th style="width: 10%">
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if(count($project->members) > 0)
-                                        @foreach($project->members as $member)
-                                            <tr>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col-sm-4 col-xs-4">
-                                                            @if($member->avatar != '')
-                                                                <img alt="Avatar" class="table-avatar" title="{{$member->name}}" src="{{asset($member->avatar)}}">
-                                                            @else
-                                                                <img alt="Avatar" class="table-avatar" title="{{$member->name}}" src="{{asset('dist/img/avatar.png')}}">
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-sm-8 col-xs-8">
-                                                                {{$member->name}}<br><span class="text-muted font-12">{{$member->department}}</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{{$member->hour_fee}}</td>
-                                                <td>{{App\Role::find($member->role)->name}}</td>
-                                                <td class="project-actions text-right">
-                                                    <button class="btn btn-info btn-sm btn-edit" data-id="{{$member->id}}">
-                                                        <i class="fas fa-pencil-alt">
-                                                        </i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$member->id}}">
-                                                        <i class="fas fa-trash">
-                                                        </i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+                          <div style="height:51px" class="card card-default color-palette-bo">
+                            <div style="height:51px" class="card-header">
+                                <div class="d-inline-block">
+                                  <h3 class="card-title"><i class="fa fa-users"></i> Members</h3>
+                                </div>
+                                <div class="d-inline-block float-right">
+                                    <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#add_member_modal"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="card card-default color-palette-bo">
+                            <div class="card-body">
+                              <table class="table table-striped projects">
+                                  <thead>
+                                      <tr>
+                                          <th style="width: 30%">
+                                              Name
+                                          </th>
+                                          <th>Hourly Rate</th>
+                                          <th>Task Pending</th>
+                                          <th>Task Completed</th>
+                                          <th>Leader</th>
+                                          <th style="width: 10%">
+                                          </th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      @if(count($project->members) > 0)
+                                          @foreach($project->members as $member)
+                                              <tr>
+                                                  <td>
+                                                      <div class="row">
+                                                          <div class="col-sm-4 col-xs-4">
+                                                              @if($member->member_detail->avatar != '')
+                                                                  <img alt="Avatar" class="table-avatar" title="{{$member->member_detail->name}}" src="{{asset($member->member_detail->avatar)}}">
+                                                              @else
+                                                                  <img alt="Avatar" class="table-avatar" title="{{$member->member_detail->name}}" src="{{asset('dist/img/avatar.png')}}">
+                                                              @endif
+                                                          </div>
+                                                          <div class="col-sm-8 col-xs-8">
+                                                                  {{$member->member_detail->name}}<br><span class="text-muted font-12">{{$member->member_detail->department}}</span>
+                                                          </div>
+                                                      </div>
+                                                  </td>
+                                                  <td>{{$member->member_detail->hour_fee}}</td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td></td>
+                                                  <td class="project-actions text-right">
+                                                      <button class="btn btn-info btn-sm btn-edit" data-id="{{$member->member_detail->id}}">
+                                                          <i class="fas fa-pencil-alt">
+                                                          </i>
+                                                      </button>
+                                                      <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$member->member_detail->id}}">
+                                                          <i class="fas fa-trash">
+                                                          </i>
+                                                      </button>
+                                                  </td>
+                                              </tr>
+                                          @endforeach
+                                      @endif
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
                         </div>
                         <div class="tab-pane fade" id="project-tasks" role="tabpanel" aria-labelledby="#project-tabs-tasks">
-                            <table id="example1" class="table table-striped projects">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20%">
-                                            Task
-                                        </th>
-                                        <th>Project</th>
-                                        <th style="width: 25%">
-                                            Assigned To
-                                        </th>
-                                        <th>
-                                            Due Date
-                                        </th>
-                                        <th style="width: 8%" class="text-center">
-                                            Status
-                                        </th>
-                                        <th style="width: 10%">
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if(count($project->tasks) > 0)
-                                        @foreach($project->tasks as $task)
-                                            <tr>
-                                                <td>
-                                                    <a>
-                                                        {{$task->title}}
-                                                    </a>
-                                                </td>
-                                                <td>{{$task->project->ProjeBASLIK}}</td>
-                                                <td>
-                                                    @if(count($task->assigned) > 0)
-                                                    <ul class="list-inline">
-                                                        @foreach($task->assigned as $user)
-                                                        <li class="list-inline-item">
-                                                            <a href="#" title="{{$user->name}}">
-                                                                @if($user->avatar != '')
-                                                                    <img alt="Avatar" class="table-avatar" src="{{asset($user->avatar)}}">
-                                                                @else 
-                                                                    <img alt="Avatar" class="table-avatar" src="{{asset('dist/img/avatar.png')}}">
-                                                                @endif
-                                                            </a> 
-                                                        </li>
-                                                        @endforeach
-                                                    </ul>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    {{date('d-m-Y', strtotime($task->due_date))}}  
-                                                </td>
-                                                <td class="project-state">
-                                                    @if($task->status == 'incomplete')
-                                                        <span class="badge badge-warning">{{$task->status}}</span>
-                                                    @elseif($task->status == 'completed')
-                                                        <span class="badge badge-success">{{$task->status}}</span>
-                                                    @endif
-                                                </td>
-                                                <td class="project-actions text-right">
-                                                    <button class="btn btn-info btn-sm btn-edit" data-id="{{$task->id}}">
-                                                        <i class="fas fa-pencil-alt">
-                                                        </i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$task->id}}">
-                                                        <i class="fas fa-trash">
-                                                        </i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+                          <div style="height:51px" class="card card-default color-palette-bo">
+                            <div style="height:51px" class="card-header">
+                                <div class="d-inline-block">
+                                  <h3 class="card-title"><i class="fa fa-list"></i> Tasks</h3>
+                                </div>
+                                <div class="d-inline-block float-right">
+                                    <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#add_task_modal"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="card card-default color-palette-bo">
+                            <div class="card-body">
+                              <table id="example1" class="table table-striped projects">
+                                  <thead>
+                                      <tr>
+                                          <th style="width: 20%">
+                                              Task
+                                          </th>
+                                          <th style="width: 25%">
+                                              Assigned To
+                                          </th>
+                                          <th>
+                                              Due Date
+                                          </th>
+                                          <th style="width: 8%" class="text-center">
+                                              Status
+                                          </th>
+                                          <th style="width: 10%">
+                                          </th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      @if(count($project->tasks) > 0)
+                                          @foreach($project->tasks as $task)
+                                              <tr>
+                                                  <td>
+                                                      <a>
+                                                          {{$task->title}}
+                                                      </a>
+                                                  </td>
+                                                  <td>
+                                                      @if(count($task->assigned) > 0)
+                                                      <ul class="list-inline">
+                                                          @foreach($task->assigned as $user)
+                                                          <li class="list-inline-item">
+                                                              <a href="#" title="{{$user->name}}">
+                                                                  @if($user->avatar != '')
+                                                                      <img alt="Avatar" class="table-avatar" src="{{asset($user->avatar)}}">
+                                                                  @else 
+                                                                      <img alt="Avatar" class="table-avatar" src="{{asset('dist/img/avatar.png')}}">
+                                                                  @endif
+                                                              </a> 
+                                                          </li>
+                                                          @endforeach
+                                                      </ul>
+                                                      @endif
+                                                  </td>
+                                                  <td>
+                                                      {{date('d-m-Y', strtotime($task->due_date))}}  
+                                                  </td>
+                                                  <td class="project-state">
+                                                      @if($task->status == 'incomplete')
+                                                          <span class="badge badge-warning">{{$task->status}}</span>
+                                                      @elseif($task->status == 'completed')
+                                                          <span class="badge badge-success">{{$task->status}}</span>
+                                                      @endif
+                                                  </td>
+                                                  <td class="project-actions text-right">
+                                                      <button class="btn btn-info btn-sm btn-edit" data-id="{{$task->id}}">
+                                                          <i class="fas fa-pencil-alt">
+                                                          </i>
+                                                      </button>
+                                                      <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$task->id}}">
+                                                          <i class="fas fa-trash">
+                                                          </i>
+                                                      </button>
+                                                  </td>
+                                              </tr>
+                                          @endforeach
+                                      @endif
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
                         </div>
                         <div class="tab-pane fade" id="project-timelogs" role="tabpanel" aria-labelledby="#project-tabs-timelogs">
                             <table class="table table-timelogs">
@@ -277,17 +309,319 @@ $system = new System;
 </section>
 @endsection
 
+@section('modals')
+<div class="modal fade" id="add_member_modal">
+  <div class="modal-dialog">
+      <form class="form-add-member" method="POST" action="{{route('admin.projects.add-member')}}">
+          @csrf
+          <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">Add project member</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                    <select class="select2bs4" name="user_id" style="width: 100%;">
+                      @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                  <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+                  <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+          </div>
+      </form>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<div class="modal fade" id="add_task_modal">
+  <div class="modal-dialog modal-lg">
+      <form class="form-add-task" method="POST" action="{{route('tasks.store')}}">
+          @csrf
+          <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
+          <div class="modal-content">
+              <div class="modal-header">
+                  Add Task
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label>Title:</label>
+                              <input type="text" name="title" class="form-control" required>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label>Description:</label>
+                              <textarea name="description" cols="30" rows="6" class="form-control"></textarea>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label>Assign to:</label>
+                              <select class="form-control select2bs4" name="assign_to[]" multiple="multiple" data-placeholder="Select an employee" required>
+                                  @foreach($project->members as $member)
+                                      <option value="{{$member->member_detail->id}}">{{$member->member_detail->name}}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label>Status:</label>
+                              <select class="form-control" name="status">
+                                  <option value="incomplete" selected>Incomplete</option>
+                                  <option value="completed">Completed</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-4">
+                          <label>Start Date:</label>
+                          <input type="date" name="start_date" class="form-control" required>
+                      </div>
+                      <div class="col-md-4">
+                          <label>Due Date: </label>
+                          <input type="date" name="due_date" class="form-control" required>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-group">
+                              <label>Priority:</label>
+                              <select class="form-control" name="priority">
+                                  <option value="1">High</option>
+                                  <option value="2" selected>Medium</option>
+                                  <option value="3">Low</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                  <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+          </div>
+      </form>
+  </div>
+  <!-- /.modal-content -->
+</div>
+
+<div class="modal fade" id="edit_task_modal">
+  <div class="modal-dialog modal-lg">
+      <form class="form-edit-task" method="POST" action="{{route('tasks.store')}}">
+          @csrf
+          <input type="hidden" name="task_id">
+          <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
+          <div class="modal-content">
+              <div class="modal-header">
+                  Edit Task
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label>Title:</label>
+                              <input type="text" name="title" class="form-control" required>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label>Description:</label>
+                              <textarea name="description" cols="30" rows="6" class="form-control"></textarea>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label>Assign to:</label>
+                              <select class="form-control select2bs4" name="assign_to[]" multiple="multiple" data-placeholder="Select an employee" required>
+                                  @foreach($project->members as $member)
+                                      <option value="{{$member->member_detail->id}}">{{$member->member_detail->name}}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label>Status:</label>
+                              <select class="form-control" name="status">
+                                  <option value="incomplete" selected>Incomplete</option>
+                                  <option value="completed">Completed</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-4">
+                          <label>Start Date:</label>
+                          <input type="date" name="start_date" class="form-control" required>
+                      </div>
+                      <div class="col-md-4">
+                          <label>Due Date: </label>
+                          <input type="date" name="due_date" class="form-control" required>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-group">
+                              <label>Priority:</label>
+                              <select class="form-control" name="priority">
+                                  <option value="1">High</option>
+                                  <option value="2" selected>Medium</option>
+                                  <option value="3">Low</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                  <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+          </div>
+      </form>
+  </div>
+  <!-- /.modal-content -->
+</div>
+
+<div class="modal fade" id="delete_task_modal">
+  <div class="modal-dialog">
+      <div class="modal-content bg-danger">
+          <div class="modal-header">
+              <h4 class="modal-title">{{$lang::settings('Isci_Paneli_Kaydi_Sil')}}</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p><strong>{{$lang::settings('Isci_Paneli_Emin_Misiniz')}}</strong></p>
+          </div>
+          <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light" data-dismiss="modal">{{$lang::settings('Isci_Paneli_Hayir')}}</button>
+              <button class="btn btn-outline-light btn-delete-go">{{$lang::settings('Isci_Paneli_Evet_Sil')}}</button>
+          </div>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+@endsection
 @section('scripts')
 <script src="{{asset('plugins/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
+<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
 
 <script>
+  //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
     $(".table-timelogs").DataTable({
         "paging": true,
         "ordering": true,
         "info": true,
         "order": [[0, "desc"]]
     });
+
+    $('.form-add-member').on('submit', function(e){
+      e.preventDefault();
+      $.ajax({
+        url: "{{route('admin.projects.add-member')}}",
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(resp){
+          if(resp.success){
+              Swal.fire({
+                title: 'Success!',
+                text: resp.msg,
+                icon: 'success'
+              }).then(()=>{
+                location.reload();
+              });
+          }
+        }
+      })
+    });
+
+    $('.form-add-task').on('submit', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(resp){
+                if(resp.success){
+                    Toast.fire({
+                        icon: 'success',
+                        title: resp.msg,
+                        showConfirmButton: false,
+                    });
+
+                    setTimeout(function() { location.reload(); }, 1000)
+                }
+            }
+        })
+    }); 
+
+      $('.btn-edit').on('click', async function(e){
+            e.preventDefault();
+            $('#edit_task_modal').modal('show');
+            var project = await $.ajax({
+                url: "{{route('admin.tasks.edit')}}",
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    id: $(this).data('id'),
+                }
+            });
+
+            let form = $('.form-edit-project');
+            form.find('input[name=ProjeID]').val(project.ProjeID);
+            form.find('input[name=ProjeBASLIK]').val(project.ProjeBASLIK);
+            form.find('input[name=ProjeKODU]').val(project.ProjeKODU);
+        });
+
+        $('.form-edit-task').on('submit', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(resp){
+                    if(resp.success){
+                        Toast.fire({
+                            icon: 'success',
+                            title: resp.msg,
+                            showConfirmButton: false,
+                        });
+
+                        setTimeout(function() { location.reload(); }, 1000)
+                    }
+                }
+            })
+        }); 
 </script>
     
 @endsection

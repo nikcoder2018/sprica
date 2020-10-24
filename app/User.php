@@ -40,4 +40,8 @@ class User extends Authenticatable
     function myrole(){
         return $this->hasOne(Role::class, 'id', 'role');
     }
+
+    function loans(){
+        return $this->hasMany(AdvancePayment::class, 'UyeID', 'id')->selectRaw('UyeID, sum(Tutar) as total')->groupBy('UyeID');
+    }
 }

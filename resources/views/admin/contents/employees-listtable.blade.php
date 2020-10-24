@@ -22,7 +22,7 @@
          <!--           <td>{{$employee->id}}</td>  -->
                     <td><a style="display:block; color:black" href="{{route('admin.employees.details', $employee->id)}}" class="clickable-row">{{$employee->name}}</a></td>
                     <td>{{$employee->username}}</td>
-                    <td>0,00 €</td> 
+                    <td>{{@$employee->loans[0]->total ?? 0}} €</td> 
                     <td>12.02.2020</td> 
                     <td>{{$employee->email}}</td>
                     <td>

@@ -7,6 +7,9 @@ $lang = new Language;
 @section('stylesheets')
     <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+
     <link href="{{asset('dist/css/validation_master.css')}}" rel="stylesheet">
     <style>
         .dataTables_length, .dataTables_filter, .dataTables_iinfo, .ddataTables_paginate {
@@ -37,7 +40,6 @@ $lang = new Language;
                     <th style="width: 20%">
                         Project Name
                     </th>
-                    <th>Project Number</th>
                     <th style="width: 25%">
                         Team Members
                     </th>
@@ -62,19 +64,18 @@ $lang = new Language;
                                 </a>
                                 <br>
                                 <small>
-                                    Created 01.01.2019
+                                    Created {{date('m.d.Y', strtotime($project->created_at))}}
                                 </small>
                             </td>
-                            <td>{{$project->ProjeKODU}}</td>
                             <td>
                                 <ul class="list-inline">
                                     @if(count($project->members) > 0)
                                         @foreach($project->members as $member)
                                             <li class="list-inline-item">
-                                                @if($member->avatar != '')
-                                                <img alt="Avatar" class="table-avatar" title="{{$member->name}}" src="{{asset($member->avatar)}}">
+                                                @if($member->member_detail->avatar != '')
+                                                <img alt="Avatar" class="table-avatar" title="{{$member->member_detail->name}}" src="{{asset($member->member_detail->avatar)}}">
                                                 @else
-                                                <img alt="Avatar" class="table-avatar" title="{{$member->name}}" src="{{asset('dist/img/avatar.png')}}">
+                                                <img alt="Avatar" class="table-avatar" title="{{$member->member_detail->name}}" src="{{asset('dist/img/avatar.png')}}">
                                                 @endif
                                             </li>
                                         @endforeach
@@ -111,7 +112,7 @@ $lang = new Language;
                                 Std.
                             </td>
                             <td class="project-state">
-                                <span class="badge badge-success">Success</span>
+                                <span class="badge badge-success">{{$project->status}}</span>
                             </td>
                             <td class="project-actions text-right">
                                 <button class="btn btn-info btn-sm btn-edit" data-id="{{$project->ProjeID}}">
@@ -151,14 +152,68 @@ $lang = new Language;
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-md-12 m05">
-                            <label class="form-control-label plabelno" for="inputBasicLastName"> {{$lang::settings('Admin_Projeler_Proje_Basligi')}}</label>
-                            <input class="form-control " required name="ProjeBASLIK" value="" />
+                        <div class="col-md-12">
+                            <div class="card-header">
+                                <h3 class="card-title">General</h3>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label>Project Name</label>
+                                  <input type="text" name="name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <label >Project Description</label>
+                                  <textarea name="description" class="form-control" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                  <label>Status</label>
+                                  <select name="status" class="form-control custom-select">
+                                    <option selected="" disabled="">Select one</option>
+                                    <option>On Hold</option>
+                                    <option>Canceled</option>
+                                    <option>Success</option>
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label>Client Company</label>
+                                  <input type="text" name="company" class="form-control">
+                                </div>
+                    
+                                <div class="form-group">
+                                    <label>Project Member</label>
+                                    <select class="form-control select2bs4" multiple="multiple" name="members[]" style="width: 100%;">
+                                        @foreach($users as $user)
+                                            <option value="{{$user->id}}">{{$user->name}}</option>
+                                        @endforeach
+                                    </select>
+                                  </div>
+                                <div class="form-group">
+                                  <label>Project Leader</label>
+                                  <select class="form-control select2bs4" name="leader" style="width: 100%;">
+                                    @foreach($users as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                              </div>
                         </div>
-                        <div class="form-group col-md-12 m05">
-                            <label class="form-control-label plabelno" for="inputBasicLastName"> {{$lang::settings('Admin_Projeler_Proje_Kodu')}}</label>
-                            <input class="form-control " required name="ProjeKODU" value="" />
-                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-header">
+                                <h3 class="card-title">Budget</h3>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label>Estimated budget</label>
+                                  <input type="number" name="budget" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <label for="inputSpentBudget">Amount spent</label>
+                                  <input type="number" name="spent" class="form-control">
+                                </div>
+                              </div>
+                          </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -175,7 +230,7 @@ $lang = new Language;
     <div class="modal-dialog modal-lg">
         <form class="form-edit-project" method="POST" action="{{route('admin.projects.update')}}">
             @csrf
-            <input type="hidden" name="ProjeID">
+            <input type="hidden" name="id">
             <div class="modal-content">
                 <div class="modal-header">
                     {{$lang::settings('Admin_Projeler')}}
@@ -185,14 +240,68 @@ $lang = new Language;
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-md-12 m05">
-                            <label class="form-control-label plabelno" for="inputBasicLastName"> {{$lang::settings('Admin_Projeler_Proje_Basligi')}}</label>
-                            <input class="form-control " required name="ProjeBASLIK" value="" />
+                        <div class="col-md-12">
+                            <div class="card-header">
+                                <h3 class="card-title">General</h3>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label>Project Name</label>
+                                  <input type="text" name="name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <label >Project Description</label>
+                                  <textarea name="description" class="form-control" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                  <label>Status</label>
+                                  <select name="status" class="form-control custom-select">
+                                    <option selected="" disabled="">Select one</option>
+                                    <option>On Hold</option>
+                                    <option>Canceled</option>
+                                    <option>Success</option>
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label>Client Company</label>
+                                  <input type="text" name="company" class="form-control">
+                                </div>
+                    
+                                <div class="form-group">
+                                    <label>Project Member</label>
+                                    <select class="form-control select2bs4" multiple="multiple" name="members[]" style="width: 100%;">
+                                        @foreach($users as $user)
+                                            <option value="{{$user->id}}">{{$user->name}}</option>
+                                        @endforeach
+                                    </select>
+                                  </div>
+                                <div class="form-group">
+                                  <label>Project Leader</label>
+                                  <select class="form-control select2bs4" name="leader" style="width: 100%;">
+                                    @foreach($users as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                              </div>
                         </div>
-                        <div class="form-group col-md-12 m05">
-                            <label class="form-control-label plabelno" for="inputBasicLastName"> {{$lang::settings('Admin_Projeler_Proje_Kodu')}}</label>
-                            <input class="form-control " required name="ProjeKODU" value="" />
-                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-header">
+                                <h3 class="card-title">Budget</h3>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group">
+                                  <label>Estimated budget</label>
+                                  <input type="number" name="budget" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <label for="inputSpentBudget">Amount spent</label>
+                                  <input type="number" name="spent" class="form-control">
+                                </div>
+                              </div>
+                          </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -232,6 +341,8 @@ $lang = new Language;
 @section('scripts')
 <script src="{{asset('plugins/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
+<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         bsCustomFileInput.init();
@@ -242,6 +353,10 @@ $lang = new Language;
 <script src="{{asset('dist/js/validation_master.js')}}" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+
         $('.form-add-project').on('submit', function(e){
             e.preventDefault();
 
@@ -263,7 +378,7 @@ $lang = new Language;
             })
         }); 
 
-        $('.btn-edit').on('click', async function(e){
+        $('.projects').on('click', '.btn-edit',async function(e){
             e.preventDefault();
             $('#modal-edit').modal('show');
             var project = await $.ajax({
@@ -276,9 +391,23 @@ $lang = new Language;
             });
 
             let form = $('.form-edit-project');
-            form.find('input[name=ProjeID]').val(project.ProjeID);
-            form.find('input[name=ProjeBASLIK]').val(project.ProjeBASLIK);
-            form.find('input[name=ProjeKODU]').val(project.ProjeKODU);
+            form.find('input[name=id]').val(project.ProjeID);
+            form.find('input[name=name]').val(project.ProjeBASLIK);
+            form.find('textarea[name=description]').val(project.description);
+            form.find('select[name=status]').val(project.status);
+            form.find('input[name=company]').val(project.client);
+            //form.find('select[name=leader]').val(project.status);
+            let projectMembers = new Array();
+            $.each(project.members, function(index, member){
+                projectMembers.push(member.member_detail.id);
+                if(member.leader == 1){
+                    form.find('select[name=leader]').val(member.member_detail.id);
+                }
+            });
+            form.find('select[name="members[]"]').select2().val(projectMembers).trigger('change');
+
+            form.find('input[name=budget]').val(project.budget);
+            form.find('input[name=spent]').val(project.spent);
         });
 
         $('.form-edit-project').on('submit', function(e){

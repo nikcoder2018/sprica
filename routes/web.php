@@ -43,12 +43,14 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('/wages_advance', 'Admin\HRController@wages_advance_store')->name('admin.hr-wages-advance');
 
     Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
+    Route::get('/projects/create','Admin\ProjectsController@create')->name('admin.projects.create');
     Route::get('/projects/{id}/details','Admin\ProjectsController@show')->name('admin.projects.details');
     Route::post('/projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');
     Route::post('/projects/update', 'Admin\ProjectsController@update')->name('admin.projects.update');
     Route::post('/projects/delete', 'Admin\ProjectsController@destroy')->name('admin.projects.destroy');
 
     Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
+    Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
     Route::get('/projects/calendar', 'Admin\ProjectsController@calendar')->name('admin.projects.calendar');
     
     Route::get('/employees', 'Admin\EmployeesController@list')->name('admin.employees');

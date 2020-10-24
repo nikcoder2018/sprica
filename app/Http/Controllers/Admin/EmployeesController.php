@@ -16,20 +16,22 @@ class EmployeesController extends Controller
 {
     public function index(Request $request){
         $role = Role::where('name', 'employee')->first();
-        $data['employees'] = User::all();
+        $data['employees'] = User::with('loans')->get();
         $data['roles'] = Role::all();
 
         if($request->get('id') != ''){
             $data['user_details'] = User::where('id', $request->get('id'))->first();
         }
 
+        return response()->json($data); exit;
         return view('admin.contents.employees', $data);
     }
 
     public function list(){
-        $data['employees'] = User::with('myrole')->where('status', 1)->orderBy('name', 'ASC')->get();
+        $data['employees'] = User::with(['myrole','loans'])->where('status', 1)->orderBy('name', 'ASC')->get();
         $data['roles'] = Role::all();
 
+        #return response()->json($data); exit;
         return view('admin.contents.employees-list', $data);
     }
 
