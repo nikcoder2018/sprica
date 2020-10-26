@@ -89,7 +89,7 @@ $system = new System;
                                     </div>
                                   </div>
                                 </div>
-                                <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+                                {{-- <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
                                   <h3 class="text-primary">{{$project->ProjeBASLIK}}</h3>
                                   <p class="text-muted"></p>
                                   <br>
@@ -110,7 +110,7 @@ $system = new System;
                                     <a href="#" class="btn btn-sm btn-primary">Add files</a>
                                     <a href="#" class="btn btn-sm btn-warning">Create ticket</a>
                                   </div>
-                                </div>
+                                </div> --}}
                               </div>
                         </div>
                         <div class="tab-pane fade" id="project-members" role="tabpanel" aria-labelledby="#project-tabs-members">
@@ -126,7 +126,7 @@ $system = new System;
                           </div>
                           <div class="card card-default color-palette-bo">
                             <div class="card-body">
-                              <table class="table table-striped projects">
+                              <table class="table table-striped projects table-members">
                                   <thead>
                                       <tr>
                                           <th style="width: 30%">
@@ -163,11 +163,7 @@ $system = new System;
                                                   <td></td>
                                                   <td></td>
                                                   <td class="project-actions text-right">
-                                                      <button class="btn btn-info btn-sm btn-edit" data-id="{{$member->member_detail->id}}">
-                                                          <i class="fas fa-pencil-alt">
-                                                          </i>
-                                                      </button>
-                                                      <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$member->member_detail->id}}">
+                                                      <button type="button" class="btn btn-danger btn-sm btn-delete-member" data-id="{{$member->member_detail->id}}">
                                                           <i class="fas fa-trash">
                                                           </i>
                                                       </button>
@@ -193,7 +189,7 @@ $system = new System;
                           </div>
                           <div class="card card-default color-palette-bo">
                             <div class="card-body">
-                              <table id="example1" class="table table-striped projects">
+                              <table id="example1" class="table table-striped projects table-tasks">
                                   <thead>
                                       <tr>
                                           <th style="width: 20%">
@@ -253,7 +249,7 @@ $system = new System;
                                                           <i class="fas fa-pencil-alt">
                                                           </i>
                                                       </button>
-                                                      <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{$task->id}}">
+                                                      <button type="button" class="btn btn-danger btn-sm btn-delete-task" data-id="{{$task->id}}">
                                                           <i class="fas fa-trash">
                                                           </i>
                                                       </button>
@@ -556,7 +552,9 @@ $system = new System;
                 text: resp.msg,
                 icon: 'success'
               }).then(()=>{
-                location.reload();
+                $('#add_member_modal').modal('hide');
+                let table = $('.table-members tbody');
+                table.append(resp.row).fadeIn(300);
               });
           }
         }
@@ -578,60 +576,142 @@ $system = new System;
                         showConfirmButton: false,
                     });
 
-                    setTimeout(function() { location.reload(); }, 1000)
+                    setTimeout(function() {
+                      $('#add_task_modal').modal('hide');
+                      let table = $('.table-tasks tbody');
+                      table.append(resp.row).fadeIn(300);
+                    }, 1000)
                 }
             }
         })
     }); 
 
-      $('.btn-edit').on('click', async function(e){
-          e.preventDefault();
-          $('#edit_task_modal').modal('show');
-          var task = await $.ajax({
-              url: "{{route('tasks.edit')}}",
-              type: 'POST',
-              data: {
-                  _token: $('meta[name="csrf-token"]').attr('content'),
-                  id: $(this).data('id'),
-              }
-          });
+    $('.table-tasks').on('click','.btn-edit', async function(e){
+        e.preventDefault();
+        $('#edit_task_modal').modal('show');
+        var task = await $.ajax({
+            url: "{{route('tasks.edit')}}",
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: $(this).data('id'),
+            }
+        });
 
-          let form = $('.form-edit-task');
-          form.find('input[name=task_id]').val(task.id);
-          form.find('input[name=title]').val(task.title);
-          form.find('textarea[name=description]').val(task.description);
-          form.find('input[name=start_date]').val(task.start_date);
-          form.find('input[name=due_date]').val(task.due_date);
-          form.find('select[name=status]').val(task.status);
-          form.find('select[name=priority]').val(task.priority);
+        let form = $('.form-edit-task');
+        form.find('input[name=task_id]').val(task.id);
+        form.find('input[name=title]').val(task.title);
+        form.find('textarea[name=description]').val(task.description);
+        form.find('input[name=start_date]').val(task.start_date);
+        form.find('input[name=due_date]').val(task.due_date);
+        form.find('select[name=status]').val(task.status);
+        form.find('select[name=priority]').val(task.priority);
 
-          let assignMembers = new Array();
-          $.each(task.assigned, function(index, member){
-              assignMembers.push(member.assign_to);
-          });
-          form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
-      });
+        let assignMembers = new Array();
+        $.each(task.assigned, function(index, member){
+            assignMembers.push(member.assign_to);
+        });
+        form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
+    });
 
-        $('.form-edit-task').on('submit', function(e){
-            e.preventDefault();
+    $('.form-edit-task').on('submit', function(e){
+        e.preventDefault();
 
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function(resp){
-                    if(resp.success){
-                        Toast.fire({
-                            icon: 'success',
-                            title: resp.msg,
-                            showConfirmButton: false,
-                        });
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(resp){
+                if(resp.success){
+                    Toast.fire({
+                        icon: 'success',
+                        title: resp.msg,
+                        showConfirmButton: false,
+                    });
 
-                        setTimeout(function() { location.reload(); }, 1000)
-                    }
+                    $('#edit_task_modal').modal('hide');
+                    
+                    setTimeout(function() {
+                      
+                      let table = $('.table-tasks tbody');
+                      table.find('[data-id='+resp.id+']').parent().parent().replaceWith(resp.renderRow).hide().fadeIn(600);
+                    }, 1000)
                 }
-            })
-        }); 
+            }
+        })
+    }); 
+
+    $('.btn-delete-member').on('click', async function() {
+        let id = $(this).data().id;
+
+        Swal.fire({
+            text: 'Are you sure you want to remove this member?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-primary",
+            cancelButtonClass: "btn btn-danger ml-1"
+        }).then(async result => {
+            if(result.value){
+                const delete_member = await $.ajax({
+                    url: "{{ route('admin.projects.remove-member') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        project_id: "{{$project->ProjeID}}",
+                        user_id: id
+                    }
+                });
+
+                if(delete_member.success){
+                    Swal.fire({
+                        text: delete_member.msg,
+                        type: 'success',
+                    }).then(()=>{
+                      let table = $('.table-members tbody');
+                      table.find('[data-id='+id+']').parent().parent().fadeOut(600);
+                    });
+                }
+            }
+        });
+    });
+    $('.btn-delete-task').on('click', async function() {
+        let id = $(this).data().id;
+
+        Swal.fire({
+            text: 'Are you sure you want to remove this task?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonClass: "btn btn-primary",
+            cancelButtonClass: "btn btn-danger ml-1"
+        }).then(async result => {
+            if(result.value){
+                const delete_task = await $.ajax({
+                    url: "{{ route('tasks.destroy') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        id: id
+                    }
+                });
+
+                if(delete_task.success){
+                    Swal.fire({
+                        text: delete_task.msg,
+                        type: 'success',
+                    }).then(()=>{
+                      let table = $('.table-tasks tbody');
+                      table.find('[data-id='+delete_task.id+']').parent().parent().fadeOut(600);
+                    });
+                }
+            }
+        });
+    });
 </script>
     
 @endsection

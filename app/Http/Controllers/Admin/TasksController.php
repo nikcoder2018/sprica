@@ -64,8 +64,9 @@ class TasksController extends Controller
             EmailTrigger::Execute('NEW_TASK_CREATED', array('user_id' => $employee));   
         }
 
+        $renderRow = view('render.row-new-project-task', ['task' => $task])->render();
 
-        return response()->json(array('success' => true, 'msg' => 'Task Successfully Created'));
+        return response()->json(array('success' => true, 'msg' => 'Task Successfully Created', 'row' => $renderRow));
     }
 
     /**
@@ -125,7 +126,9 @@ class TasksController extends Controller
 
         TaskAssignment::where('task_id', $task->id)->whereNotIn('assign_to', $assigned_employee)->delete();
 
-        return response()->json(array('success' => true, 'msg' => 'Task Updated Successfully.'));
+        $renderRow = view('render.row-new-project-task', ['task' => $task])->render();
+
+        return response()->json(array('success' => true, 'msg' => 'Task Updated Successfully.','renderRow' => $renderRow, 'id' => $task->id));
     }
 
     /**
@@ -140,7 +143,7 @@ class TasksController extends Controller
         $task->delete();
 
         if($task){
-            return response()->json(array('success' => true, 'msg' => 'Task Deleted!'));
+            return response()->json(array('success' => true, 'msg' => 'Task Deleted!','id'=>$task->id));
         }
     }
 }

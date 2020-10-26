@@ -51,6 +51,8 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
 
     Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
     Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
+    Route::post('/projects/remove-member', 'Admin\ProjectsController@remove_member')->name('admin.projects.remove-member');
+
     Route::get('/projects/calendar', 'Admin\ProjectsController@calendar')->name('admin.projects.calendar');
     
     Route::get('/employees', 'Admin\EmployeesController@list')->name('admin.employees');

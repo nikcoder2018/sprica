@@ -12,7 +12,7 @@ use App\ProjectMember;
 class ProjectsController extends Controller
 {
     public function index(){
-        $data['projects'] = Project::with(['tasks','tasks_completed', 'members'])->whereNotIn('ProjeBASLIK',['Feiertag','Urlaub','Krank'])->orderBy('ProjeID', 'DESC')->get();
+        $data['projects'] = Project::with(['tasks','tasks_completed', 'members'])->whereNotIn('ProjeBASLIK',['Feiertag','Urlaub','Krank','KUG'])->orderBy('ProjeID', 'DESC')->get();
         $data['users'] = User::where('status', 1)->get();
         
         //return response()->json($data); exit;
@@ -74,8 +74,10 @@ class ProjectsController extends Controller
         $newmember->user_id = $request->user_id;
         $newmember->save();
 
+        $renderRow = view('render.row-new-project-member', ['member' => $newmember])->render();
+
         if($newmember){
-            return response()->json(array('success' => true, 'msg' => 'New member added successfully.'));
+            return response()->json(array('success' => true, 'msg' => 'New member added successfully.', 'row' => $renderRow));
         }
     }
     public function edit(Request $request){
@@ -137,7 +139,14 @@ class ProjectsController extends Controller
             return response()->json(array('success' => true, 'msg' => 'Project Deleted!'));
         }
     }
+    public function remove_member(Request $request){
+        $member = ProjectMember::where('project_id',$request->project_id)->where('user_id',$request->user_id);
+        $member->delete();
 
+        if($member){
+            return response()->json(array('success' => true, 'msg' => 'Member Removed!','id' => $request->user_id));
+        }
+    }
     public function calendar(){
         return view('admin.contents.projects_calendar');
     }
