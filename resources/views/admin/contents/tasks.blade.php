@@ -206,39 +206,87 @@ $lang = new Language;
     <!-- /.modal-content -->
 </div>
 
-<div class="modal fade" id="modal-edit">
+<div class="modal fade" id="edit_task_modal">
     <div class="modal-dialog modal-lg">
-        <form class="form-edit-project" method="POST" action="{{route('admin.projects.update')}}">
+        <form class="form-edit-task" method="POST" action="{{route('tasks.update')}}">
             @csrf
-            <input type="hidden" name="ProjeID">
+            <input type="hidden" name="task_id">
+            <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
             <div class="modal-content">
                 <div class="modal-header">
-                    {{$lang::settings('Admin_Projeler')}}
+                    Edit Task
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-md-12 m05">
-                            <label class="form-control-label plabelno" for="inputBasicLastName"> {{$lang::settings('Admin_Projeler_Proje_Basligi')}}</label>
-                            <input class="form-control " required name="ProjeBASLIK" value="" />
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" name="title" class="form-control" required>
+                            </div>
                         </div>
-                        <div class="form-group col-md-12 m05">
-                            <label class="form-control-label plabelno" for="inputBasicLastName"> {{$lang::settings('Admin_Projeler_Proje_Kodu')}}</label>
-                            <input class="form-control " required name="ProjeKODU" value="" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Description:</label>
+                                <textarea name="description" cols="30" rows="6" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Assign to:</label>
+                                <select class="form-control select2bs4" name="assign_to[]" multiple="multiple" data-placeholder="Select an employee" required>
+                                    @foreach($project->members as $member)
+                                        <option value="{{$member->member_detail->id}}">{{$member->member_detail->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select class="form-control" name="status">
+                                    <option value="incomplete" selected>Incomplete</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Start Date:</label>
+                            <input type="date" name="start_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Due Date: </label>
+                            <input type="date" name="due_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Priority:</label>
+                                <select class="form-control" name="priority">
+                                    <option value="1">High</option>
+                                    <option value="2" selected>Medium</option>
+                                    <option value="3">Low</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <a href="{{route('admin.projects')}}" type="button" class="btn btn-default">Close</a>
-                    <button type="submit" class="btn btn-primary">{{$lang::settings('Isci_Paneli_Kaydet')}}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </form>
     </div>
     <!-- /.modal-content -->
-</div>
+  </div>
 
 <div class="modal fade" id="modal-danger">
     <div class="modal-dialog">
@@ -304,22 +352,32 @@ $lang = new Language;
         }); 
 
         $('.btn-edit').on('click', async function(e){
-            e.preventDefault();
-            $('#modal-edit').modal('show');
-            var project = await $.ajax({
-                url: "{{route('admin.projects.edit')}}",
-                type: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    id: $(this).data('id'),
-                }
-            });
+          e.preventDefault();
+          $('#edit_task_modal').modal('show');
+          var task = await $.ajax({
+              url: "{{route('tasks.edit')}}",
+              type: 'POST',
+              data: {
+                  _token: $('meta[name="csrf-token"]').attr('content'),
+                  id: $(this).data('id'),
+              }
+          });
 
-            let form = $('.form-edit-project');
-            form.find('input[name=ProjeID]').val(project.ProjeID);
-            form.find('input[name=ProjeBASLIK]').val(project.ProjeBASLIK);
-            form.find('input[name=ProjeKODU]').val(project.ProjeKODU);
-        });
+          let form = $('.form-edit-task');
+          form.find('input[name=task_id]').val(task.id);
+          form.find('input[name=title]').val(task.title);
+          form.find('textarea[name=description]').val(task.description);
+          form.find('input[name=start_date]').val(task.start_date);
+          form.find('input[name=due_date]').val(task.due_date);
+          form.find('select[name=status]').val(task.status);
+          form.find('select[name=priority]').val(task.priority);
+
+          let assignMembers = new Array();
+          $.each(task.assigned, function(index, member){
+              assignMembers.push(member.assign_to);
+          });
+          form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
+      });
 
         $('.form-edit-task').on('submit', function(e){
             e.preventDefault();

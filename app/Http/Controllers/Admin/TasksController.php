@@ -87,7 +87,7 @@ class TasksController extends Controller
      */
     public function edit(Request $request)
     {
-        $task = Task::with('assigned')->where('id', $request->id)->get();
+        $task = Task::with('assigned')->where('id', $request->id)->first();
         return response()->json($task);
     }
 
@@ -100,7 +100,7 @@ class TasksController extends Controller
      */
     public function update(Request $request)
     {
-        $task = Task::find($request->id);
+        $task = Task::find($request->task_id);
         $task->project_id = $request->project_id;
         $task->title = $request->title;
         $task->description = $request->description;
@@ -112,8 +112,8 @@ class TasksController extends Controller
 
         $assigned_employee = array();
 
-        foreach($request->assigned_to as $employee){
-            if(!TaskAssignment::where(['task_id'=>$task->id,'assign_to' => $employee]->exists())){
+        foreach($request->assign_to as $employee){
+            if(!TaskAssignment::where('task_id',$task->id)->where('assign_to',$employee)->exists()){
                 TaskAssignment::create([
                     'task_id' => $task->id,
                     'assign_to' => $employee

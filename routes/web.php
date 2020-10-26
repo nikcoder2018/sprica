@@ -88,7 +88,8 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('mailbox.drafts');
     Route::get('/mailbox/templates', 'MailboxController@templates')->name('mailbox.templates');
 
-    Route::resource('tasks', 'Admin\TasksController', ['except'=>['update', 'destroy']]);
+    Route::resource('tasks', 'Admin\TasksController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('task/edit', 'Admin\TasksController@edit')->name('tasks.edit');
     Route::post('task/update', 'Admin\TasksController@update')->name('tasks.update');
     Route::post('task/destroy', 'Admin\TasksController@destroy')->name('tasks.destroy');
 

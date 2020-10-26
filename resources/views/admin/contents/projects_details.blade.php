@@ -423,7 +423,7 @@ $system = new System;
 
 <div class="modal fade" id="edit_task_modal">
   <div class="modal-dialog modal-lg">
-      <form class="form-edit-task" method="POST" action="{{route('tasks.store')}}">
+      <form class="form-edit-task" method="POST" action="{{route('tasks.update')}}">
           @csrf
           <input type="hidden" name="task_id">
           <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
@@ -585,22 +585,32 @@ $system = new System;
     }); 
 
       $('.btn-edit').on('click', async function(e){
-            e.preventDefault();
-            $('#edit_task_modal').modal('show');
-            var project = await $.ajax({
-                url: "{{route('admin.tasks.edit')}}",
-                type: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    id: $(this).data('id'),
-                }
-            });
+          e.preventDefault();
+          $('#edit_task_modal').modal('show');
+          var task = await $.ajax({
+              url: "{{route('tasks.edit')}}",
+              type: 'POST',
+              data: {
+                  _token: $('meta[name="csrf-token"]').attr('content'),
+                  id: $(this).data('id'),
+              }
+          });
 
-            let form = $('.form-edit-project');
-            form.find('input[name=ProjeID]').val(project.ProjeID);
-            form.find('input[name=ProjeBASLIK]').val(project.ProjeBASLIK);
-            form.find('input[name=ProjeKODU]').val(project.ProjeKODU);
-        });
+          let form = $('.form-edit-task');
+          form.find('input[name=task_id]').val(task.id);
+          form.find('input[name=title]').val(task.title);
+          form.find('textarea[name=description]').val(task.description);
+          form.find('input[name=start_date]').val(task.start_date);
+          form.find('input[name=due_date]').val(task.due_date);
+          form.find('select[name=status]').val(task.status);
+          form.find('select[name=priority]').val(task.priority);
+
+          let assignMembers = new Array();
+          $.each(task.assigned, function(index, member){
+              assignMembers.push(member.assign_to);
+          });
+          form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
+      });
 
         $('.form-edit-task').on('submit', function(e){
             e.preventDefault();

@@ -115,6 +115,10 @@ $lang = new Language;
                                 <span class="badge badge-success">{{$project->status}}</span>
                             </td>
                             <td class="project-actions text-right">
+                                <a class="btn btn-primary btn-sm" href="{{route('admin.projects.details', $project->ProjeID)}}">
+                                    <i class="fas fa-eye">
+                                    </i>
+                                </a>
                                 <button class="btn btn-info btn-sm btn-edit" data-id="{{$project->ProjeID}}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
