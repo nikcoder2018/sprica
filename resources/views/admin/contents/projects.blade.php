@@ -112,7 +112,13 @@ $lang = new Language;
                                 Std.
                             </td>
                             <td class="project-state">
-                                <span class="badge badge-success">{{$project->status}}</span>
+                                @if($project->status == 'onhold')
+                                    <span class="badge badge-warning">{{ucfirst($project->status)}}</span>
+                                @elseif($project->status == 'canceled')
+                                    <span class="badge badge-danger">{{ucfirst($project->status)}}</span>
+                                @elseif($project->status == 'completed')
+                                    <span class="badge badge-success">{{ucfirst($project->status)}}</span>
+                                @endif
                             </td>
                             <td class="project-actions text-right">
                                 <a class="btn btn-primary btn-sm" href="{{route('admin.projects.details', $project->ProjeID)}}">
@@ -173,9 +179,9 @@ $lang = new Language;
                                   <label>Status</label>
                                   <select name="status" class="form-control custom-select">
                                     <option selected="" disabled="">Select one</option>
-                                    <option>On Hold</option>
-                                    <option>Canceled</option>
-                                    <option>Success</option>
+                                    <option value="onhold">On Hold</option>
+                                    <option value="canceled">Canceled</option>
+                                    <option value="completed">Completed</option>
                                   </select>
                                 </div>
                                 <div class="form-group">
@@ -261,9 +267,9 @@ $lang = new Language;
                                   <label>Status</label>
                                   <select name="status" class="form-control custom-select">
                                     <option selected="" disabled="">Select one</option>
-                                    <option>On Hold</option>
-                                    <option>Canceled</option>
-                                    <option>Success</option>
+                                    <option value="onhold">On Hold</option>
+                                    <option value="canceled">Canceled</option>
+                                    <option value="completed">Completed</option>
                                   </select>
                                 </div>
                                 <div class="form-group">

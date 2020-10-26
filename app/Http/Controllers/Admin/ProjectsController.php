@@ -12,7 +12,7 @@ use App\ProjectMember;
 class ProjectsController extends Controller
 {
     public function index(){
-        $data['projects'] = Project::with(['tasks','tasks_completed', 'members'])->orderBy('ProjeID', 'DESC')->get();
+        $data['projects'] = Project::with(['tasks','tasks_completed', 'members'])->whereNotIn('ProjeBASLIK',['Feiertag','Urlaub','Krank'])->orderBy('ProjeID', 'DESC')->get();
         $data['users'] = User::where('status', 1)->get();
         
         //return response()->json($data); exit;
@@ -49,7 +49,7 @@ class ProjectsController extends Controller
             ]);
         }
 
-        $leader = ProjectMember::where('project_id', $project->id)->where('user_id',$request->leader)->first();
+        $leader = ProjectMember::where('project_id', $project->id)->where('user_id',$request->leader);
         if($leader->exists()){
             $leader->leader = 1;
             $leader->save();
@@ -85,7 +85,6 @@ class ProjectsController extends Controller
     }
     
     public function update(Request $request){
-
         $project = Project::find($request->id);
         $project->ProjeBASLIK = $request->name;
         $project->description = $request->description;
@@ -93,6 +92,7 @@ class ProjectsController extends Controller
         $project->budget = $request->budget;
         $project->spent = $request->spent;
         $project->status = $request->status;
+        $project->save();
 
         $membersIds = array();
 
