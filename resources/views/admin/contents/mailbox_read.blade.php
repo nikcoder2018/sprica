@@ -30,21 +30,29 @@
                   </div>
                   <div class="card-body p-0">
                     <ul class="nav nav-pills flex-column">
+                      @if(auth()->user()->myrole->name == 'admin')
+                      <li class="nav-item">
+                        <a href="{{route('admin.mailbox')}}" class="nav-link">
+                          <i class="far fa-envelope"></i> Inbox
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{{route('admin.mailbox.sent')}}" class="nav-link">
+                          <i class="far fa-file-alt"></i> Sent
+                        </a>
+                      </li>
+                      @else 
                       <li class="nav-item">
                         <a href="{{route('mailbox')}}" class="nav-link">
-                          <i class="far fa-envelope"></i> Sent
+                          <i class="far fa-envelope"></i> Inbox
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="{{route('mailbox.drafts')}}" class="nav-link">
-                          <i class="far fa-file-alt"></i> Drafts
+                        <a href="{{route('mailbox.sent')}}" class="nav-link">
+                          <i class="far fa-file-alt"></i> Sent
                         </a>
                       </li>
-                      <li class="nav-item">
-                        <a href="{{route('mailbox.templates')}}" class="nav-link">
-                          <i class="far fa-file-alt"></i> Templates
-                        </a>
-                      </li>
+                      @endif
                     </ul>
                   </div>
                   <!-- /.card-body -->

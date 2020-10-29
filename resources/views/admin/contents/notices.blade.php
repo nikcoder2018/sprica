@@ -23,7 +23,7 @@ $lang = new Language;
 <div style="height:51px" class="card card-default color-palette-bo">
     <div style="height:51px" class="card-header">
         <div class="d-inline-block">
-          <h3 class="card-title"><i class="fa fa-envelope"></i> Email Triggers</h3>
+          <h3 class="card-title"><i class="fa fa-bell"></i> News</h3>
         </div>
         <div class="d-inline-block float-right">
             <a href="javascript:void(0)" class="btn btn-sm btn-outline-primary add_modal"><i class="fa fa-plus"></i></a>
@@ -38,19 +38,19 @@ $lang = new Language;
             <table id="example1" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Triggers when</th>
-                        <th>Email Template</th>
+                        <th>Heading</th>
+                        <th>Date</th>
                         <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>                                   
-                    @foreach($triggers as $trigger)
+                    @foreach($notices as $notice)
                     <tr>
-                        <td>{{ $trigger->action->description }}</td>
-                        <td>{{ $trigger->template->title }}</td>
+                        <td>{{ $notice->heading }}</td>
+                        <td>{{ date('Y-m-d', strtotime($notice->created_at)) }}</td>
                         <td>
-                            <a href="#" class="edit_trigger" data-id="{{ $trigger->id }}"><i class="fa fa-fw fa-edit text-primary"></i></a>
-                            <a href="#" class="delete_trigger" data-id="{{ $trigger->id }}"><i class="fa fa-fw fa-trash text-danger "></i></a>
+                            <a href="#" class="edit_notice" data-id="{{ $notice->id }}"><i class="fa fa-fw fa-edit text-primary"></i></a>
+                            <a href="#" class="delete_notice" data-id="{{ $notice->id }}"><i class="fa fa-fw fa-trash text-danger "></i></a>
                         </td>
                     </tr>
                     @endforeach    
@@ -62,40 +62,31 @@ $lang = new Language;
 <div class="modal fade add__modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ route('emailtriggers.store') }}" class="form-add-trigger" method="POST"> 
+            <form action="{{ route('notices.store') }}" class="form-add-notice" method="POST"> 
                 <div class="modal-header"> 
-                    <h4 class="modal-title">Create Trigger</h4>
+                    <h4 class="modal-title">Create News</h4>
                     <button type="button" class="close text-danger" data-dismiss="modal">&times;</button>
                 </div>
-
                 @csrf
                 <div class="modal-body">
                     <div class="form-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <fieldset class="form-group">
-                                    <label for="action_id">Trigger when</label>
-                                    <select name="action_id" class="form-control" required>
-                                        <option value="">Select action</option>
-                                        @if(count($actions) > 0)
-                                            @foreach($actions as $action)
-                                                <option value="{{$action->id}}">{{$action->description}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <label for="heading">Heading <sup>*</sup></label>
+                                    <input type="text" name="heading" class="form-control" required>
                                 </fieldset>
                             </div>
                             <div class="col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="to" value="ALL" checked>
+                                    <label class="form-check-label">All</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
                                 <fieldset class="form-group">
-                                    <label for="template_id">Email Template</label>
-                                    <select name="template_id" class="form-control" required>
-                                        <option value="">Select template</option>
-                                        @if(count($templates) > 0)
-                                            @foreach($templates as $template)
-                                                <option value="{{$template->id}}">{{$template->title}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <label for="details">Details</label>
+                                    <textarea name="details" cols="30" rows="5" class="form-control"></textarea>
                                 </fieldset>
                             </div>
                         </div>
@@ -114,11 +105,11 @@ $lang = new Language;
 <div class="modal fade edit__modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ route('emailtriggers.update') }}" class="form-edit-trigger" method="POST"> 
+            <form action="{{ route('notices.update') }}" class="form-edit-notice" method="POST"> 
                 @csrf
                 <input type="hidden" name="id">
                 <div class="modal-header"> 
-                    <h4 class="modal-title">Update Trigger</h4>
+                    <h4 class="modal-title">Update News</h4>
                     <button type="button" class="close text-danger" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -126,28 +117,20 @@ $lang = new Language;
                         <div class="row">
                             <div class="col-md-12">
                                 <fieldset class="form-group">
-                                    <label for="action_id">Trigger when</label>
-                                    <select name="action_id" class="form-control" required>
-                                        <option value="">Select action</option>
-                                        @if(count($actions) > 0)
-                                            @foreach($actions as $action)
-                                                <option value="{{$action->id}}">{{$action->description}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <label for="heading">Heading <sup>*</sup></label>
+                                    <input type="text" name="heading" class="form-control" required>
                                 </fieldset>
                             </div>
                             <div class="col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="to" value="ALL" checked>
+                                    <label class="form-check-label">All</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
                                 <fieldset class="form-group">
-                                    <label for="template_id">Email Template</label>
-                                    <select name="template_id" class="form-control" required>
-                                        <option value="">Select template</option>
-                                        @if(count($templates) > 0)
-                                            @foreach($templates as $template)
-                                                <option value="{{$template->id}}">{{$template->title}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <label for="details">Details</label>
+                                    <textarea name="details" cols="30" rows="5" class="form-control"></textarea>
                                 </fieldset>
                             </div>
                         </div>
@@ -179,7 +162,7 @@ $lang = new Language;
            add_modal.modal();
        });
 
-       $('.form-add-trigger').on('submit', function(e){
+       $('.form-add-notice').on('submit', function(e){
             e.preventDefault();
             $.ajax({
                 url: $(this).attr('action'),
@@ -199,13 +182,13 @@ $lang = new Language;
         });
 
        
-       $('.edit_trigger').on('click', async function() {  
+       $('.edit_notice').on('click', async function() {  
            let edit_modal = $('.edit__modal');
            let form = edit_modal.find('form');
            let id = $(this).data().id;
            edit_modal.modal();
-           const trigger = await $.ajax({
-               url: "{{ route('emailtriggers.edit') }}",
+           const notice = await $.ajax({
+               url: "{{ route('notices.edit') }}",
                type: 'POST',
                data: {
                    _token: "{{ csrf_token() }}",
@@ -213,13 +196,13 @@ $lang = new Language;
                }
            });
 
-           form.find('input[name=id]').val(trigger.id);
-           form.find('select[name=action_id]').val(trigger.action_id);
-           form.find('select[name=template_id]').val(trigger.template_id);
+           form.find('input[name=id]').val(notice.id);
+           form.find('input[name=heading]').val(notice.heading);
+           form.find('textarea[name=details]').val(notice.details);
 
        });
 
-       $('.form-edit-trigger').on('submit', function(e){
+       $('.form-edit-notice').on('submit', function(e){
             e.preventDefault();
 
             $.ajax({
@@ -240,11 +223,11 @@ $lang = new Language;
             })
         }); 
 
-       $('.delete_trigger').on('click', async function() {
+       $('.delete_notice').on('click', async function() {
            let id = $(this).data().id;
 
            Swal.fire({
-               text: 'Are you sure you want to delete this trigger?',
+               text: 'Are you sure you want to delete this news?',
                type: 'warning',
                showCancelButton: true,
                confirmButtonColor: "#3085d6",
@@ -254,8 +237,8 @@ $lang = new Language;
                cancelButtonClass: "btn btn-danger ml-1"
            }).then(async result => {
                if(result.value){
-                   const delete_trigger = await $.ajax({
-                       url: "{{ route('emailtriggers.destroy') }}",
+                   const delete_notice = await $.ajax({
+                       url: "{{ route('notices.destroy') }}",
                        type: 'POST',
                        data: {
                            _token: "{{ csrf_token() }}",
@@ -263,9 +246,9 @@ $lang = new Language;
                        }
                    });
 
-                   if(delete_trigger.success){
+                   if(delete_notice.success){
                        Swal.fire({
-                           text: delete_trigger.msg,
+                           text: delete_notice.msg,
                            type: 'success',
                        }).then(()=>{
                            location.reload();

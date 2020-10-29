@@ -19,13 +19,27 @@ Route::get('/messages/{sender}', 'ChatSystemController@index2')->name('messages.
 Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking')->middleware('auth');
 Route::post('/timesheet/store', 'TimeTrackingController@store')->name('timetracking.store')->middleware('auth');
 Route::post('/timesheet/delete', 'TimeTrackingController@destroy')->name('timetracking.destroy')->middleware('auth');
+Route::post('notices/show', 'NoticesController@show')->name('notices.show');
 
-Route::group(['middleware' => ['auth','employee']], function(){
+Route::group(['middleware' => ['auth','employee','checkstatus']], function(){
     Route::get('/', 'DashboardController@index')->name('home');
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/mailbox', 'MailboxController@index')->name('mailbox');
+    Route::get('/mailbox/compose', 'MailboxController@compose')->name('mailbox.compose');
+    Route::post('/mailbox/compose', 'MailboxController@send')->name('mailbox.compose');
+    Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('mailbox.read');
+    Route::get('/mailbox/sent', 'MailboxController@sent')->name('mailbox.sent');
+    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('mailbox.unsent');
+    Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('mailbox.drafts');
+    Route::get('/mailbox/templates', 'MailboxController@templates')->name('mailbox.templates');
+    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('tickets.edit');
+    Route::post('tickets/update', 'Admin\TicketsController@update')->name('tickets.update');
+    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('tickets.destroy');
+
 });
 
-Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
+Route::group(['prefix' => 'admin','middleware' => ['auth','admin','checkstatus']], function(){
     Route::get('/', 'Admin\DashboardController@show')->name('home');
    
     Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
@@ -81,14 +95,14 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('/vacationdays_settings/update', 'Admin\SettingsController@vacationdays_settings_update')->name('admin.settings.vacationdays-update');
     Route::post('/vacationdays_settings/delete', 'Admin\SettingsController@vacationdays_settings_delete')->name('admin.settings.vacationdays-delete');
 
-    Route::get('/mailbox', 'MailboxController@index')->name('mailbox');
-    Route::get('/mailbox/compose', 'MailboxController@compose')->name('mailbox.compose');
-    Route::post('/mailbox/compose', 'MailboxController@send')->name('mailbox.compose');
-    Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('mailbox.read');
-    Route::get('/mailbox/sent', 'MailboxController@sent')->name('mailbox.sent');
-    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('mailbox.unsent');
-    Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('mailbox.drafts');
-    Route::get('/mailbox/templates', 'MailboxController@templates')->name('mailbox.templates');
+    Route::get('/mailbox', 'MailboxController@index')->name('admin.mailbox');
+    Route::get('/mailbox/compose', 'MailboxController@compose')->name('admin.mailbox.compose');
+    Route::post('/mailbox/compose', 'MailboxController@send')->name('admin.mailbox.compose');
+    Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('admin.mailbox.read');
+    Route::get('/mailbox/sent', 'MailboxController@sent')->name('admin.mailbox.sent');
+    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('admin.mailbox.unsent');
+    Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('admin.mailbox.drafts');
+    Route::get('/mailbox/templates', 'MailboxController@templates')->name('admin.mailbox.templates');
 
     Route::resource('tasks', 'Admin\TasksController', ['except'=>['edit','update', 'destroy']]);
     Route::post('task/edit', 'Admin\TasksController@edit')->name('tasks.edit');
@@ -110,10 +124,10 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('emailactions/update', 'Admin\EmailActionsController@update')->name('emailactions.update');
     Route::post('emailactions/destroy', 'Admin\EmailActionsController@destroy')->name('emailactions.destroy');
 
-    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy']]);
-    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('tickets.edit');
-    Route::post('tickets/update', 'Admin\TicketsController@update')->name('tickets.update');
-    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('tickets.destroy');
+    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy'],'as'=>'admin']);
+    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('admin.tickets.edit');
+    Route::post('tickets/update', 'Admin\TicketsController@update')->name('admin.tickets.update');
+    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('admin.tickets.destroy');
 
     Route::resource('tickettypes', 'Admin\TicketsTypeController', ['except'=>['edit','update', 'destroy']]);
     Route::post('tickettypes/edit', 'Admin\TicketsTypeController@edit')->name('tickettypes.edit');
@@ -135,5 +149,10 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin']], function(){
     Route::post('fuels/edit', 'Admin\FuelsController@edit')->name('fuels.edit');
     Route::post('fuels/update', 'Admin\FuelsController@update')->name('fuels.update');
     Route::post('fuels/destroy', 'Admin\FuelsController@destroy')->name('fuels.destroy');
+
+    Route::resource('notices', 'NoticesController', ['except'=>['show','edit','update', 'destroy']]);
+    Route::post('notices/edit', 'NoticesController@edit')->name('notices.edit');
+    Route::post('notices/update', 'NoticesController@update')->name('notices.update');
+    Route::post('notices/destroy', 'NoticesController@destroy')->name('notices.destroy');
 
 }); 

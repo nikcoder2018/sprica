@@ -467,6 +467,7 @@ $lang = new Language;
            
            
        });
+
        $(document).on('click','.preview-button',function(){
 
            let content = quill.root.innerHTML;
@@ -483,7 +484,6 @@ $lang = new Language;
            }
        });
 
-      
     });
 
    

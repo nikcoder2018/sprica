@@ -77,16 +77,45 @@ $lang = new Language;
                 <div class="modal-body">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <fieldset class="form-group">
                                     <label for="subject">Ticket Subject</label>
                                     <input type="text" name="subject" class="form-control" required>
                                 </fieldset>
                             </div>
+                            <div class="col-md-6">
+                                @if(auth()->user()->myrole->name == 'admin')
+                                <fieldset class="form-group">
+                                    <label for="chassis_no">Project</label>
+                                    <select name="project" class="form-control" required>
+                                        <option value="">Select project</option>
+                                        @if(count($projects) > 0)
+                                            @foreach($projects as $project)
+                                                <option value="{{$project->ProjeID}}">{{$project->ProjeBASLIK}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </fieldset>
+                                @else 
+                                <fieldset class="form-group">
+                                    <label for="chassis_no">Project</label>
+                                    <select name="project" class="form-control" required>
+                                        <option value="">Select project</option>
+                                        @if(count($projects) > 0)
+                                            @foreach($projects as $project)
+                                                <option value="{{$project->project->ProjeID}}">{{$project->project->ProjeBASLIK}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </fieldset>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
                                 <fieldset class="form-group">
                                     <label for="name">Ticket Description</label>
-                                    <textarea name="description" cols="30" rows="6" class="form-control" required></textarea>
+                                    <textarea name="description" class="form-control" cols="30" rows="6" required></textarea>
                                 </fieldset>
                             </div>
                         </div>
@@ -94,6 +123,7 @@ $lang = new Language;
                             <div class="col-md-4">
                                 <fieldset class="form-group">
                                     <label for="chassis_no">Requester Name</label>
+                                    @if(auth()->user()->myrole->name == 'admin')
                                     <select name="requester_user_id" class="form-control" required>
                                         <option value="">Select Requester Name</option>
                                         @if(count($users) > 0)
@@ -102,6 +132,10 @@ $lang = new Language;
                                             @endforeach
                                         @endif
                                     </select>
+                                    @else 
+                                    <input type="hidden" name="requester_user_id" value="{{auth()->user()->id}}" class="form-control">
+                                    <input type="text" value="{{auth()->user()->name}}" class="form-control" disabled>
+                                    @endif
                                 </fieldset>
                             </div>
                             <div class="col-md-4">
@@ -153,12 +187,41 @@ $lang = new Language;
                 <div class="modal-body">
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <fieldset class="form-group">
                                     <label for="subject">Ticket Subject</label>
                                     <input type="text" name="subject" class="form-control" required>
                                 </fieldset>
                             </div>
+                            <div class="col-md-6">
+                                @if(auth()->user()->myrole->name == 'admin')
+                                <fieldset class="form-group">
+                                    <label for="chassis_no">Project</label>
+                                    <select name="project" class="form-control" required>
+                                        <option value="">Select project</option>
+                                        @if(count($projects) > 0)
+                                            @foreach($projects as $project)
+                                                <option value="{{$project->ProjeID}}">{{$project->ProjeBASLIK}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </fieldset>
+                                @else 
+                                <fieldset class="form-group">
+                                    <label for="chassis_no">Project</label>
+                                    <select name="project" class="form-control" required>
+                                        <option value="">Select project</option>
+                                        @if(count($projects) > 0)
+                                            @foreach($projects as $project)
+                                                <option value="{{$project->project->ProjeID}}">{{$project->project->ProjeBASLIK}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </fieldset>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
                                 <fieldset class="form-group">
                                     <label for="name">Ticket Description</label>
@@ -167,9 +230,11 @@ $lang = new Language;
                             </div>
                         </div>
                         <div class="row">
+                            
                             <div class="col-md-4">
                                 <fieldset class="form-group">
                                     <label for="chassis_no">Requester Name</label>
+                                    @if(auth()->user()->myrole->name == 'admin')
                                     <select name="requester_user_id" class="form-control" required>
                                         <option value="">Select Requester Name</option>
                                         @if(count($users) > 0)
@@ -178,8 +243,13 @@ $lang = new Language;
                                             @endforeach
                                         @endif
                                     </select>
+                                    @else 
+                                    <input type="hidden" name="requester_user_id" value="{{auth()->user()->id}}" class="form-control">
+                                    <input type="text" value="{{auth()->user()->name}}" class="form-control" disabled>
+                                    @endif
                                 </fieldset>
                             </div>
+                      
                             <div class="col-md-4">
                                 <fieldset class="form-group">
                                     <label for="type">Type</label>
@@ -246,7 +316,11 @@ $lang = new Language;
        $('.form-add-ticket').on('submit', function(e){
             e.preventDefault();
             $.ajax({
-                url: $(this).attr('action'),
+                @if(auth()->user()->myrole->name == 'admin')
+                url: "{{ route('admin.tickets.store') }}",
+               @else 
+                url: "{{ route('tickets.store') }}",
+               @endif
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(resp){
@@ -269,7 +343,11 @@ $lang = new Language;
            let id = $(this).data().id;
            edit_modal.modal();
            const ticket = await $.ajax({
+               @if(auth()->user()->myrole->name == 'admin')
+               url: "{{ route('admin.tickets.edit') }}",
+               @else 
                url: "{{ route('tickets.edit') }}",
+               @endif
                type: 'POST',
                data: {
                    _token: "{{ csrf_token() }}",
@@ -279,6 +357,7 @@ $lang = new Language;
 
            form.find('input[name=id]').val(ticket.id);
            form.find('input[name=subject]').val(ticket.subject);
+           form.find('select[name=project]').val(ticket.project_id);
            form.find('textarea[name=description]').val(ticket.description);
            form.find('select[name=requester_user_id]').val(ticket.requester_user_id);
            form.find('select[name=type]').val(ticket.type);
@@ -289,7 +368,11 @@ $lang = new Language;
             e.preventDefault();
 
             $.ajax({
-                url: $(this).attr('action'),
+                @if(auth()->user()->myrole->name == 'admin')
+                url: "{{ route('admin.tickets.update') }}",
+               @else 
+                url: "{{ route('tickets.update') }}",
+               @endif
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(resp){
@@ -321,7 +404,11 @@ $lang = new Language;
            }).then(async result => {
                if(result.value){
                    const delete_ticket = await $.ajax({
-                       url: "{{ route('tickets.destroy') }}",
+                    @if(auth()->user()->myrole->name == 'admin')
+                    url: "{{ route('admin.tickets.destroy') }}",
+                    @else 
+                    url: "{{ route('tickets.destroy') }}",
+                    @endif
                        type: 'POST',
                        data: {
                            _token: "{{ csrf_token() }}",

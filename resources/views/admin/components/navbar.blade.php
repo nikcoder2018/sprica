@@ -2,6 +2,8 @@
 use App\Helpers\System;
 $messages_count = count(System::getLatestMessages());
 $messages = System::getLatestMessages();
+$news_count = count(System::getNews());
+$news_data = System::getNews();
 @endphp
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -53,32 +55,24 @@ $messages = System::getLatestMessages();
                 <a href="{{route('messages')}}" class="dropdown-item dropdown-footer">See All Messages</a>
             </div>
           </li>
+          @if($news_count > 0)
           <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
               <i class="far fa-bell"></i>
-              <span class="badge badge-warning navbar-badge">15</span>
+              <span class="badge badge-warning navbar-badge">{{$news_count}}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-              <span class="dropdown-item dropdown-header">15 Notifications</span>
+              <span class="dropdown-item dropdown-header">{{$news_count}} News</span>
+              @foreach($news_data as $news)
               <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">
-                <i class="fas fa-envelope mr-2"></i> 4 new messages
-                <span class="float-right text-muted text-sm">3 mins</span>
+              <a href="#" class="dropdown-item open-news" data-id="{{$news->id}}">
+                <i class="fas fa-envelope mr-2"></i>{{$news->heading}}
+                <span class="float-right text-muted text-sm">{{Carbon\Carbon::parse($news->created_at)->diffForHumans()}}</span>
               </a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">
-                <i class="fas fa-users mr-2"></i> 8 friend requests
-                <span class="float-right text-muted text-sm">12 hours</span>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">
-                <i class="fas fa-file mr-2"></i> 3 new reports
-                <span class="float-right text-muted text-sm">2 days</span>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              @endforeach
             </div>
           </li>
+          @endif
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">

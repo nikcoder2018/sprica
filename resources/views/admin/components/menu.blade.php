@@ -66,6 +66,13 @@
                         <p>Mailbox</p>
                     </a>
                 </li>
+
+                <li class="nav-item ">
+                    <a data-parents="projeler" href="{{route('tickets.index')}}" class="nav-link">
+                        <i class="fas fa-ticket-alt nav-icon"></i>
+                        <p>Tickets </p>
+                    </a>
+                </li>
                 @endif
                 @if(\App\Role::where('id', Auth::user()->role)->first()->name == 'admin')
 
@@ -91,37 +98,20 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('mailbox')}}" class="nav-link">
+                    <a href="{{route('admin.mailbox')}}" class="nav-link">
                         <i class="nav-icon fas fa-envelope"></i>
                         <p>Mailbox</p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-envelope"></i>
-                        <p>Email<i class="right fas fa-angle-left"></i></p>
+
+                <li class="nav-item ">
+                    <a data-parents="projeler" href="{{route('admin.tickets.index')}}" class="nav-link">
+                        <i class="fas fa-ticket-alt nav-icon"></i>
+                        <p>Tickets </p>
                     </a>
-                    <ul class="nav nav-treeview" style="background-color:#555555;">
-                        <li class="nav-item" >
-                            <a  href="{{route('emailtemplates.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-envelope-square"></i>
-                                <p>Templates</p>
-                            </a>
-                        </li>  
-                        <li class="nav-item" >
-                            <a  href="{{route('emailtriggers.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-envelope-open-text"></i>
-                                <p>Triggers</p>
-                            </a>
-                        </li> 
-                        <li class="nav-item" >
-                            <a  href="{{route('emailactions.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-envelope-open"></i>
-                                <p>Actions</p>
-                            </a>
-                        </li>       
-                    </ul>
                 </li>
+
+                <li class="nav-item"><a href="{{route('notices.index')}}" class="nav-link"><i class="nav-icon fas fa-bell"></i><p>News</p></a></li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link ana">
                         <i class="nav-icon fas fa-bars"></i>
@@ -190,7 +180,7 @@
 
                 
                 <li class="nav-item ">
-                    <a data-parents="projeler" href="{{route('tickets.index')}}" class="nav-link">
+                    <a data-parents="projeler" href="{{route('admin.tickets.index')}}" class="nav-link">
                         <i class="fas fa-ticket-alt nav-icon"></i>
                         <p>Tickets </p>
                     </a>

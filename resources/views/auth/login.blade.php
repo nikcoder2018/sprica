@@ -13,6 +13,11 @@
   
         <form class="form-signin" action="{{ route('login') }}" method="POST">
         @csrf
+            @error('username')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
             <div class="input-group mb-3">
                 <input type="text" name="username" class="form-control" placeholder="{{$placeholder['username']}}">
                 <div class="input-group-append">
@@ -21,7 +26,8 @@
                 </div>
                 </div>
             </div>
-            @error('username')
+            
+            @error('password')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -34,7 +40,8 @@
                     </div>
                 </div>
             </div>
-            @error('password')
+            
+            @error('status')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>

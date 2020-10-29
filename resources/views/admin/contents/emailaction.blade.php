@@ -31,7 +31,6 @@ $lang = new Language;
     </div>
 </div>
 
-
 <section class="content">
     <div class="card">
         <div class="card-body p-0">

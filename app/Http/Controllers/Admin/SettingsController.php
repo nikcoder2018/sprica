@@ -11,6 +11,10 @@ use App\Language;
 use App\Code;
 use App\VacationDay;
 use App\TicketType;
+use App\EmailTemplate;
+use App\EmailTrigger;
+use App\EmailAction;
+use App\EmailCommand;
 class SettingsController extends Controller
 {
     //
@@ -19,6 +23,11 @@ class SettingsController extends Controller
         $data['ticket_types'] = TicketType::orderBy('id', 'ASC')->get();
         $data['vacationdays'] = VacationDay::orderBy('GunID', 'DESC')->get();
         $data['codes'] = Code::orderBy('KodID', 'DESC')->get();
+        $data["templates"] = EmailTemplate::all();
+        $data['text_templates'] = EmailTemplate::select('id','body','title')->where('word_template', true)->get();
+        $data['triggers'] = EmailTrigger::with(['template','action'])->get();
+        $data['actions'] = EmailAction::with('command')->get();
+        $data['commands'] = EmailCommand::all();
         return view('admin.contents.settings',$data);
     }
 

@@ -62,7 +62,7 @@ class EmailTemplatesController extends Controller
         ]);
 
         if($create)
-            return response()->json(array('success' => true, 'msg' => 'New Email Template Created'));
+            return response()->json(array('success' => true, 'msg' => 'New Email Template Created', 'action' => 'add', 'template' => $create));
     }
 
     /**
@@ -123,7 +123,7 @@ class EmailTemplatesController extends Controller
 
 
         if($template)
-            return response()->json(array('success' => true, 'msg' => 'Template Updated'));
+            return response()->json(array('success' => true, 'msg' => 'Template Updated', 'action' => 'edit', 'template' => $template));
     }
 
     /**
@@ -139,6 +139,6 @@ class EmailTemplatesController extends Controller
         $delete = EmailTemplate::find($id)->delete();
 
         if($delete)
-            return response()->json(array('success' => true, 'msg' => 'Template Deleted'));
+            return response()->json(array('success' => true, 'msg' => 'Template Deleted', 'id' => $id));
     }
 }

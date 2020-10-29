@@ -41,7 +41,4 @@
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-
-</div>
-<!-- ./wrapper -->
 @endsection

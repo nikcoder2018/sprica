@@ -47,7 +47,7 @@ class EmailActionsController extends Controller
         ]);
 
         if($createAction)
-            return response()->json(array('success' => true, 'msg' => 'Action Created'));
+            return response()->json(array('success' => true, 'msg' => 'Action Created', 'action' => EmailAction::with('command')->where('id', $createAction->id)->first()));
     }
 
     /**
@@ -88,7 +88,7 @@ class EmailActionsController extends Controller
         $action->save();
 
         if($action)
-            return response()->json(array('success' => true, 'msg' => 'Action Updated.'));
+            return response()->json(array('success' => true, 'msg' => 'Action Updated.', 'action' => EmailAction::with('command')->where('id', $request->id)->first()));
     }
 
     /**
@@ -102,6 +102,6 @@ class EmailActionsController extends Controller
         $delete = EmailAction::find($request->id)->delete();
 
         if($delete)
-            return response()->json(array('success' => true, 'msg' => 'Action Deleted'));
+            return response()->json(array('success' => true, 'msg' => 'Action Deleted', 'id' => $request->id));
     }
 }

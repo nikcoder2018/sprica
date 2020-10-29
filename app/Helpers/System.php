@@ -5,6 +5,8 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Message;
+use App\Notice;
+use App\NoticeRead;
 use Cache;
 
 class System
@@ -42,7 +44,17 @@ class System
                         ->unique('from_id');
         return $messages;
     }
+    public static function getNews(){
+        $readIds = array();
 
+        $notices_read = NoticeRead::where('user_id', auth()->user()->id)->get();
+        foreach($notices_read as $notice){
+            array_push($readIds, $notice->notice_id);
+        }
+        $notices = Notice::where('to', 'ALL')->whereNotIn('id', $readIds)->get();
+
+        return $notices;
+    }
     public static function cevir($tarih)
     {
         $parcala = explode("-",$tarih);

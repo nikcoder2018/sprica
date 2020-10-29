@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Ticket;
 use App\TicketType;
 use App\User;
+use App\Project;
+use App\ProjectMember;
 class TicketsController extends Controller
 {
     /**
@@ -17,9 +19,19 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        $data['tickets'] = Ticket::all();
+        if(auth()->user()->myrole->name != 'admin'){
+            $data['tickets'] = Ticket::where('requester_user_id', auth()->user()->id)->get();
+            $data['projects'] = ProjectMember::where('user_id', auth()->user()->id)->with('project')->get();
+        }else{
+            $data['tickets'] = Ticket::all();
+            $data['projects'] = Project::all();
+        }
+            
         $data['types'] = TicketType::orderBy('id', 'ASC')->get();
+        
         $data['users'] = User::all();
+
+        #return response()->json($data);
         return view('admin.contents.tickets', $data);
     }
 
@@ -43,6 +55,7 @@ class TicketsController extends Controller
     {
         $createTicket = Ticket::create([
             'requester_user_id' => $request->requester_user_id,
+            'project_id' => $request->project,
             'type' => $request->type,
             'priority' => $request->priority,
             'subject' => $request->subject, 
@@ -88,6 +101,7 @@ class TicketsController extends Controller
     {
         $ticket = Ticket::find($request->id);
         $ticket->requester_user_id = $request->requester_user_id;
+        $ticket->project_id = $request->project;
         $ticket->type = $request->type;
         $ticket->priority = $request->priority;
         $ticket->subject = $request->subject;

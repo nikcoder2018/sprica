@@ -29,6 +29,18 @@
           </div>
           <div class="card-body p-0">
             <ul class="nav nav-pills flex-column">
+              @if(auth()->user()->myrole->name == 'admin')
+              <li class="nav-item">
+                <a href="{{route('admin.mailbox')}}" class="nav-link">
+                  <i class="far fa-envelope"></i> Inbox
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admin.mailbox.sent')}}" class="nav-link">
+                  <i class="far fa-file-alt"></i> Sent
+                </a>
+              </li>
+              @else 
               <li class="nav-item">
                 <a href="{{route('mailbox')}}" class="nav-link">
                   <i class="far fa-envelope"></i> Inbox
@@ -39,6 +51,7 @@
                   <i class="far fa-file-alt"></i> Sent
                 </a>
               </li>
+              @endif
             </ul>
           </div>
           <!-- /.card-body -->
@@ -85,11 +98,15 @@
                           <label for="check1"></label>
                         </div>
                       </td>
-                      <td class="mailbox-name"><a href="{{route('mailbox.read', $email->id)}}">{{$email->to}}</a></td>
+                      @if(auth()->user()->myrole->name == 'admin')
+                      <td class="mailbox-name"><a href="{{route('admin.mailbox.read', $email->id)}}">{{$email->from}}</a></td>
+                      @else 
+                      <td class="mailbox-name"><a href="{{route('mailbox.read', $email->id)}}">{{$email->from}}</a></td>
+                      @endif
                       <td class="mailbox-subject"><b>{{$email->subject}}</b>
                       </td>
                       <td class="mailbox-attachment"></td>
-                      <td class="mailbox-date">5 mins ago</td>
+                      <td class="mailbox-date">{{Carbor\Carbon::parse($email->created_at)->diffForHumans()}}</td>
                     </tr>
                     @endforeach
                   @endif

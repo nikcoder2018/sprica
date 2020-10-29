@@ -47,7 +47,7 @@ class EmailTriggersController extends Controller
         ]);
 
         if($createTrigger)
-            return response()->json(array('success' => true, 'msg' => 'Trigger Created.'));
+            return response()->json(array('success' => true, 'msg' => 'Trigger Created.', 'trigger' => EmailTrigger::with(['action','template'])->where('id', $createTrigger->id)->first()));
     }
 
     /**
@@ -88,7 +88,7 @@ class EmailTriggersController extends Controller
         $trigger->save();
 
         if($trigger)
-            return response()->json(array('success' => true, 'msg' => 'Triger Updated.'));
+            return response()->json(array('success' => true, 'msg' => 'Triger Updated.', 'trigger' => EmailTrigger::with(['action','template'])->where('id', $trigger->id)->first()));
     }
 
     /**
@@ -102,6 +102,6 @@ class EmailTriggersController extends Controller
         $delete = EmailTrigger::find($request->id)->delete();
 
         if($delete)
-            return response()->json(array('success' => true, 'msg' => 'Trigger Deleted'));
+            return response()->json(array('success' => true, 'msg' => 'Trigger Deleted', 'id' => $request->id));
     }
 }

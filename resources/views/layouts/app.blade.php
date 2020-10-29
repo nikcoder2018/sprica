@@ -37,13 +37,20 @@
         <!-- /.content-wrapper -->
         
         @include('admin.components.footer')
-
-        @yield('modals')
     </div>
     <!-- ./wrapper -->
 
     @yield('modals')
-
+    <div class="modal fade" id="open-news-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4 class="heading"></h4>
+                    <p class="details"></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- APP WRAPPER -->
     <!-- jQuery -->
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
@@ -97,6 +104,23 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
+
+        $('.open-news').on('click',async function(){
+            let id = $(this).data('id');
+
+            const news = await $.ajax({
+                url: "{{route('notices.show')}}",
+                type: 'POST',
+                data: {
+                    _token: "{{csrf_token()}}",
+                    id
+                }
+            });
+
+            let newsModal = $('#open-news-modal').modal('show');
+            newsModal.find('.heading').text(news.heading);
+            newsModal.find('.details').text(news.details);
+        });
     </script>
 
     @yield('scripts')

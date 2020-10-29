@@ -11,6 +11,9 @@ class ProjectMember extends Model
 
     public $timestamps = false;
 
+    function project(){
+        return $this->hasOne(Project::class, 'ProjeID', 'project_id');
+    }
     function member_detail(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }
