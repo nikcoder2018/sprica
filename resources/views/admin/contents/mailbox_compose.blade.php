@@ -27,7 +27,12 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-3">
-              <a href="{{route('mailbox')}}" class="btn btn-primary btn-block mb-3">Back to Inbox</a>
+              @if(auth()->user()->myrole->name == 'admin')
+                <a href="{{route('admin.mailbox')}}" class="btn btn-primary btn-block mb-3">Back to Inbox</a>
+              @else 
+                <a href="{{route('mailbox')}}" class="btn btn-primary btn-block mb-3">Back to Inbox</a>
+              @endif
+              
   
               <div class="card">
                 <div class="card-header">
@@ -75,7 +80,11 @@
                 <div class="card-header">
                   <h3 class="card-title">Compose New Message</h3>
                 </div>
-                <form class="form-compose-email" action="{{route('mailbox.compose')}}" method="POST">
+                @if(auth()->user()->myrole->name == 'admin')
+                  <form class="form-compose-email" action="{{route('admin.mailbox.compose')}}" method="POST">
+                @else 
+                  <form class="form-compose-email" action="{{route('mailbox.compose')}}" method="POST">
+                @endif
                   @csrf
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -143,7 +152,11 @@
                   title: resp.msg,
                   showConfirmButton: false,
               });
+              @if(auth()->user()->myrole->name == 'admin')
+              setTimeout(function() { location.href="{{route('admin.mailbox.sent')}}"; }, 1000);
+              @else 
               setTimeout(function() { location.href="{{route('mailbox.sent')}}"; }, 1000);
+              @endif
             }
           }
         })

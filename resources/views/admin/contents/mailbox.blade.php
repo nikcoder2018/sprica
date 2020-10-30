@@ -16,8 +16,11 @@
   <section class="content">
     <div class="row">
       <div class="col-md-3">
-        <a href="{{route('mailbox.compose')}}" class="btn btn-primary btn-block mb-3">Compose</a>
-
+        @if(auth()->user()->myrole->name == 'admin')
+          <a href="{{route('admin.mailbox.compose')}}" class="btn btn-primary btn-block mb-3">Compose</a>
+        @else 
+          <a href="{{route('mailbox.compose')}}" class="btn btn-primary btn-block mb-3">Compose</a>
+        @endif
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Folders</h3>
@@ -106,7 +109,7 @@
                       <td class="mailbox-subject"><b>{{$email->subject}}</b>
                       </td>
                       <td class="mailbox-attachment"></td>
-                      <td class="mailbox-date">{{Carbor\Carbon::parse($email->created_at)->diffForHumans()}}</td>
+                      <td class="mailbox-date">{{Carbon\Carbon::parse($email->created_at)->diffForHumans()}}</td>
                     </tr>
                     @endforeach
                   @endif

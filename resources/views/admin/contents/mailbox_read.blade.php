@@ -17,8 +17,11 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-3">
+              @if(auth()->user()->myrole->name == 'admin')
+                <a href="{{route('admin.mailbox.compose')}}" class="btn btn-primary btn-block mb-3">Compose</a>
+              @else 
                 <a href="{{route('mailbox.compose')}}" class="btn btn-primary btn-block mb-3">Compose</a>
-        
+              @endif
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Folders</h3>
