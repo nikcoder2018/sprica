@@ -91,7 +91,7 @@
                   <div class="form-group">
                     <select class="select2bs4" multiple="multiple" name="recipient[]" data-placeholder="To" style="width: 100%;">
                       @foreach($users as $user)
-                        <option value="{{$user->email}}">{{$user->name}}</option>
+                        <option value="{{$user->id}}">{{$user->name}}</option>
                       @endforeach
                     </select>
                   </div>

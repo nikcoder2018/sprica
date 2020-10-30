@@ -102,9 +102,9 @@
                         </div>
                       </td>
                       @if(auth()->user()->myrole->name == 'admin')
-                      <td class="mailbox-name"><a href="{{route('admin.mailbox.read', $email->id)}}">{{$email->from}}</a></td>
+                      <td class="mailbox-name"><a href="{{route('admin.mailbox.read', $email->id)}}">{{$email->receiver->name}}</a></td>
                       @else 
-                      <td class="mailbox-name"><a href="{{route('mailbox.read', $email->id)}}">{{$email->from}}</a></td>
+                      <td class="mailbox-name"><a href="{{route('mailbox.read', $email->id)}}">{{$email->receiver->name}}</a></td>
                       @endif
                       <td class="mailbox-subject"><b>{{$email->subject}}</b>
                       </td>

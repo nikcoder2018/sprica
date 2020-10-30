@@ -8,12 +8,12 @@ use App\User;
 class MailboxController extends Controller
 {
     public function index(){
-        $data['mailbox'] = MailBox::where('to', auth()->user()->email)->orderBy('created_at','desc')->get();
+        $data['mailbox'] = MailBox::with('receiver')->where('to', auth()->user()->id)->orderBy('created_at','desc')->get();
         return view('admin.contents.mailbox', $data);
     }
 
     public function compose(){
-        $data['users'] = User::where('status',1)->where('email','!=',auth()->user()->email)->get();
+        $data['users'] = User::where('status',1)->where('id','!=',auth()->user()->id)->get();
         return view('admin.contents.mailbox_compose', $data);
     }
 
@@ -21,14 +21,13 @@ class MailboxController extends Controller
         foreach($request->recipient as $recipient){
             $mailbox = new MailBox;
             $mailbox->to = $recipient;
-            $mailbox->from = auth()->user()->email;
+            $mailbox->from = auth()->user()->id;
             $mailbox->subject = $request->subject;
             $mailbox->content = $request->content;
             $mailbox->save();
         }
 
         return response()->json(array('success' => true, 'msg' => 'Email Sent.'));
-        
     }
 
     public function unsent(Request $request){
@@ -43,11 +42,11 @@ class MailboxController extends Controller
     }
 
     public function sent(){
-        $data['mailbox'] = MailBox::where('from', auth()->user()->email)->where('unsent', 0)->orderBy('created_at','desc')->get();
+        $data['mailbox'] = MailBox::with('sender')->where('from', auth()->user()->id)->where('unsent', 0)->orderBy('created_at','desc')->get();
         return view('admin.contents.mailbox_sent', $data);
     }
     public function read($id){
-        $data['email'] = MailBox::find($id);
+        $data['email'] = MailBox::with(['receiver','sender'])->where('id',$id)->first();
 
         return view('admin.contents.mailbox_read', $data);
     }

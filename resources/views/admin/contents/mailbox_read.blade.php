@@ -76,7 +76,7 @@
                 <div class="card-body p-0">
                     <div class="mailbox-read-info">
                     <h5>Subject: {{$email->subject}}</h5>
-                    <h6>To: {{$email->to}}
+                    <h6>To: {{$email->sender->name}}
                         <span class="mailbox-read-time float-right">{{date('d M, Y H:i A', strtotime($email->created_at))}}</span></h6>
                     </div>
                     <!-- /.mailbox-controls -->
