@@ -178,13 +178,6 @@
                     </ul>
                 </li>
 
-                
-                <li class="nav-item ">
-                    <a data-parents="projeler" href="{{route('admin.tickets.index')}}" class="nav-link">
-                        <i class="fas fa-ticket-alt nav-icon"></i>
-                        <p>Tickets </p>
-                    </a>
-                </li>
                 <li class="nav-item has-treeview">
                     <a data-parents="projeler" href="#" class="nav-link">
                         <i class="fas fa-car nav-icon"></i>
