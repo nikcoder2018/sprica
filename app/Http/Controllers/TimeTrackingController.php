@@ -12,7 +12,7 @@ class TimeTrackingController extends Controller
 {
     public function index(){
         $data['page_title'] = 'Time Sheet';
-        $data['projects'] = Project::orderBy('projeKODU', 'ASC')->get();
+        $data['projects'] = Project::whereNotIn('ProjeBASLIK', ['Feiertag','Urlaub','Krank','KUG'])->orderBy('projeKODU', 'ASC')->get();
         $data['codes'] = Code::all();
         $data['timelogs'] = Watches::where('UyeID', auth()->user()->id)->orderBy('Tarih', 'DESC')->get();
         return view('contents.timetracking', $data);

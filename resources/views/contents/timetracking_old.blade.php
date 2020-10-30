@@ -8,32 +8,33 @@ $system = new System;
 
 @section('content')
     <!-- Content Header (Page header) -->
-<div style="height:51px" class="card card-default color-palette-bo">
-    <div style="height:51px" class="card-header">
-        <div class="d-inline-block">
-          <h3 class="card-title"><i class="fa fa-users"></i> {{$page_title}}</h3>
-        </div>
-        <div class="d-inline-block float-right">
-            <a data-toggle="modal" data-target="#modal-lg" href="javascript:void(0)"class="btn btn-sm btn-outline-primary"><i class="fa fa-play-circle"></i></a>
-        </div>
-    </div>
-</div>
-
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h4>{{$page_title}}</h4>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
 
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                  <div class="card">
-                      
-                    
-                      
-                    <div class="">
-                      <table id="example1" class="table ttable-bordered table-striped table-hover">
+                  <div class="card card-primary">
+                    <div class="card-header">
+                      <h3 class="card-title">{{$lang::settings('_Isci_Paneli_Saatler')}}</h3>
+                      <div class="text-right"><button data-toggle="modal" class="btn btn-light" data-target="#modal-lg">
+                          <i style="color:#5858FA" class="nav-icon fas fa-play-circle"></i></button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <table id="example1" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                          <th data-sort="2015-08-27T" style="width:29%">{{$lang::settings('Isci_Paneli_Tarih')}}</th>
+                          <th style="width:29%">{{$lang::settings('Isci_Paneli_Tarih')}}</th>
                           <th style="width:19%">{{$lang::settings('Isci_Paneli_Saat')}}</th>
                           <th class="text-center" colspan="1">{{$lang::settings('Isci_Paneli_Proje')}}</th>
                           <th style="width:20%"></th>
@@ -55,11 +56,7 @@ $system = new System;
                               </td>
                               <td>
                                 @if($log->Onay != 1)
-                                  <button class="btn btn-outline-danger btn-sm btn-delete" data-id="{{$log->SaatID}}"><i class="nav-icon fas fa-trash"></i></button>  
-                                @endif
-                                  @if($log->Onay != 0)
-                                  
-                                  <span class="badge badge-success"><i class="fas fa-check"></i></span>
+                                  <button class="btn btn-danger btn-sm btn-delete" data-id="{{$log->SaatID}}"><i class="nav-icon fas fa-trash"></i></button>
                                 @endif
                               </td>
                             </tr>
@@ -92,8 +89,7 @@ $system = new System;
                   <div class="row">
                       <div class="form-group col-md-6">
                           <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Isci_Paneli_Proje_Seciniz')}}</label>
-                          <select class="custom-select " required name="ProjeID">
-                              <option selceted disabled>Wähle Projekt</option>
+                          <select class="form-control " required name="ProjeID">
                             @foreach($projects as $project)
                                 <option value="{{$project->ProjeID}}">{{$project->ProjeBASLIK}}</option>
                             @endforeach
@@ -102,7 +98,7 @@ $system = new System;
                    
                       <div class="form-group col-md-6">
                           <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Isci_Paneli_Proje_Giriniz')}}</label>
-                          <input required type="text" class="custom-select vRequired" id="inputBasicFirstName" name="ProjeBASLIK" placeholder="Stadt">
+                          <input required type="text" class="form-control vRequired" id="inputBasicFirstName" name="ProjeBASLIK" placeholder="Stadt">
                       </div>
                       
                         @php
@@ -122,7 +118,7 @@ $system = new System;
 
                       <div class="form-group col-md-4">
                           <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Isci_Paneli_Saat')}}</label>
-                          <select type="text" class="custom-select vRequired" id="inputBasicFirstName" name="Saat" placeholder="">
+                          <select type="text" class="form-control vRequired" id="inputBasicFirstName" name="Saat" placeholder="">
                               <option value="0.5">0:30</option>
                               <option value="1">1:00</option>
                               <option value="1.5">1:30</option>
@@ -147,14 +143,14 @@ $system = new System;
                       </div>
                       <div class="form-group col-md-4">
                           <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Isci_Paneli_Gunduz_Mu')}}</label>
-                          <select class="custom-select" name="Gunduz">
+                          <select class="form-control" name="Gunduz">
                               <option value="1">{{$lang::settings('Isci_Paneli_Gündüz')}}</option>
                               <option value="2">{{$lang::settings('Isci_Paneli_Gece')}}</option>
                           </select>
                       </div>
                       <div class="form-group col-md-4">
                           <label class="form-control-label" for="inputBasicFirstName">{{$lang::settings('Admin_Saatler_Ekle_Kod_Seciniz')}}</label>
-                          <select class="custom-select" name="Kod">
+                          <select class="form-control" name="Kod">
                               <option value="99">Keine Auslöse</option>
                               @foreach($codes as $code)
                                 @if(\App\EmployeeCode::where('PersonelID', Auth::user()->id)->where('KodID', $code->KodID)->exists() && $code->Kod != '99')
@@ -167,7 +163,7 @@ $system = new System;
               </div>
               <div class="modal-footer justify-content-between">
                 <!--  <a href="" type="button" class="btn btn-default">Close</a> -->
-                  <button type="submit" class="btn btn-primary btn-block">{{$lang::settings('Isci_Paneli_Kaydet')}}</button>
+                  <button type="submit" class="btn btn-primary">{{$lang::settings('Isci_Paneli_Kaydet')}}</button>
               </div>
           </div>
       </form>
@@ -177,7 +173,7 @@ $system = new System;
 
 <div class="modal fade" id="modal-danger">
   <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content bg-danger">
           <div class="modal-header">
               <h4 class="modal-title">{{$lang::settings('Isci_Paneli_Kaydi_Sil')}}</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -188,8 +184,8 @@ $system = new System;
               <p><strong>{{$lang::settings('Isci_Paneli_Emin_Misiniz')}}</strong></p>
           </div>
           <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{{$lang::settings('Isci_Paneli_Hayir')}}</button>
-              <button class="btn btn-danger btn-delete-go">{{$lang::settings('Isci_Paneli_Evet_Sil')}}</button>
+              <button type="button" class="btn btn-outline-light" data-dismiss="modal">{{$lang::settings('Isci_Paneli_Hayir')}}</button>
+              <button class="btn btn-outline-light btn-delete-go">{{$lang::settings('Isci_Paneli_Evet_Sil')}}</button>
           </div>
       </div>
       <!-- /.modal-content -->
@@ -209,10 +205,8 @@ $system = new System;
         "searching": false,
         "ordering": true,
         "info": true,
-        "pageLength": 25,
         "autoWidth": false,
-        "order": [[0, "desc"]],
-        "columnDefs": [{ "type": "date", "targets": 0 }]
+        "order": [[0, "desc"]]
     });
 
     $('.form-add-time').on('submit', function(e){
@@ -226,8 +220,6 @@ $system = new System;
               if(resp.success){
                   Toast.fire({
                       icon: 'success',
-                      toast: true,
-                        timerProgressBar: false,
                       title: resp.msg,
                       showConfirmButton: false,
                   });
@@ -253,11 +245,8 @@ $system = new System;
             },
             success: function(resp){
                 if(resp.success){
-                    
                     Toast.fire({
                         icon: 'success',
-                        toast: true,
-                        timerProgressBar: false,
                         title: resp.msg,
                         showConfirmButton: false,
                     });
