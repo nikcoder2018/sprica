@@ -65,7 +65,9 @@ class VehiclesController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['vehicle'] = Vehicle::with(['group','fuels'])->where('id',$id)->first();
+        #return response()->json($data); exit;
+        return view('admin.contents.vehicles-details', $data);
     }
 
     /**

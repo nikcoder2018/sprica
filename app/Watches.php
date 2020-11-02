@@ -11,4 +11,11 @@ class Watches extends Model
     protected $fillable = ['UyeID','ProjeID','ProjeBASLIK','Tarih','Saat','Onay', 'Odenecek', 'Gunduz','Kod','Calisti'];
 
     public $timestamps = false;
+
+    function project(){
+        return $this->belongsTo(Project::class, 'ProjeID', 'ProjeID');
+    }
+    function user(){
+        return $this->hasOne(User::class, 'id', 'UyeID');
+    }
 }

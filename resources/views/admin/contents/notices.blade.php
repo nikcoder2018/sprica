@@ -34,31 +34,66 @@ $lang = new Language;
 
 <section class="content">
     <div class="card">
+        <div class="card-header p-0">
+            <ul class="nav nav-tabs" id="news-tabs" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="news-overview-tabs" data-toggle="pill" href="#news-main" role="tab" aria-controls="news-tabs-main" aria-selected="true">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="news-members-tabs" data-toggle="pill" href="#news-members" role="tab" aria-controls="news-tabs-members" aria-selected="true">Who reads the news?</a>
+                </li>
+            </ul>
+        </div>
         <div class="card-body p-0">
-            <table id="example1" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Heading</th>
-                        <th>Date</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody>                                   
-                    @foreach($notices as $notice)
-                    <tr>
-                        <td>{{ $notice->heading }}</td>
-                        <td>{{ date('Y-m-d', strtotime($notice->created_at)) }}</td>
-                        <td>
-                            <a href="#" class="edit_notice" data-id="{{ $notice->id }}"><i class="fa fa-fw fa-edit text-primary"></i></a>
-                            <a href="#" class="delete_notice" data-id="{{ $notice->id }}"><i class="fa fa-fw fa-trash text-danger "></i></a>
-                        </td>
-                    </tr>
-                    @endforeach    
-                </tbody>
-            </table>
+            <div class="tab-content" id="news-tabs-content">
+                <div class="tab-pane fade active show" id="news-main" role="tabpanel" aria-labelledby="#news-tabs-overview">
+                    <table id="example1" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Heading</th>
+                                <th>Date</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>                                   
+                            @foreach($notices as $notice)
+                            <tr>
+                                <td>{{ $notice->heading }}</td>
+                                <td>{{ date('Y-m-d', strtotime($notice->created_at)) }}</td>
+                                <td>
+                                    <a href="#" class="edit_notice" data-id="{{ $notice->id }}"><i class="fa fa-fw fa-edit text-primary"></i></a>
+                                    <a href="#" class="delete_notice" data-id="{{ $notice->id }}"><i class="fa fa-fw fa-trash text-danger "></i></a>
+                                </td>
+                            </tr>
+                            @endforeach    
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="news-members" role="tabpanel" aria-labelledby="#news-tabs-members">
+                    <table id="example1" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Heading</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>                                   
+                            @foreach($notices_reads as $read)
+                            <tr>
+                                <td>{{ $read->user->name }}</td>
+                                <td>{{ $read->notice->heading }}</td>
+                                <td>{{ date('Y-m-d', strtotime($read->created_at)) }}</td>
+                            </tr>
+                            @endforeach    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
 <div class="modal fade add__modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">

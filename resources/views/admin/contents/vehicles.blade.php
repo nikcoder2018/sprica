@@ -58,6 +58,7 @@ $lang = new Language;
                         <td>{{ $vehicle->type }}</td>
                         <td>{{ $vehicle->color }}</td>
                         <td>
+                            <a href="{{route('vehicles.show', $vehicle->id)}}"><i class="fa fa-fw fa-eye text-primary"></i></a>
                             <a href="#" class="edit_vehicle" data-id="{{ $vehicle->id }}"><i class="fa fa-fw fa-edit text-primary"></i></a>
                             <a href="#" class="delete_vehicle" data-id="{{ $vehicle->id }}"><i class="fa fa-fw fa-trash text-danger "></i></a>
                         </td>

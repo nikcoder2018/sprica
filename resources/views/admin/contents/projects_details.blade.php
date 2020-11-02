@@ -266,6 +266,7 @@ $system = new System;
                             <table class="table table-timelogs">
                                 <thead>
                                 <tr>
+                                <th></th>
                                   <th style="width:29%">{{$lang::settings('Isci_Paneli_Tarih')}}</th>
                                   <th style="width:19%">{{$lang::settings('Isci_Paneli_Saat')}}</th>
                                   <th class="text-center" colspan="1">{{$lang::settings('Isci_Paneli_Proje')}}</th>
@@ -276,20 +277,21 @@ $system = new System;
                                   @if(count($project->timelogs) > 0)
                                     @foreach($project->timelogs as $log)
                                     <tr>
-                                      <td>{{$system->cevir($log->Tarih)}} {{$system->gun_bas_kisa($log->Tarih)}}</td>
-                                      <td>{{$log->Saat}}</td>
-                                      <td class="text-center" >
-                                        @if($log->ProjeBASLIK != '')
-                                          {{$log->ProjeBASLIK}}
-                                        @else 
-                                          {{\App\Project::where('ProjeID', $log->ProjeID)->first()->ProjeBASLIK}}
-                                        @endif
-                                      </td>
-                                      <td>
-                                        @if($log->Onay != 1)
-                                          <button class="btn btn-danger btn-sm btn-delete" data-id="{{$log->SaatID}}"><i class="nav-icon fas fa-trash"></i></button>
-                                        @endif
-                                      </td>
+                                        <td>{{isset($log->user->name) ? $log->user->name : ''}}</td>
+                                        <td>{{$system->cevir($log->Tarih)}} {{$system->gun_bas_kisa($log->Tarih)}}</td>
+                                        <td>{{$log->Saat}}</td>
+                                        <td class="text-center" >
+                                            @if($log->ProjeBASLIK != '')
+                                            {{$log->ProjeBASLIK}}
+                                            @else 
+                                            {{\App\Project::where('ProjeID', $log->ProjeID)->first()->ProjeBASLIK}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($log->Onay != 1)
+                                            <button class="btn btn-danger btn-sm btn-delete" data-id="{{$log->SaatID}}"><i class="nav-icon fas fa-trash"></i></button>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @endforeach
                                   @endif

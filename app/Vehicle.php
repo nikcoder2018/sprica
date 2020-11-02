@@ -12,4 +12,8 @@ class Vehicle extends Model
     function group(){
         return $this->hasOne(VehicleGroup::class, 'id','group_id');
     }
+
+    function fuels(){
+        return $this->hasMany(Fuel::class, 'vehicle_id', 'id');
+    }
 }

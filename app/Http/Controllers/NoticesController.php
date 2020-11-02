@@ -15,6 +15,7 @@ class NoticesController extends Controller
     public function index()
     {
         $data['notices'] = Notice::all();
+        $data['notices_reads'] = NoticeRead::with(['notice', 'user'])->get();
 
         return view('admin.contents.notices', $data);
     }
