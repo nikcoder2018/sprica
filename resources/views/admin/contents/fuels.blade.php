@@ -5,9 +5,8 @@ $lang = new Language;
 @extends('layouts.admin.main')
 
 @section('stylesheets')
-<link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-<link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
-<link href="{{asset('dist/css/validation_master.css')}}" rel="stylesheet">
+<link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 
 <style>
     .dataTables_length, .dataTables_filter, .dataTables_iinfo, .ddataTables_paginate {
@@ -243,8 +242,7 @@ $lang = new Language;
 @endsection
 
 @section('scripts')
-<script src="{{asset('plugins/datatables/jquery.dataTables.js')}}"></script>
-<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
+    
 <script>
     $(document).ready(function () {
         bsCustomFileInput.init();

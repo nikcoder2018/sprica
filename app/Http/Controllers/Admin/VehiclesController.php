@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Vehicle;
 use App\VehicleGroup;
+use App\User;
 
 class VehiclesController extends Controller
 {
@@ -65,7 +66,8 @@ class VehiclesController extends Controller
      */
     public function show($id)
     {
-        $data['vehicle'] = Vehicle::with(['group','fuels'])->where('id',$id)->first();
+        $data['vehicle'] = Vehicle::with(['driver','group','fuels'])->where('id',$id)->first();
+        $data['drivers'] = User::where('status', 1)->get();
         #return response()->json($data); exit;
         return view('admin.contents.vehicles-details', $data);
     }
@@ -121,5 +123,13 @@ class VehiclesController extends Controller
 
         if($delete)
             return response()->json(array('success' => true, 'msg' => 'Vehicle Deleted'));
+    }
+
+    public function setdriver(Request $request){
+        $vehicle = Vehicle::find($request->id);
+        $vehicle->driver_id = $request->driver;
+        $vehicle->save();
+
+        return response()->json(array('success' => true, 'msg' => 'Vehicle Updated'));
     }
 }

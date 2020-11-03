@@ -139,6 +139,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin','checkstatus']
     Route::post('vehicles/edit', 'Admin\VehiclesController@edit')->name('vehicles.edit');
     Route::post('vehicles/update', 'Admin\VehiclesController@update')->name('vehicles.update');
     Route::post('vehicles/destroy', 'Admin\VehiclesController@destroy')->name('vehicles.destroy');
+    Route::post('vehicles/setdriver', 'Admin\VehiclesController@setdriver')->name('vehicles.setdriver');
     Route::get('vehicles/{id}/details', 'Admin\VehiclesController@show')->name('vehicles.show');
 
     Route::resource('vehiclegroups', 'Admin\VehicleGroupsController', ['except'=>['edit','update', 'destroy']]);
