@@ -139,10 +139,22 @@ class HRController extends Controller
        
         if($request->UyeID){
             $year_first = Carbon::create(Carbon::now()->year, 1,1)->toDateString();
-            
+            $next_first = Carbon::create(Carbon::now()->year+1, 1,1)->toDateString();
             $data['profile'] = Members::where('id', $request->UyeID)->first();
             $data['vacation'] = Watches::where('Tarih', '>=', $year_first)->where('Onay', 1)->where('ProjeID', 1)->where('UyeID', $request->UyeID)->count();
-            
+            $wages = Watches::where('UyeID', $request->UyeID)->where('Onay', 1);
+            if($request->Yil != null){
+                if($request->Ay != null){
+                    $wages = $wages->where('Tarih', '>=', $year_first)->where('Tarih', '<=', $next_first);
+                }else{
+                    $first_of_month = Carbon::create(Carbon::now()->year, $request->Ay,1)->startOfMonth()->toDateString();
+                    $end_of_month = Carbon::create(Carbon::now()->year, $request->Ay,1)->endOfMonth()->toDateString();
+                    $wages = $wages->where('Tarih', '>=', $first_of_month)->where('Tarih', '<=', $end_of_month);
+                }
+            }
+
+            $data['wages'] = $wages->get();
+
             $sq = Watches::where('Tarih', '>=', $year_first);
             if($request->Ay){
                 $end_of_month = Carbon::create(Carbon::now()->year, $request->Ay,1)->endOfMonth()->toDateString();

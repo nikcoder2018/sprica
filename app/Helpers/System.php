@@ -62,7 +62,7 @@ class System
         return $yeni_tarih;
     }
 
-    function gun_bas_kisa($tarih){
+    public static function gun_bas_kisa($tarih){
         $tarih=explode ("-",$tarih);
         $gun = date("l",mktime(0,0,0,$tarih[1],$tarih[2],$tarih[0]));
         $gun_ingilizce = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
@@ -72,7 +72,7 @@ class System
 
     }
 
-    function pazarmibak($girilentarih)
+    public static function pazarmibak($girilentarih)
     {
         global $db;
         $tarih=explode ("-",$girilentarih);
@@ -82,6 +82,24 @@ class System
         $gun_degis = str_replace($gun_ingilizce,$turkce_gun,$gun);
 
         if( $gun_degis=="Pazar")
+        {
+            return true;
+        }else
+        {
+            return false;
+
+        }
+    }
+
+    public static function cumartesimibak($girilentarih)
+    {
+        $tarih=explode ("-",$girilentarih);
+        $gun = date("l",mktime(0,0,0,$tarih[1],$tarih[2],$tarih[0]));
+        $gun_ingilizce = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+        $turkce_gun = array('Pazartesi','Salı;','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar');
+        $gun_degis = str_replace($gun_ingilizce,$turkce_gun,$gun);
+
+        if( $gun_degis=="Cumartesi")
         {
             return true;
         }else
