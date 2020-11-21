@@ -174,7 +174,15 @@
                                 </p>
                             </a>
                         </li>
-                        
+
+                        <li class="nav-item">
+                            <a data-parents="genelayarlar" href="{{route('admin.projects.calendar')}}" class="nav-link">
+                                <i class="fas fa-calendar nav-icon"></i>
+                                <p>
+                                    Project Calendar
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
