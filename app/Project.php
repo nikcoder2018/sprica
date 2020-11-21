@@ -25,4 +25,8 @@ class Project extends Model
     function timelogs(){
         return $this->hasMany(Watches::class, 'ProjeID', 'ProjeID')->with('user');
     }
+
+    function activities(){
+        return $this->hasMany(ProjectActivity::class, 'project_id', 'ProjeID')->with('user');
+    }
 }

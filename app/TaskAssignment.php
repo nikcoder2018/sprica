@@ -10,6 +10,6 @@ class TaskAssignment extends Model
     protected $fillable = ['task_id', 'assign_to'];
 
     function task(){
-        return $this->belongsTo(Task::class, 'id', 'task_id');
+        return $this->belongsTo(Task::class, 'task_id', 'id');
     }
 }

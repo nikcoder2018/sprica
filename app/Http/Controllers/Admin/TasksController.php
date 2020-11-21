@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Project;
+use App\ProjectActivity;
 use App\Task;
 use App\TaskAssignment;
 use App\User;
@@ -58,11 +59,18 @@ class TasksController extends Controller
         foreach($request->assign_to as $employee){
             TaskAssignment::create([
                 'task_id' => $task->id,
+                'user_id' => auth()->user()->id,
                 'assign_to' => $employee
             ]);
 
             EmailTrigger::Execute('NEW_TASK_CREATED', array('user_id' => $employee));   
         }
+        
+        ProjectActivity::create([
+            'project_id' => $request->project_id,
+            'user_id' => auth()->user()->id,
+            'details' => 'New Task Added.'
+        ]);
 
         $renderRow = view('render.row-new-project-task', ['task' => $task])->render();
 
@@ -124,6 +132,27 @@ class TasksController extends Controller
             array_push($assigned_employee, $employee);
         }
 
+        if($task->status == 'completed'){
+            ProjectActivity::create([
+                'project_id' => $request->project_id,
+                'user_id' => auth()->user()->id,
+                'details' => 'Project Task Marked as Completed'
+            ]);
+        }
+        if($task->status == 'incomplete'){
+            ProjectActivity::create([
+                'project_id' => $request->project_id,
+                'user_id' => auth()->user()->id,
+                'details' => 'Project Task Marked as Incomplete'
+            ]);
+        }
+
+        ProjectActivity::create([
+            'project_id' => $request->project_id,
+            'user_id' => auth()->user()->id,
+            'details' => 'Project Task Updated'
+        ]);
+
         TaskAssignment::where('task_id', $task->id)->whereNotIn('assign_to', $assigned_employee)->delete();
 
         $renderRow = view('render.row-new-project-task', ['task' => $task])->render();
@@ -141,6 +170,12 @@ class TasksController extends Controller
     {
         $task = Task::find($request->id);
         $task->delete();
+
+        ProjectActivity::create([
+            'project_id' => $request->project_id,
+            'user_id' => auth()->user()->id,
+            'details' => 'Project Task Deleted'
+        ]);
 
         if($task){
             return response()->json(array('success' => true, 'msg' => 'Task Deleted!','id'=>$task->id));

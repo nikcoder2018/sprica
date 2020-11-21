@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Helpers\Language;
 
 use App\Project;
+use App\Task;
+use App\TaskAssignment;
 use App\User;
 use App\ProjectMember;
 class ProjectsController extends Controller
@@ -20,7 +22,7 @@ class ProjectsController extends Controller
     }
 
     public function show($id){
-        $data['project'] = Project::with(['tasks','timelogs', 'members'])->where('ProjeID', $id)->orderBy('ProjeID', 'DESC')->first();
+        $data['project'] = Project::with(['tasks','timelogs', 'members', 'activities'])->where('ProjeID', $id)->orderBy('ProjeID', 'DESC')->first();
         
         $data['users'] = User::where('status', 1)->get();
         #return response()->json($data); exit;
@@ -148,6 +150,44 @@ class ProjectsController extends Controller
         }
     }
     public function calendar(){
+
         return view('admin.contents.projects_calendar');
+    }
+
+    public function calendar_resources(){
+        $users = User::orderBy('name', 'ASC')->get();
+
+        $user_array = array();
+        foreach($users as $user){
+            array_push($user_array, (object) array(
+                'id' => $user->id,
+                'title' => $user->name
+            ));
+        }
+
+        return response()->json($user_array);
+    }
+
+    public function calendar_events(){
+        $users = User::orderBy('name', 'ASC')->get();
+
+        $results = array();
+        foreach($users as $user){
+            $resourceId = $user->id;
+            $title = '';
+            $tasks = TaskAssignment::with('task')->where('assign_to', $resourceId)->get();
+
+            foreach($tasks as $task){
+                $project = Project::where('ProjeID', $task->task->project_id)->first();
+                array_push($results, (object) array(
+                    'resourceId' => $user->id,
+                    'title' => $project->ProjeBASLIK.'-'.$task->task->title,
+                    'start' => $task->task->start_date,
+                    'end' => $task->task->due_date
+                ));
+            }
+        }
+
+        return response()->json($results);
     }
 }

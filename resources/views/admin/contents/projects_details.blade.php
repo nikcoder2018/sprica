@@ -37,6 +37,9 @@ $system = new System;
                             <a class="nav-link" id="project-tasks-tabs" data-toggle="pill" href="#project-tasks" role="tab" aria-controls="project-tabs-tasks" aria-selected="true">Tasks</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" id="project-activity-tabs" data-toggle="pill" href="#project-activity" role="tab" aria-controls="project-tabs-activity" aria-selected="true">Activity</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="project-timelogs-tabs" data-toggle="pill" href="#project-timelogs" role="tab" aria-controls="project-tabs-timelogs" aria-selected="true">Timelogs</a>
                         </li>
                       </ul>
@@ -297,6 +300,25 @@ $system = new System;
                                   @endif
                               </table>
                         </div>
+                        <div class="tab-pane fade" id="project-activity" role="tabpanel" aria-labelledby="#project-tabs-activity">
+                            <table class="table table-activity">
+                                <thead>
+                                <tr>
+                                  <th>User</th>
+                                  <th>Details</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                  @if(count($project->activities) > 0)
+                                    @foreach($project->activities as $activity)
+                                    <tr>
+                                        <td>{{$activity->user->name}}</td>
+                                        <td>{{$activity->details}}</td>
+                                    </tr>
+                                    @endforeach
+                                  @endif
+                              </table>
+                        </div>
                       </div>
                     </div>
                     <!-- /.card -->
@@ -533,7 +555,12 @@ $system = new System;
     $('.select2bs4').select2({
       theme: 'bootstrap4'
     })
-
+    $(".table-activity").DataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true,
+        "order": [[0, "desc"]]
+    });
     $(".table-timelogs").DataTable({
         "paging": true,
         "ordering": true,
