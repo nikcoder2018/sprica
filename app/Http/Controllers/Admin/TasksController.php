@@ -23,7 +23,7 @@ class TasksController extends Controller
     {
         $data['tasks'] = Task::with(['project','assigned'])->get();
         $data['projects'] = Project::all();
-        $data['employees'] = User::all();
+        $data['employees'] = User::where('status', 1)->get();
         #return response()->json($data); exit;
         return view('admin.contents.tasks', $data);
     }
@@ -169,13 +169,15 @@ class TasksController extends Controller
     public function destroy(Request $request)
     {
         $task = Task::find($request->id);
-        $task->delete();
+        
 
         ProjectActivity::create([
-            'project_id' => $request->project_id,
+            'project_id' => $task->project_id,
             'user_id' => auth()->user()->id,
             'details' => 'Project Task Deleted'
         ]);
+
+        $task->delete();
 
         if($task){
             return response()->json(array('success' => true, 'msg' => 'Task Deleted!','id'=>$task->id));

@@ -150,8 +150,9 @@ class ProjectsController extends Controller
         }
     }
     public function calendar(){
-
-        return view('admin.contents.projects_calendar');
+        $data['projects'] = Project::all();
+        $data['employees'] = User::where('status', 1)->get();
+        return view('admin.contents.projects_calendar', $data);
     }
 
     public function calendar_resources(){

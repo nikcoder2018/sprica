@@ -115,7 +115,6 @@ $lang = new Language;
 @endsection
 
 @section('modals')
-
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <form class="form-add-task" method="POST" action="{{route('tasks.store')}}">
@@ -205,7 +204,6 @@ $lang = new Language;
     </div>
     <!-- /.modal-content -->
 </div>
-
 <div class="modal fade" id="edit_task_modal">
     <div class="modal-dialog modal-lg">
         <form class="form-edit-task" method="POST" action="{{route('tasks.update')}}">
@@ -351,7 +349,7 @@ $lang = new Language;
             })
         }); 
 
-        $('.btn-edit').on('click', async function(e){
+        $('.projects').on('click', '.btn-edit', async function(e){
           e.preventDefault();
           $('#edit_task_modal').modal('show');
           var task = await $.ajax({
@@ -377,7 +375,7 @@ $lang = new Language;
               assignMembers.push(member.assign_to);
           });
           form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
-      });
+        });
 
         $('.form-edit-task').on('submit', function(e){
             e.preventDefault();
@@ -400,7 +398,7 @@ $lang = new Language;
             })
         }); 
 
-        $('.btn-delete').on('click', function(){
+        $('.projects').on('click', '.btn-delete', function(){
             $('#modal-danger').modal('show');
             $('.btn-delete-go').attr('data-id', $(this).data('id'));
         });
