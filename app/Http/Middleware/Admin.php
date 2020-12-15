@@ -18,8 +18,8 @@ class Admin
     public function handle($request, Closure $next)
     {
         $role = Role::where('id', Auth::user()->role)->first();
-        if($role->name != 'admin'){
-            if($role->name == 'employee'){
+        if($role->title != 'admin'){
+            if($role->title == 'employee'){
                 return redirect('/');
             }
 

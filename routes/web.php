@@ -21,29 +21,27 @@ Route::post('/timesheet/store', 'TimeTrackingController@store')->name('timetrack
 Route::post('/timesheet/delete', 'TimeTrackingController@destroy')->name('timetracking.destroy')->middleware('auth');
 Route::post('notices/show', 'NoticesController@show')->name('notices.show');
 
-Route::group(['middleware' => ['auth','employee','checkstatus']], function(){
-    Route::get('/', 'DashboardController@index')->name('home');
-    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-    Route::get('/mailbox', 'MailboxController@index')->name('mailbox');
-    Route::get('/mailbox/compose', 'MailboxController@compose')->name('mailbox.compose');
-    Route::post('/mailbox/compose', 'MailboxController@send')->name('mailbox.compose');
-    Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('mailbox.read');
-    Route::get('/mailbox/sent', 'MailboxController@sent')->name('mailbox.sent');
-    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('mailbox.unsent');
-    Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('mailbox.drafts');
-    Route::get('/mailbox/templates', 'MailboxController@templates')->name('mailbox.templates');
-    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy']]);
-    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('tickets.edit');
-    Route::post('tickets/update', 'Admin\TicketsController@update')->name('tickets.update');
-    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('tickets.destroy');
 
-});
-
-Route::group(['prefix' => 'admin','middleware' => ['auth','admin','checkstatus']], function(){
+Route::group(['middleware' => ['auth','checkstatus']], function(){
     Route::get('/', 'Admin\DashboardController@show')->name('home');
    
-    Route::get('/dashboard', 'Admin\DashboardController@show')->name('admin.dashboard');
+    Route::get('/dashboard', 'Admin\DashboardController@show')->name('dashboard');
 
+    Route::resource('/users', 'UsersController');
+    Route::post('/users/{id}', 'UsersController@update')->name('users.update');
+    Route::get('/users/{id}/delete', 'UsersController@destroy')->name('users.delete');
+
+    Route::resource('/roles', 'RolesController', ['except' => ['show','update','destroy']]);
+    Route::post('/roles/{id}', 'RolesController@update')->name('roles.update');
+    Route::get('/roles/{id}/delete', 'RolesController@destroy')->name('roles.delete');
+
+    Route::resource('/permissions', 'PermissionsController', ['except' => ['show', 'update','destroy']]);
+    Route::post('/permissions/update', 'PermissionsController@update')->name('permissions.update');
+    Route::get('/permissions/{id}/delete', 'PermissionsController@destroy')->name('permissions.delete');
+
+    Route::resource('todo', 'TodosController');
+    Route::resource('documents', 'DocumentsController');
+    
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
     Route::post('/control/add', 'Admin\HRController@control_addtime')->name('admin.hr-control.add');
     Route::post('/control/edit', 'Admin\HRController@control_edittime')->name('admin.hr-control.edit');
@@ -95,14 +93,14 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin','checkstatus']
     Route::post('/vacationdays_settings/update', 'Admin\SettingsController@vacationdays_settings_update')->name('admin.settings.vacationdays-update');
     Route::post('/vacationdays_settings/delete', 'Admin\SettingsController@vacationdays_settings_delete')->name('admin.settings.vacationdays-delete');
 
-    Route::get('/mailbox', 'MailboxController@index')->name('admin.mailbox');
-    Route::get('/mailbox/compose', 'MailboxController@compose')->name('admin.mailbox.compose');
-    Route::post('/mailbox/compose', 'MailboxController@send')->name('admin.mailbox.compose');
-    Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('admin.mailbox.read');
-    Route::get('/mailbox/sent', 'MailboxController@sent')->name('admin.mailbox.sent');
-    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('admin.mailbox.unsent');
-    Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('admin.mailbox.drafts');
-    Route::get('/mailbox/templates', 'MailboxController@templates')->name('admin.mailbox.templates');
+    Route::get('/mailbox', 'MailboxController@index')->name('mailbox');
+    Route::get('/mailbox/compose', 'MailboxController@compose')->name('mailbox.compose');
+    Route::post('/mailbox/compose', 'MailboxController@send')->name('mailbox.compose');
+    Route::get('/mailbox/read/{id}', 'MailboxController@read')->name('mailbox.read');
+    Route::get('/mailbox/sent', 'MailboxController@sent')->name('mailbox.sent');
+    Route::post('/mailbox/unsent', 'MailboxController@unsent')->name('mailbox.unsent');
+    Route::get('/mailbox/drafts', 'MailboxController@drafts')->name('mailbox.drafts');
+    Route::get('/mailbox/templates', 'MailboxController@templates')->name('mailbox.templates');
 
     Route::resource('tasks', 'Admin\TasksController', ['except'=>['edit','update', 'destroy']]);
     Route::post('task/edit', 'Admin\TasksController@edit')->name('tasks.edit');
@@ -124,10 +122,10 @@ Route::group(['prefix' => 'admin','middleware' => ['auth','admin','checkstatus']
     Route::post('emailactions/update', 'Admin\EmailActionsController@update')->name('emailactions.update');
     Route::post('emailactions/destroy', 'Admin\EmailActionsController@destroy')->name('emailactions.destroy');
 
-    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy'],'as'=>'admin']);
-    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('admin.tickets.edit');
-    Route::post('tickets/update', 'Admin\TicketsController@update')->name('admin.tickets.update');
-    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('admin.tickets.destroy');
+    Route::resource('tickets', 'Admin\TicketsController', ['except'=>['edit','update', 'destroy']]);
+    Route::post('tickets/edit', 'Admin\TicketsController@edit')->name('tickets.edit');
+    Route::post('tickets/update', 'Admin\TicketsController@update')->name('tickets.update');
+    Route::post('tickets/destroy', 'Admin\TicketsController@destroy')->name('tickets.destroy');
 
     Route::resource('tickettypes', 'Admin\TicketsTypeController', ['except'=>['edit','update', 'destroy']]);
     Route::post('tickettypes/edit', 'Admin\TicketsTypeController@edit')->name('tickettypes.edit');

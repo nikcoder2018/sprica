@@ -11,8 +11,13 @@ class Language
      *
      * @return string
      */
-    public static function settings($DilBASLIK)
+    public static function get($key)
     {
-        return Cache::get('settings')->where('DilBASLIK', $DilBASLIK)->first()->DilKARSILIK;
+        return Cache::get('settings')->where('DilBASLIK', $key)->first()->DilKARSILIK;
+    }
+
+    public static function settings($key) //TODO Remove this function soon
+    {
+        return Cache::get('settings')->where('DilBASLIK', $key)->first()->DilKARSILIK;
     }
 }

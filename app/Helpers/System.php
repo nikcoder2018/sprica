@@ -61,7 +61,7 @@ class System
         $yeni_tarih= $parcala[2].".".$parcala[1].".".$parcala[0];
         return $yeni_tarih;
     }
-
+    
     public static function gun_bas_kisa($tarih){
         $tarih=explode ("-",$tarih);
         $gun = date("l",mktime(0,0,0,$tarih[1],$tarih[2],$tarih[0]));
@@ -106,6 +106,26 @@ class System
         {
             return false;
 
+        }
+    }
+
+    /**
+     * Format bytes to kb, mb, gb, tb
+     *
+     * @param  integer $size
+     * @param  integer $precision
+     * @return integer
+     */
+    public static function formatBytes($size, $precision = 2)
+    {
+        if ($size > 0) {
+            $size = (int) $size;
+            $base = log($size) / log(1024);
+            $suffixes = array(' bytes', ' KB', ' MB', ' GB', ' TB');
+
+            return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+        } else {
+            return $size;
         }
     }
 }

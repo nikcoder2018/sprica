@@ -19,8 +19,8 @@ class Employee
     {
         $role = Role::where('id', Auth::user()->role)->first();
 
-        if($role->name != 'employee'){
-            if($role->name == 'admin'){
+        if($role->title != 'employee'){
+            if($role->title == 'admin'){
                 return redirect('/admin');
             }
 

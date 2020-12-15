@@ -20,3 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/projects/calendar/resource', 'Admin\ProjectsController@calendar_resources');
 Route::get('/projects/calendar/events', 'Admin\ProjectsController@calendar_events');
+
+Route::get('/users/all', 'UsersController@all');
+Route::get('/permissions/all', 'PermissionsController@all');
+Route::get('/roles/all', 'RolesController@all');

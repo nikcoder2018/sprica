@@ -11,11 +11,15 @@ use App\Watches;
 class TimeTrackingController extends Controller
 {
     public function index(){
-        $data['page_title'] = 'Time Sheet';
+        $data['title'] = 'My Times';
         $data['projects'] = Project::whereNotIn('ProjeBASLIK', ['Feiertag','Urlaub','Krank','KUG'])->orderBy('projeKODU', 'ASC')->get();
         $data['codes'] = Code::all();
+        
+        return view('contents.timesheet', $data);
+    }
+    public function logs(){
         $data['timelogs'] = Watches::where('UyeID', auth()->user()->id)->orderBy('Tarih', 'DESC')->get();
-        return view('contents.timetracking', $data);
+
     }
     public function store(Request $request){
         $saat = $request->Saat; 
