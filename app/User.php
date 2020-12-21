@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Timelog;
 
+use Carbon\Carbon;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -37,6 +39,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $dates = ['created_at','updated_at'];
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -44,5 +48,18 @@ class User extends Authenticatable
 
     function loans(){
         return $this->hasMany(AdvancePayment::class, 'UyeID', 'id')->selectRaw('UyeID, sum(Tutar) as total')->groupBy('UyeID');
+    }
+
+    function advances(){
+        return $this->hasMany(Advance::class);
+    }
+
+    public function getTotalConfirmedTimelogAttribute(){
+        return Timelog::where(['user_id' => $this->id, 'confirmation' => 1])->get()->count();
+    }
+
+    public function getDateRegisteredAttribute(){
+        $date = new Carbon($this->created_at);
+        return $date->format('Y-m-d');
     }
 }

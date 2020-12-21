@@ -4,54 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Project;
-use App\Code;
+use App\OtherExpenses;
 use App\Setting;
 use App\Watches;
+use App\Tag;
+use App\Timelog;
+
+use App\Http\Resources\Timelog as TimelogResource;
+use DataTables;
 
 class TimeTrackingController extends Controller
 {
     public function index(){
         $data['title'] = 'My Times';
-        $data['projects'] = Project::whereNotIn('ProjeBASLIK', ['Feiertag','Urlaub','Krank','KUG'])->orderBy('projeKODU', 'ASC')->get();
-        $data['codes'] = Code::all();
-        
+        $data['projects'] = Project::where('default', 0)->orderBy('created_at', 'ASC')->get();
+        $data['expenses'] = OtherExpenses::all();
+        $data['tags'] = Tag::where('for', 'timelog')->get();
         return view('contents.timesheet', $data);
     }
     public function logs(){
-        $data['timelogs'] = Watches::where('UyeID', auth()->user()->id)->orderBy('Tarih', 'DESC')->get();
-
+        $timelogs = Timelog::with('project')->where('user_id', auth()->user()->id)->orderBy('start_date', 'DESC')->get();
+        return DataTables::of(TimelogResource::collection($timelogs))->toJson();
     }
     public function store(Request $request){
-        $saat = $request->Saat; 
-        $code = $request->Kod; 
+        $timelog = Timelog::create([
+            'user_id' => auth()->user()->id,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'duration' => $request->duration,
+            'project_id' => $request->project_id,
+            'expenses_id' => $request->expenses_id,
+            'note' => $request->note
+        ]);
 
-        $kacsaat = Setting::where('GenelID', 1)->first()->KacSAAT;
-        if(Watches::where('Tarih', $request->Tarih)->where('UyeID', auth()->user()->id)->count() < $kacsaat){
+        $timelog->tags()->sync($request->input('tags', []));
 
-            if($request->ProjeID == 1 || $request->ProjeID == 2){
-                $saat = 8;
-                $kod = 12;
-            }
-
-            $time = Watches::create([
-                'UyeID' => auth()->user()->id,
-                'ProjeID' => $request->ProjeID,
-                'ProjeBASLIK' => $request->ProjeBASLIK,
-                'Tarih' => $request->Tarih,
-                'Saat' => $saat,
-                'Onay' => 0,
-                'Odenecek' => 0,
-                'Gunduz' => $request->Gunduz,
-                'Kod' => $code,
-                'Calisti' => 0
-            ]);
-
-            if($time){
-                return response()->json(array('success' => true, 'msg' => 'New Time Added'));
-            }else{
-                return response()->json(array('success' => false, 'msg' => 'Something went wrong!'));
-            }    
-        }
+        if($timelog)
+            return response()->json(array('success' => true, 'msg' => 'Time saved successfully!'));
     }
 
     public function destroy(Request $request){

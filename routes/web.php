@@ -19,13 +19,14 @@ Route::get('/messages/{sender}', 'ChatSystemController@index2')->name('messages.
 Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking')->middleware('auth');
 Route::post('/timesheet/store', 'TimeTrackingController@store')->name('timetracking.store')->middleware('auth');
 Route::post('/timesheet/delete', 'TimeTrackingController@destroy')->name('timetracking.destroy')->middleware('auth');
+Route::get('/timesheet/logs', 'TimeTrackingController@logs');
+
 Route::post('notices/show', 'NoticesController@show')->name('notices.show');
 
 
 Route::group(['middleware' => ['auth','checkstatus']], function(){
-    Route::get('/', 'Admin\DashboardController@show')->name('home');
-   
-    Route::get('/dashboard', 'Admin\DashboardController@show')->name('dashboard');
+    Route::get('/', 'DashboardController@index')->name('home');
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
     Route::resource('/users', 'UsersController');
     Route::post('/users/{id}', 'UsersController@update')->name('users.update');
@@ -52,8 +53,18 @@ Route::group(['middleware' => ['auth','checkstatus']], function(){
     Route::get('/wages', 'Admin\HRController@wages')->name('admin.hr-wage');
     Route::get('/wages_total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');
     Route::get('/wages_advance', 'Admin\HRController@wages_advance')->name('admin.hr-wages-advance');
-    Route::post('/wages_advance', 'Admin\HRController@wages_advance_store')->name('admin.hr-wages-advance');
+    
+    Route::get('controlling', 'ControllingController@index')->name('controlling.index');
+    Route::get('controlling/data', 'ControllingController@data');
+    Route::get('payroll', 'PayrollController@index')->name('payroll.index');
+    Route::get('payroll/data', 'PayrollController@data');
+    Route::get('payroll/profile', 'PayrollController@profile');
+    Route::get('payroll-total', 'PayrollTotalController@index')->name('payrolltotal.index');
+    Route::get('payroll-total/data', 'PayrollTotalController@data');
 
+    Route::resource('advances', 'AdvancesController', ['except' => ['show']]);
+    Route::get('advances/all', 'AdvancesController@all');
+        
     Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
     Route::get('/projects/create','Admin\ProjectsController@create')->name('admin.projects.create');
     Route::get('/projects/{id}/details','Admin\ProjectsController@show')->name('admin.projects.details');

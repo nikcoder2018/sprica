@@ -18,7 +18,7 @@
         "munafio/chatify": "^1.0",
         "nesbot/carbon": "^2.38",
         "spatie/laravel-translation-loader": "^2.7",
-        "yajra/laravel-datatables-oracle": "^9.15"
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

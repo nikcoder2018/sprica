@@ -76,18 +76,19 @@
     <!-- BEGIN: Vendor JS-->
     <script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/vendors.min.js')}}"></script>
     <!-- BEGIN Vendor JS-->
-
+    @yield('vendors_js')
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/charts/apexcharts.min.js')}}"></script>
     <script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/toastr.min.js')}}"></script>
     <!-- END: Page Vendor JS-->
+    @yield('external_js')
 
     <!-- BEGIN: Theme JS-->
     <script src="{{asset(env('APP_THEME','default').'/app-assets/js/core/app-menu.js')}}"></script>
     <script src="{{asset(env('APP_THEME','default').'/app-assets/js/core/app.js')}}"></script>
     <!-- END: Theme JS-->
 
-    @yield('external_js')
+
 
     @yield('scripts')
 
