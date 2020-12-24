@@ -18,8 +18,10 @@ Route::get('/messages', 'ChatSystemController@index')->name('messages')->middlew
 Route::get('/messages/{sender}', 'ChatSystemController@index2')->name('messages.hasSender')->middleware('auth');
 Route::get('/timesheet', 'TimeTrackingController@index')->name('timetracking')->middleware('auth');
 Route::post('/timesheet/store', 'TimeTrackingController@store')->name('timetracking.store')->middleware('auth');
-Route::post('/timesheet/delete', 'TimeTrackingController@destroy')->name('timetracking.destroy')->middleware('auth');
+Route::get('/timesheet/{id}/delete', 'TimeTrackingController@destroy')->name('timetracking.destroy')->middleware('auth');
 Route::get('/timesheet/logs', 'TimeTrackingController@logs');
+Route::get('/timesheet/edit/{id}', 'TimeTrackingController@edit')->name('timetracking.edit');
+Route::post('/timesheet/update', 'TimeTrackingController@update')->name('timetracking.update');
 
 Route::post('notices/show', 'NoticesController@show')->name('notices.show');
 

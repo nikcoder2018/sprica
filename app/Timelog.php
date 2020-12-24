@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Timelog extends Model
 {
     protected $table = "timelogs";
-    protected $fillable = ['user_id', 'project_id','expenses_id', 'start_date', 'end_date', 'duration', 'confirmation', 'payable', 'code', 'tags','note'];
+    protected $fillable = ['user_id', 'project_id','expenses_id', 'start_date', 'end_time', 'duration', 'break', 'confirmation', 'payable', 'code', 'tags','note'];
 
     protected $dates = ['start_date','end_date','created_at', 'updated_at'];
     
@@ -25,5 +25,9 @@ class Timelog extends Model
 
     public function expenses(){
         return $this->belongsTo(OtherExpenses::class);
+    }
+
+    public function getDateStartAttribute(){
+        return $this->start_date->format('Y-m-d h:i');
     }
 }

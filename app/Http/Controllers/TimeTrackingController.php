@@ -26,12 +26,17 @@ class TimeTrackingController extends Controller
         $timelogs = Timelog::with('project')->where('user_id', auth()->user()->id)->orderBy('start_date', 'DESC')->get();
         return DataTables::of(TimelogResource::collection($timelogs))->toJson();
     }
+    public function edit($id){
+        $timelog = Timelog::with('tags')->where('id', $id)->first()->append('dateStart');
+        return response()->json($timelog);
+    }
     public function store(Request $request){
         $timelog = Timelog::create([
             'user_id' => auth()->user()->id,
             'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'end_time' => $request->end_time,
             'duration' => $request->duration,
+            'break' => $request->break,
             'project_id' => $request->project_id,
             'expenses_id' => $request->expenses_id,
             'note' => $request->note
@@ -42,13 +47,26 @@ class TimeTrackingController extends Controller
         if($timelog)
             return response()->json(array('success' => true, 'msg' => 'Time saved successfully!'));
     }
+    public function update(Request $request){
+        $timelog = Timelog::find($request->id);
+        $timelog->start_date = $request->start_date;
+        $timelog->end_time = $request->end_time;
+        $timelog->duration = $request->duration;
+        $timelog->break = $request->break;
+        $timelog->project_id = $request->project_id;
+        $timelog->expenses_id = $request->expenses_id;
+        $timelog->note = $request->note;
+        $timelog->save();
 
-    public function destroy(Request $request){
-        $time = Watches::find($request->SaatID);
+        if($timelog)
+            return response()->json(array('success' => true, 'msg' => 'Time updated successfully!'));
+    }
+    public function destroy($id){
+        $time = Timelog::find($id);
         $time->delete();
 
         if($time){
-            return response()->json(array('success' => true, 'msg' => 'Time Deleted!'));
+            return response()->json(array('success' => true, 'msg' => 'Timelog Deleted!'));
         }
     }
 }

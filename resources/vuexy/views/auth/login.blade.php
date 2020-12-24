@@ -4,7 +4,7 @@
   <div class="auth-wrapper auth-v2">
     <div class="auth-inner row m-0">
         <!-- Brand logo--><a class="brand-logo" href="javascript:void(0);">
-            <img style="text-align:center; width: 73%" src="{{asset('dist/img/logo-auth.jpg')}}">
+            <img style="text-align:center; width: 73%; background: #fff" src="{{asset('dist/img/logo-auth.jpg')}}">
         </a>
         <!-- /Brand logo-->
         <!-- Left Text-->
@@ -13,7 +13,7 @@
         </div>
         <!-- /Left Text-->
         <!-- Login-->
-        <div class="d-flex col-lg-4 auth-bg px-2 p-lg-5">
+        <div class="d-flex col-lg-4 auth-bg px-2 p-lg-5 pt-5">
             <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 pt-5 mx-auto">
                 <h4 class="card-title mb-1">Welcome to Sprica! 👋</h4>
                 <p class="card-text mb-2">Please sign-in to your account</p>

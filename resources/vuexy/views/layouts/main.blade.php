@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/vendors.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/charts/apexcharts.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/extensions/toastr.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/extensions/sweetalert2.min.css')}}">
     <!-- END: Vendor CSS-->
     @yield('vendors_css')
     <!-- BEGIN: Theme CSS-->
@@ -35,7 +36,8 @@
     @yield('external_css')
 
     @yield('stylesheets')
-
+    <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/css/plugins/extensions/ext-component-toastr.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/css/plugins/extensions/ext-component-sweet-alerts.css')}}">
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/assets/css/style.css')}}">
     <!-- END: Custom CSS-->
@@ -66,6 +68,8 @@
     </div>
     <!-- END: Content-->
 
+    @include('partials.customizer')
+
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
@@ -86,6 +90,7 @@
     <!-- BEGIN: Theme JS-->
     <script src="{{asset(env('APP_THEME','default').'/app-assets/js/core/app-menu.js')}}"></script>
     <script src="{{asset(env('APP_THEME','default').'/app-assets/js/core/app.js')}}"></script>
+    <script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/customizer.js') }}"></script>
     <!-- END: Theme JS-->
 
 

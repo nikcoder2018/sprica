@@ -17,6 +17,7 @@ $(function() {
         URL = '/timesheet',
         API_TOKEN = $('[name=api-token]').attr('content'),
         dateTimePickr = $('.flatpickr-date-time'),
+        timePickr = $('.flatpickr-time'),
         new_timelog_modal = '#new-timelog-modal',
         edit_timelog_modal = '#edit-timelog-modal';
 
@@ -132,6 +133,62 @@ $(function() {
         });
     }
 
+    $(dtTimelogTable).on('click', '.btn-edit', async function() {
+        var id = $(this).data('id');
+        let form = $(edit_timelog_modal).find('form');
+        $(edit_timelog_modal).modal('show');
+
+        const timelog = await $.get('/timesheet/edit/' + id);
+        const end_time = moment(moment(timelog.date_start).format(moment.HTML5_FMT.DATE) + ' ' + timelog.end_time).format(moment.HTML5_FMT.TIME);
+        form.find('input[name=id]').val(timelog.id);
+        form.find('input[name=start_date]').val(timelog.dateStart);
+        form.find('input[name=end_time]').val(end_time);
+        form.find('input[name=duration]').val(timelog.duration);
+        form.find('input[name=break]').val(timelog.break);
+        form.find('select[name=project_id]').val(timelog.project_id);
+        form.find('select[name=expenses_id]').val(timelog.expenses_id);
+
+        var tags = [];
+        $.each(timelog.tags, function(index, tag) {
+            tags.push(tag.id);
+        });
+        if (tags.length != 0) {
+            form.find('.tags-input').select2('val', tags);
+        } else {
+            form.find('.tags-input').val('');
+        }
+
+        $('.select2').trigger('change');
+        //form.find('select[name=project_id]').val(timelog.project_id);
+    });
+
+    $(dtTimelogTable).on('click', '.btn-delete', async function() {
+        let id = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-danger ml-1'
+            },
+            buttonsStyling: false
+        }).then(async function(result) {
+            if (result.isConfirmed) {
+                const deleteData = await $.get(`/timesheet/${id}/delete`);
+                if (deleteData.success) {
+                    toastr['success'](deleteData.msg, 'Deleted!', {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl
+                    });
+                    dtTimelog.ajax.reload();
+                }
+            }
+        });
+    });
     $(new_timelog_modal).on('submit', 'form', function(e) {
         e.preventDefault();
         var form = this;
@@ -156,29 +213,114 @@ $(function() {
         });
     });
 
-    $(new_timelog_modal).on('change', 'input[name=end_date]', function() {
-        var start = moment($(new_timelog_modal).find('input[name=start_date]').val());
-        var end = moment($(new_timelog_modal).find('input[name=end_date]').val());
-        var duration = moment.duration(end.diff(start));
-        var hours = duration.asHours();
-        $(new_timelog_modal).find('input[name=duration]').val(hours);
+    $(edit_timelog_modal).on('submit', 'form', function(e) {
+        e.preventDefault();
+        var form = this;
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(resp) {
+                if (resp.success) {
+                    $(edit_timelog_modal).modal('hide');
+                    $(form)[0].reset();
+
+                    toastr['success'](resp.msg, 'Success!', {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl
+                    });
+
+                    dtTimelog.ajax.reload();
+                }
+            }
+        });
     });
-    $(new_timelog_modal).on('change', 'input[name=start_date]', function() {
-        if ($(new_timelog_modal).find('input[name=end_date]').val() != '') {
-            var start = moment($(new_timelog_modal).find('input[name=start_date]').val());
-            var end = moment($(new_timelog_modal).find('input[name=end_date]').val());
-            var duration = moment.duration(end.diff(start));
-            var hours = duration.asHours();
-            $(new_timelog_modal).find('input[name=duration]').val(hours);
-        }
-    });
+
+
     // Date & TIme
     if (dateTimePickr.length) {
         dateTimePickr.flatpickr({
-            enableTime: true
+            enableTime: true,
+            defaultHour: 7,
+            onChange: function(selectedDates, dateStr, instanc) {
+                if ($(new_timelog_modal).hasClass('show')) {
+                    var end_time = $(new_timelog_modal).find('input[name=end_time]').val();
+
+                    if (end_time == '') return;
+
+                    var start = moment(dateStr);
+                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + end_time);
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(new_timelog_modal).find('input[name=duration]').val(hours);
+                }
+                if ($(edit_timelog_modal).hasClass('show')) {
+                    var end_time = $(edit_timelog_modal).find('input[name=end_time]').val();
+
+                    if (end_time == '') return;
+
+                    var start = moment(dateStr);
+                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + end_time);
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(edit_timelog_modal).find('input[name=duration]').val(hours);
+                }
+            }
+        });
+    }
+    var clickCount = 0,
+        time = 0;
+    if (timePickr.length) {
+        timePickr.flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            defaultHour: 22,
+            onChange: function(selectedDates, dateStr, instanc) {
+                clickCount++;
+                if (clickCount == 1) time = 22
+                else time = dateStr;
+                if ($(new_timelog_modal).hasClass('show')) {
+                    var start = moment($(new_timelog_modal).find('input[name=start_date]').val());
+                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + time);
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(new_timelog_modal).find('input[name=duration]').val(hours);
+
+                }
+                if ($(edit_timelog_modal).hasClass('show')) {
+                    var start = moment($(edit_timelog_modal).find('input[name=start_date]').val());
+                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + time);
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(edit_timelog_modal).find('input[name=duration]').val(hours);
+
+                }
+
+            }
         });
     }
 
+    $(new_timelog_modal).find('input[name=duration]').on('keyup', function() {
+        var duration = $(this).val();
+        var start = $(new_timelog_modal).find('input[name=start_date]').val();
+        var end = moment(start).add(duration, 'hours').format(moment.HTML5_FMT.TIME);
+        $(new_timelog_modal).find('input[name=end_time]').val(end);
+    });
+    $(edit_timelog_modal).find('input[name=duration]').on('keyup', function() {
+        var duration = $(this).val();
+        var start = $(edit_timelog_modal).find('input[name=start_date]').val();
+        var end = moment(start).add(duration, 'hours').format(moment.HTML5_FMT.TIME);
+        $(edit_timelog_modal).find('input[name=end_time]').val(end);
+    });
     $('.select2').each(function() {
         var $this = $(this);
         $this.wrap('<div class="position-relative"></div>');
