@@ -1,7 +1,6 @@
 <?php
 use App\Helpers\Language;
 $lang = new Language();
-$theme = auth()->user()->settings()->where('key', 'theme')->first() ? auth()->user()->settings()->where('key', 'theme')->first()->value : 'default';
 ?>
 
 @extends('layouts.admin.main')
@@ -135,14 +134,6 @@ $theme = auth()->user()->settings()->where('key', 'theme')->first() ? auth()->us
                                                             for="inputBasicLastName">{{ $lang::settings('Bir_Gun_Proje') }}</label>
                                                         <input type="text" value="{{ $genset->KacSAAT }}" name="KacSAAT"
                                                             id="form-field-16" class="form-control " required>
-                                                    </div>
-
-                                                    <div class="form-group col-md-12">
-                                                        <label for="theme" class="form-control-label">Theme</label>
-                                                        <select type="text" name="theme" id="theme" class="form-control">
-                                                            <option value="default" {{ $theme === 'default' ? 'selected' : '' }}>Default</option>
-                                                            <option value="vuexy" {{ $theme === 'vuexy' ? 'selected' : '' }}>Vuexy</option>
-                                                        </select>
                                                     </div>
 
                                                     <div class="form-group col-md-12">
