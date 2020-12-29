@@ -16,38 +16,38 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $data['title'] = 'Dashboard';
-
         return view('contents.dashboard', $data);
     }
 
-    public function data(Request $request){
-        switch($request->type){
-            case 'mytimelogs': 
+    public function data(Request $request)
+    {
+        switch ($request->type) {
+            case 'mytimelogs':
                 $data['timelog_month'] = Timelog::where('user_id', auth()->user()->id)
-                                    ->whereBetween('start_date', [Carbon::today()->firstOfMonth()->toDateString(),Carbon::today()->endOfMonth()->toDateString()])
-                                    ->sum('duration');
+                    ->whereBetween('start_date', [Carbon::today()->firstOfMonth()->toDateString(), Carbon::today()->endOfMonth()->toDateString()])
+                    ->sum('duration');
                 $data['timelog_total'] = Timelog::where('user_id', auth()->user()->id)->sum('duration');
-                $data['timelog_today'] = Timelog::where('start_date','>=',Carbon::today()->toDateString())->sum('duration');
+                $data['timelog_today'] = Timelog::where('start_date', '>=', Carbon::today()->toDateString())->sum('duration');
 
                 return response()->json($data);
-            break;
+                break;
 
-            case 'statistics': 
-                $data['timelog_month'] = Timelog::whereBetween('start_date', [Carbon::today()->firstOfMonth()->toDateString(),Carbon::today()->endOfMonth()->toDateString()])
-                ->sum('duration');
+            case 'statistics':
+                $data['timelog_month'] = Timelog::whereBetween('start_date', [Carbon::today()->firstOfMonth()->toDateString(), Carbon::today()->endOfMonth()->toDateString()])
+                    ->sum('duration');
                 $data['timelog_year']  = Timelog::whereYear('start_date', Carbon::now()->year)->sum('duration');
 
                 return response()->json($data);
-            break;
-
+                break;
         }
-        
-       
+
+
         // $data['hours'] = Watches::where('Onay', 1)->sum('Saat') - RemainingPayment::sum('KalanODEME');
         // $data['vacation'] = Members::sum('day_off') - Watches::where('ProjeID', 1)->whereYear('Tarih', '>=', Carbon::now()->year)->count();
-        
+
         // for($i = 1; $i <= 12; $i++){
         //     $current_month_str = strtolower(Carbon::create(Carbon::now()->year, $i,1)->format('M'));
 
@@ -65,7 +65,7 @@ class DashboardController extends Controller
         // $data['project']['total']['proj_2'] = Watches::where('ProjeID', 2)->whereYear('Tarih', Carbon::now()->year)->sum('Saat');
         // $data['project']['total']['proj_10'] = Watches::where('ProjeID', 10)->whereYear('Tarih', Carbon::now()->year)->sum('Saat');
         // $data['project']['total']['proj_11'] = Watches::where('ProjeID', 11)->whereYear('Tarih', Carbon::now()->year)->sum('Saat');
-        
-        
+
+
     }
 }

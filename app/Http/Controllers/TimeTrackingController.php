@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\GeneralSetting;
 use Illuminate\Http\Request;
 use App\Project;
 use App\OtherExpenses;
@@ -15,22 +16,32 @@ use DataTables;
 
 class TimeTrackingController extends Controller
 {
-    public function index(){
+    public function index(Request $request)
+    {
         $data['title'] = 'My Times';
         $data['projects'] = Project::where('default', 0)->orderBy('created_at', 'ASC')->get();
         $data['expenses'] = OtherExpenses::all();
         $data['tags'] = Tag::where('for', 'timelog')->get();
+        $default = $request->user()->settings()->where('key', 'default_start_time')->first();
+        if ($default) {
+            $data['default_start_time'] = $default->value;
+        } else {
+            $data['default_start_time'] = '07:00';
+        }
         return view('contents.timesheet', $data);
     }
-    public function logs(){
+    public function logs()
+    {
         $timelogs = Timelog::with('project')->where('user_id', auth()->user()->id)->orderBy('start_date', 'DESC')->get();
         return DataTables::of(TimelogResource::collection($timelogs))->toJson();
     }
-    public function edit($id){
+    public function edit($id)
+    {
         $timelog = Timelog::with('tags')->where('id', $id)->first()->append('dateStart');
         return response()->json($timelog);
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $timelog = Timelog::create([
             'user_id' => auth()->user()->id,
             'start_date' => $request->start_date,
@@ -44,10 +55,11 @@ class TimeTrackingController extends Controller
 
         $timelog->tags()->sync($request->input('tags', []));
 
-        if($timelog)
+        if ($timelog)
             return response()->json(array('success' => true, 'msg' => 'Time saved successfully!'));
     }
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $timelog = Timelog::find($request->id);
         $timelog->start_date = $request->start_date;
         $timelog->end_time = $request->end_time;
@@ -58,14 +70,15 @@ class TimeTrackingController extends Controller
         $timelog->note = $request->note;
         $timelog->save();
 
-        if($timelog)
+        if ($timelog)
             return response()->json(array('success' => true, 'msg' => 'Time updated successfully!'));
     }
-    public function destroy($id){
+    public function destroy($id)
+    {
         $time = Timelog::find($id);
         $time->delete();
 
-        if($time){
+        if ($time) {
             return response()->json(array('success' => true, 'msg' => 'Timelog Deleted!'));
         }
     }

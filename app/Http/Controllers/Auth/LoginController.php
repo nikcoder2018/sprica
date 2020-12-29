@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-    
+
     /**
      * Create a new controller instance.
      *
@@ -55,15 +56,16 @@ class LoginController extends Controller
         return view('auth.login', $data);
     }
 
-    public function username(){
+    public function username()
+    {
         return 'username';
     }
 
     public function login(Request $request)
     {
-        $remember_me  = ( !empty( $request->remember_me ) )? TRUE : FALSE;
+        $remember_me  = (!empty($request->remember_me)) ? TRUE : FALSE;
 
-        if (Auth::attempt(['username' => $request->username, 'password' => $request->password, 'status' => 1],$remember_me)) {
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password, 'status' => 1], $remember_me)) {
             // Authentication passed...
             return redirect()->intended('dashboard');
         }
@@ -75,7 +77,7 @@ class LoginController extends Controller
 
         // Check if user was successfully loaded, that the password matches
         // and active is not 1. If so, override the default error message.
-        if ($user && \Hash::check($request->password, $user->password) && $user->status != 1) {
+        if ($user && Hash::check($request->password, $user->password) && $user->status != 1) {
             $errors = [$this->username() => trans('auth.notactive')];
         }
 
@@ -83,9 +85,9 @@ class LoginController extends Controller
             return response()->json($errors, 422);
         }
 
-        
+
         return redirect()->back()
             ->withInput($request->only($this->username(), 'remember'))
             ->withErrors($errors);
-    } 
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\GeneralSetting;
 use Illuminate\Support\ServiceProvider;
 use Cache;
 use Blade;

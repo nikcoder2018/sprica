@@ -1,5 +1,8 @@
 <?php
 
+use App\Providers\ViewServiceProvider;
+use Illuminate\View\ViewServiceProvider as ViewViewServiceProvider;
+
 return [
 
     /*
@@ -160,7 +163,7 @@ return [
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
-        Illuminate\View\ViewServiceProvider::class,
+        ViewServiceProvider::class,
 
         /*
          * Package Service Providers...

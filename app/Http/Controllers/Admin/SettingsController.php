@@ -15,61 +15,90 @@ use App\EmailTemplate;
 use App\EmailTrigger;
 use App\EmailAction;
 use App\EmailCommand;
+use Carbon\Carbon;
+
 class SettingsController extends Controller
 {
     //
-    public function general_settings(){
+    public function general_settings(Request $request)
+    {
         $data['genset'] = Setting::orderBy('GenelID', 'DESC')->first();
         $data['ticket_types'] = TicketType::orderBy('id', 'ASC')->get();
         $data['vacationdays'] = VacationDay::orderBy('GunID', 'DESC')->get();
         $data['codes'] = Code::orderBy('KodID', 'DESC')->get();
         $data["templates"] = EmailTemplate::all();
-        $data['text_templates'] = EmailTemplate::select('id','body','title')->where('word_template', true)->get();
-        $data['triggers'] = EmailTrigger::with(['template','action'])->get();
+        $data['text_templates'] = EmailTemplate::select('id', 'body', 'title')->where('word_template', true)->get();
+        $data['triggers'] = EmailTrigger::with(['template', 'action'])->get();
         $data['actions'] = EmailAction::with('command')->get();
         $data['commands'] = EmailCommand::all();
-        return view('admin.contents.settings',$data);
+        $stime = $request->user()->settings()->where('key', 'default_start_time')->first();
+        $data['default_start_time'] = $stime ? $stime->value : '07:00';
+        return view('admin.contents.settings', $data);
     }
 
-    public function general_settings_update(Request $request){
+    public function general_settings_update(Request $request)
+    {
         $gensetting = Setting::where('GenelID', 1)->first();
 
-        if($gensetting){
+        if ($gensetting) {
             $gensetting->SiteURL = $request->SiteURL;
             $gensetting->KacSAAT = $request->KacSAAT;
             $gensetting->save();
         }
 
-        return response()->json(array('success' => true, 'msg' => 'General Settings Updated!'));
+        /**
+         * @var \App\User
+         */
+        $user = $request->user();
+
+        // theme
+        $user->setSetting('theme', $request->theme);
+
+        // default start time
+        $user->setSetting('default_start_time', $request->default_start_time);
+
+        // working hours
+        $user->setSetting('working_hour', $request->working_hour);
+
+
+
+        if ($request->expectsJson()) {
+            return response()->json(array('success' => true, 'msg' => 'General Settings Updated!'));
+        }
+        return redirect()->back();
     }
-    public function language_settings(){
+    public function language_settings()
+    {
         $data['languages'] = Language::all();
 
         return view('admin.contents.settings_language', $data);
     }
 
-    public function language_settings_update(Request $request){
-        foreach($request->input() as $key=>$value){
-            if($key != '_token'){
+    public function language_settings_update(Request $request)
+    {
+        foreach ($request->input() as $key => $value) {
+            if ($key != '_token') {
                 $language = Language::where('DilBASLIK', $key)->first();
-                if($language){
-                    if($language->DilKARSILIK != $value){
+                if ($language) {
+                    if ($language->DilKARSILIK != $value) {
                         $language->DilKARSILIK = $value;
                         $language->save();
                     }
                 }
             }
         }
-        
+
         return response()->json(array('success' => true, 'msg' => LangSetting::settings('Dil_Ayarlari_Guncellendi')));
     }
 
-    public function code_settings(){
+    public function code_settings()
+    {
         $data['codes'] = Code::orderBy('KodID', 'DESC')->get();
-        return view('admin.contents.settings_codes',$data);
+        return view('admin.contents.settings_codes', $data);
     }
 
-    public function code_settings_store(Request $request){
+    public function code_settings_store(Request $request)
+    {
 
         $code = Code::create([
             'Kod' => $request->Kod,
@@ -79,48 +108,53 @@ class SettingsController extends Controller
             'Yatti' => $request->Yatti
         ]);
 
-        if($code){
+        if ($code) {
             return response()->json(array('success' => true, 'msg' => 'Code added!'));
         }
     }
 
-    public function vacationdays_settings(){
+    public function vacationdays_settings()
+    {
         $data['vacationdays'] = VacationDay::orderBy('GunID', 'DESC')->get();
-        return view('admin.contents.settings_vacationdays',$data);
+        return view('admin.contents.settings_vacationdays', $data);
     }
 
-    public function vacationdays_settings_store(Request $request){
+    public function vacationdays_settings_store(Request $request)
+    {
         $vd = VacationDay::create([
             'Tarih' => $request->Tarih,
             'GunBASLIK' => $request->GunBASLIK,
         ]);
 
-        if($vd){
+        if ($vd) {
             return response()->json(array('success' => true, 'msg' => 'Vacation Day added!', 'details' => $vd));
         }
     }
 
-    public function vacationdays_settings_edit(Request $request){
+    public function vacationdays_settings_edit(Request $request)
+    {
         $vd = VacationDay::find($request->GunID);
-        
+
         return response()->json($vd);
     }
-    public function vacationdays_settings_update(Request $request){
+    public function vacationdays_settings_update(Request $request)
+    {
         $vd = VacationDay::find($request->GunID);
         $vd->Tarih = $request->Tarih;
         $vd->GunBASLIK = $request->GunBASLIK;
         $vd->save();
 
-        if($vd){
+        if ($vd) {
             return response()->json(array('success' => true, 'msg' => 'Vacation Day Updated!', 'details' => $vd));
         }
     }
 
-    public function vacationdays_settings_delete(Request $request){
+    public function vacationdays_settings_delete(Request $request)
+    {
         $vd = VacationDay::find($request->GunID);
         $vd->delete();
 
-        if($vd){
+        if ($vd) {
             return response()->json(array('success' => true, 'msg' => 'Vacation Day Deleted!', 'id' => $vd->GunID));
         }
     }

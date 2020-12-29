@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h4>{{$page_title}}</h4>
+                    <h4>{{ $title }}</h4>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -23,7 +23,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Working hours this month</span>
-                            <span class="info-box-number">{{$this_month}}</span>
+                            <span class="info-box-number">{{ $this_month ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -33,11 +33,11 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Working hours total</span>
-                            <span class="info-box-number">{{$total}}</span>
+                            <span class="info-box-number">{{ $total ?? '' }}</span>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
