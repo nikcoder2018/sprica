@@ -58,9 +58,9 @@
 
 <!-- BEGIN: Body-->
 
-<body>
-    <div class="vertical-layout vertical-menu-modern dark-layout  navbar-floating footer-static " data-open="click"
-        data-menu="vertical-menu-modern" data-col="" data-layout="dark-layout">
+<body class="vertical-layout vertical-menu-modern dark-layout  navbar-floating footer-static " data-open="click"
+    data-menu="vertical-menu-modern" data-col="" data-layout="dark-layout">
+    <div id="main-content-wrapper" class="d-none">
         @include('admin.partials.header')
 
         @include('admin.partials.menu')
@@ -73,14 +73,22 @@
             </div>
         </div>
 
+        @include('partials.customizer')
+
         <div class="sidenav-overlay"></div>
         <div class="drag-target"></div>
 
         @include('admin.partials.footer')
+
+        @yield('modals')
+    </div>
+    <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh; width: 100%;"
+        id="loading-content">
+        <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/logo.jpg') }}" alt=""
+            style="max-height: 60px;">
     </div>
 
 
-    @yield('modals')
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/vendors.min.js') }}"></script>
@@ -94,6 +102,7 @@
     <!-- BEGIN: Theme JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/core/app-menu.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/core/app.js') }}"></script>
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/customizer.js') }}"></script>
     <!-- END: Theme JS-->
 
     @yield('external_js')

@@ -343,13 +343,8 @@
                     if (key === 'collapsible-mode') {
                         if (value === 'on') {
                             setTimeout(() => {
-                                if ($(`#collapse-sidebar-switch`).attr(
-                                        'data-status') !== 'on') {
-                                    $(`.nav-item.nav-toggle`).children()[0].click();
-                                    $(`#collapse-sidebar-switch`).attr('data-status',
-                                        'on');
-                                }
-                            }, 10000);
+
+                            }, 15000);
                         }
                     }
                 });
