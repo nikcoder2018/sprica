@@ -171,4 +171,7 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('notices/edit', 'NoticesController@edit')->name('notices.edit');
     Route::post('notices/update', 'NoticesController@update')->name('notices.update');
     Route::post('notices/destroy', 'NoticesController@destroy')->name('notices.destroy');
+
+    Route::get('/user/settings', 'GeneralSettingController@index')->name('user.settings.index');
+    Route::post('/user/settings', 'GeneralSettingController@store')->name('user.settings.store');
 });

@@ -42,6 +42,50 @@ class User extends Authenticatable
 
     protected $dates = ['created_at', 'updated_at'];
 
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $builder = $user->settings();
+
+            collect([
+                [
+                    'key' => 'theme',
+                    'value' => 'vuexy',
+                ],
+                [
+                    'key' => 'default_start_time',
+                    'value' => '07:00',
+                ],
+                [
+                    'key' => 'collapsible-mode',
+                    'value' => 'off',
+                ],
+                [
+                    'key' => 'theme-mode',
+                    'value' => 'dark',
+                ],
+                [
+                    'key' => 'layout-mode',
+                    'value' => 'full',
+                ],
+                [
+                    'key' => 'navbar-color',
+                    'value' => 'bg-white',
+                ],
+                [
+                    'key' => 'nav-layout',
+                    'value' => 'floating',
+                ],
+                [
+                    'key' => 'footer-layout',
+                    'value' => 'static',
+                ],
+            ])->each(function ($entry) use ($builder) {
+                $builder->create($entry);
+            });
+        });
+    }
+
     public function getRoleAttribute()
     {
         $role = $this->roles()->first();
@@ -78,6 +122,11 @@ class User extends Authenticatable
                 'value' => $value,
             ]);
         }
+    }
+
+    public function hasSetting($key)
+    {
+        return $this->getSetting($key) !== null;
     }
 
     function loans()
