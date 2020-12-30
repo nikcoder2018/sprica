@@ -99,6 +99,25 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="clock"></i>
+                    <span class="menu-title text-truncate">Times Management</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="">
+                        <a class="d-flex align-items-center" href="#">
+                            <i data-feather="circle"></i><span class="menu-item">Working Hours</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="d-flex align-items-center" href="#">
+                            <i data-feather="circle"></i><span class="menu-item">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-item">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="book"></i>

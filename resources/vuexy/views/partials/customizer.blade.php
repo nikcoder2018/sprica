@@ -169,110 +169,208 @@
 {{-- End: Customizer --}}
 <script defer>
     const ready = ($) => {
+        // events are wrappen in IIFEs in order to 
+        // use block-scoped `running` variables
+        // to prevent saving settings more than once
 
         const registerNavigationButtons = ($) => {
-            $('#nav-floating-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'nav-layout',
-                    value: 'floating',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#nav-floating-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'nav-layout',
+                        value: 'floating',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#nav-sticky-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'nav-layout',
-                    value: 'sticky',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#nav-sticky-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'nav-layout',
+                        value: 'sticky',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#nav-static-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'nav-layout',
-                    value: 'static',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#nav-static-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'nav-layout',
+                        value: 'static',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#nav-hidden-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'nav-layout',
-                    value: 'hidden',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#nav-hidden-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'nav-layout',
+                        value: 'hidden',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
         }
 
         const registerThemeModes = ($) => {
-            $('#light-theme-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'theme-mode',
-                    value: 'light',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#light-theme-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'theme-mode',
+                        value: 'light',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#dark-theme-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'theme-mode',
-                    value: 'dark',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#dark-theme-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'theme-mode',
+                        value: 'dark',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#bordered-theme-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'theme-mode',
-                    value: 'bordered',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#bordered-theme-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'theme-mode',
+                        value: 'bordered',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
         }
 
         const registerFooterButtons = ($) => {
-            $('#footer-sticky-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'footer-layout',
-                    value: 'sticky',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#footer-sticky-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'footer-layout',
+                        value: 'sticky',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#footer-static-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'footer-layout',
-                    value: 'static',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#footer-static-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'footer-layout',
+                        value: 'static',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-
-            $('#footer-hidden-button').click((e) => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'footer-layout',
-                    value: 'hidden',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#footer-hidden-button').click((e) => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'footer-layout',
+                        value: 'hidden',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
         };
 
         const registerLayoutButtons = ($) => {
-            $('#layout-full-button').click(() => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'layout-mode',
-                    value: 'full',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#layout-full-button').click(() => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'layout-mode',
+                        value: 'full',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
 
-            $('#layout-boxed-button').click(() => {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'layout-mode',
-                    value: 'boxed',
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('#layout-boxed-button').click(() => {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'layout-mode',
+                        value: 'boxed',
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
         };
 
         const registerSolos = ($) => {
@@ -296,13 +394,21 @@
                 });
             })();
 
-            $('.color-box').click(function() {
-                $.post("{{ route('user.settings.store') }}", {
-                    key: 'navbar-color',
-                    value: $(this).attr('data-color'),
-                    "_token": "{{ csrf_token() }}",
+            (() => {
+                let running = false;
+                $('.color-box').click(function() {
+                    if (!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    $.post("{{ route('user.settings.store') }}", {
+                        key: 'navbar-color',
+                        value: $(this).attr('data-color'),
+                        "_token": "{{ csrf_token() }}",
+                    }, () => (running = false));
                 });
-            });
+            })();
         }
 
         const sync = (done) => {
