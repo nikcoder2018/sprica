@@ -10,10 +10,13 @@
                     </span>
                 </a>
             </li>
-            <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i
-                        class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i
-                        class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc"
-                        data-ticon="disc"></i></a></li>
+            <li class="nav-item nav-toggle">
+                <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
+                    <i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i>
+                    <i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc"
+                        data-ticon="disc"></i>
+                </a>
+            </li>
         </ul>
     </div>
     <div class="shadow-bottom"></div>
@@ -73,8 +76,11 @@
                 <span data-i18n="Apps &amp; Pages">Administrator</span>
                 <i data-feather="more-horizontal"></i>
             </li>
-            <li class="nav-item"><a class="d-flex align-items-center" href="#">
-                    <i data-feather="users"></i><span class="menu-title text-truncate">Users Management</span></a>
+            <li class="nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="users"></i>
+                    <span class="menu-title text-truncate">Users Management</span>
+                </a>
                 <ul class="menu-content">
                     <li class="{{ Request::segment(1) === 'users' ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('users.index') }}">
@@ -93,8 +99,11 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item"><a class="d-flex align-items-center" href="#">
-                    <i data-feather="book"></i><span class="menu-title text-truncate">Human Resource</span></a>
+            <li class="nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="book"></i>
+                    <span class="menu-title text-truncate">Human Resource</span>
+                </a>
                 <ul class="menu-content">
                     <li class="{{ Request::segment(1) === 'control' ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('controlling.index') }}">
@@ -113,8 +122,11 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item"><a class="d-flex align-items-center" href="#">
-                    <i data-feather="box"></i><span class="menu-title text-truncate">Projects</span></a>
+            <li class="nav-item">
+                <a class="d-flex align-items-center" href="#">
+                    <i data-feather="box"></i>
+                    <span class="menu-title text-truncate">Projects</span>
+                </a>
                 <ul class="menu-content">
                     <li class="{{ Request::segment(1) === 'projects' ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.projects') }}">

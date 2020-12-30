@@ -171,7 +171,7 @@
     const ready = ($) => {
 
         const registerNavigationButtons = ($) => {
-            $('#nav-float-button').click((e) => {
+            $('#nav-floating-button').click((e) => {
                 $.post("{{ route('user.settings.store') }}", {
                     key: 'nav-layout',
                     value: 'floating',
@@ -312,20 +312,7 @@
                     value
                 }) => {
                     if (key === 'nav-layout') {
-                        switch (value) {
-                            case 'floating':
-                                $('#nav-float-button').children().children()[0].click();
-                                break;
-                            case 'sticky':
-                                $('#nav-sticky-button').children().children()[0].click();
-                                break;
-                            case 'static':
-                                $('#nav-static-button').children().children()[0].click();
-                                break;
-                            case 'hidden':
-                                $('#nav-hidden-button').children().children()[0].click();
-                                break;
-                        }
+                        $(`#nav-type-${value}`).click();
                     }
                     if (key === 'footer-layout') {
                         console.log($(`#footer-type-${value}`));
