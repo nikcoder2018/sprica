@@ -173,7 +173,7 @@ $lang = new Language();
                                         </div>
                                     </div>
                                     <div class="card card-default color-palette-bo">
-                                        <div class="card-body">
+                                        <div class="card-body table-responsive">
                                             <table id="example1"
                                                 class="table table-hover table-bordered table-striped table-code"
                                                 data-order='[[1, "asc"]]' data-page-length='100'>
@@ -220,7 +220,7 @@ $lang = new Language();
                                         </div>
                                     </div>
                                     <div class="card card-default color-palette-bo">
-                                        <div class="card-body">
+                                        <div class="card-body table-responsive">
                                             <table id="example1" class="table table-bordered table-striped table-vacation"
                                                 data-page-length='10' data-order='[[0, "desc"]]'>
                                                 <thead>
@@ -282,7 +282,7 @@ $lang = new Language();
                                         </div>
                                     </div>
                                     <div class="card card-default color-palette-bo">
-                                        <div class="card-body">
+                                        <div class="card-body table-responsive">
                                             <table id="example1" class="table table-striped">
                                                 <thead>
                                                     <tr>
@@ -322,40 +322,38 @@ $lang = new Language();
                                             </div>
                                         </div>
                                     </div>
-                                    <section class="content m-0">
-                                        <div class="card">
-                                            <div class="card-body p-0">
-                                                <table id="example1" class="table table-striped table-emailtemplate">
-                                                    <thead>
+                                    <div class="card card-default color-palette-bo">
+                                        <div class="card-body table-responsive p-0">
+                                            <table id="example1" class="table table-striped table-emailtemplate">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Title</th>
+                                                        <th>Subject</th>
+                                                        <th>Options</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($templates as $template)
                                                         <tr>
-                                                            <th>Title</th>
-                                                            <th>Subject</th>
-                                                            <th>Options</th>
+                                                            <td>{{ $template->title }}</td>
+                                                            <td>{{ $template->subject }}</td>
+                                                            <td>
+                                                                <a href="#" class="edit_template"
+                                                                    data-id="{{ $template->id }}"><i
+                                                                        class="fa fa-fw fa-pencil text-warning"></i></a>
+                                                                <a href="#" class="view_template"
+                                                                    data-id="{{ $template->id }}"><i
+                                                                        class="fa fa-fw fa-eye text-primary"></i></a>
+                                                                <a href="#" class="delete_template"
+                                                                    data-id="{{ $template->id }}"><i
+                                                                        class="fa fa-fw fa-trash text-danger "></i></a>
+                                                            </td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($templates as $template)
-                                                            <tr>
-                                                                <td>{{ $template->title }}</td>
-                                                                <td>{{ $template->subject }}</td>
-                                                                <td>
-                                                                    <a href="#" class="edit_template"
-                                                                        data-id="{{ $template->id }}"><i
-                                                                            class="fa fa-fw fa-pencil text-warning"></i></a>
-                                                                    <a href="#" class="view_template"
-                                                                        data-id="{{ $template->id }}"><i
-                                                                            class="fa fa-fw fa-eye text-primary"></i></a>
-                                                                    <a href="#" class="delete_template"
-                                                                        data-id="{{ $template->id }}"><i
-                                                                            class="fa fa-fw fa-trash text-danger "></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </section>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="settings-tabs-email-triggers" role="tabpanel"
                                     aria-labelledby="#settings-tabs-email-triggers">
@@ -372,38 +370,35 @@ $lang = new Language();
                                         </div>
                                     </div>
 
-
-                                    <section class="content m-0">
-                                        <div class="card">
-                                            <div class="card-body p-0">
-                                                <table id="example1" class="table table-striped table-emailtrigger">
-                                                    <thead>
+                                    <div class="card">
+                                        <div class="card-body p-0 table-responsive">
+                                            <table id="example1" class="table table-striped table-emailtrigger">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Triggers when</th>
+                                                        <th>Email Template</th>
+                                                        <th>Options</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($triggers as $trigger)
                                                         <tr>
-                                                            <th>Triggers when</th>
-                                                            <th>Email Template</th>
-                                                            <th>Options</th>
+                                                            <td>{{ $trigger->action->description }}</td>
+                                                            <td>{{ $trigger->template->title }}</td>
+                                                            <td>
+                                                                <a href="#" class="edit_trigger"
+                                                                    data-id="{{ $trigger->id }}"><i
+                                                                        class="fa fa-fw fa-edit text-primary"></i></a>
+                                                                <a href="#" class="delete_trigger"
+                                                                    data-id="{{ $trigger->id }}"><i
+                                                                        class="fa fa-fw fa-trash text-danger "></i></a>
+                                                            </td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($triggers as $trigger)
-                                                            <tr>
-                                                                <td>{{ $trigger->action->description }}</td>
-                                                                <td>{{ $trigger->template->title }}</td>
-                                                                <td>
-                                                                    <a href="#" class="edit_trigger"
-                                                                        data-id="{{ $trigger->id }}"><i
-                                                                            class="fa fa-fw fa-edit text-primary"></i></a>
-                                                                    <a href="#" class="delete_trigger"
-                                                                        data-id="{{ $trigger->id }}"><i
-                                                                            class="fa fa-fw fa-trash text-danger "></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </section>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="settings-tabs-email-actions" role="tabpanel"
                                     aria-labelledby="#settings-tabs-email-actions">
@@ -419,37 +414,35 @@ $lang = new Language();
                                         </div>
                                     </div>
 
-                                    <section class="content m-0">
-                                        <div class="card">
-                                            <div class="card-body p-0">
-                                                <table id="example1" class="table table-striped table-actions">
-                                                    <thead>
+                                    <div class="card">
+                                        <div class="card-body p-0 table-responsive">
+                                            <table id="example1" class="table table-striped table-actions">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Description</th>
+                                                        <th>Command</th>
+                                                        <th>Options</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($actions as $action)
                                                         <tr>
-                                                            <th>Description</th>
-                                                            <th>Command</th>
-                                                            <th>Options</th>
+                                                            <td>{{ $action->description }}</td>
+                                                            <td>{{ $action->command->code }}</td>
+                                                            <td>
+                                                                <a href="#" class="edit_action"
+                                                                    data-id="{{ $action->id }}"><i
+                                                                        class="fa fa-fw fa-edit text-primary"></i></a>
+                                                                <a href="#" class="delete_action"
+                                                                    data-id="{{ $action->id }}"><i
+                                                                        class="fa fa-fw fa-trash text-danger "></i></a>
+                                                            </td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($actions as $action)
-                                                            <tr>
-                                                                <td>{{ $action->description }}</td>
-                                                                <td>{{ $action->command->code }}</td>
-                                                                <td>
-                                                                    <a href="#" class="edit_action"
-                                                                        data-id="{{ $action->id }}"><i
-                                                                            class="fa fa-fw fa-edit text-primary"></i></a>
-                                                                    <a href="#" class="delete_action"
-                                                                        data-id="{{ $action->id }}"><i
-                                                                            class="fa fa-fw fa-trash text-danger "></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </section>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade active show" id="settings-tabs-general" role="tabpanel" aria-labelledby="settings-tabs-general">
                                     <form class="form-update-gensettings" action="{{ route('admin.settings.general-update') }}" method="POST">
