@@ -108,6 +108,7 @@
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/charts/apexcharts.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+    <script src="{{ asset(env('APP_THEME', 'default').'/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
     <!-- END: Page Vendor JS-->
     @yield('external_js')
 

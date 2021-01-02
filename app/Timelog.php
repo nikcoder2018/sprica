@@ -18,6 +18,10 @@ class Timelog extends Model
     public function users(){
         return $this->belongsToMany(User::class);
     }
+    
+    function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 
     public function project(){
         return $this->belongsTo(Project::class);

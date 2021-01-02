@@ -97,6 +97,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
     public function settings()
     {
         return $this->hasMany(GeneralSetting::class);

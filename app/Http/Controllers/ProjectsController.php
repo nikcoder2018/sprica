@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use App\Task;
 use App\TaskAssignment;
 use App\User;
 use App\ProjectMember;
-
+use App\Role;
 use DataTables;
 class ProjectsController extends Controller
 {
@@ -23,7 +23,8 @@ class ProjectsController extends Controller
     }
 
     public function all(){
-        $projects = Project::with(['tasks', 'timelogs', 'tasks_completed', 'members'])->whereNotIn('title',['Feiertag','Urlaub','Krank','KUG'])->orderBy('id', 'DESC')->get();
+        //return response()->json(Role::all());
+        $projects = Project::with(['client','tasks', 'tasks_completed'])->whereNotIn('title',['Feiertag','Urlaub','Krank','KUG'])->orderBy('id', 'DESC')->get();
         
         return DataTables::of(ResourceProject::collection($projects))->toJson();
     }
