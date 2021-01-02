@@ -369,7 +369,6 @@ $lang = new Language();
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="card">
                                         <div class="card-body p-0 table-responsive">
                                             <table id="example1" class="table table-striped table-emailtrigger">
@@ -413,7 +412,6 @@ $lang = new Language();
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="card">
                                         <div class="card-body p-0 table-responsive">
                                             <table id="example1" class="table table-striped table-actions">
@@ -447,40 +445,47 @@ $lang = new Language();
                                 <div class="tab-pane fade active show" id="settings-tabs-general" role="tabpanel" aria-labelledby="settings-tabs-general">
                                     <form class="form-update-gensettings" action="{{ route('admin.settings.general-update') }}" method="POST">
                                         @csrf
-                                        <div class="media mb-1">
-                                            <a href="#" class="mr-25">
-                                                <img id="account-upload-preview" src="{{ auth()->user()->avatar ?: asset('vuexy/app-assets/images/portrait/small/avatar-s-11.jpg') }}" height="80" width="80" alt="" class="rounded mr-50">
-                                            </a>
-                                            <div class="media-body mt-75 ml-1">
-                                                <label for="account-upload" class="btn btn-sm btn-primary mb-75 mr-75 waves-effect waves-float waves-light">Upload</label>
-                                                <input type="file" id="account-upload" hidden="" name="avatar" accept="image/*">
-                                                <p>Allowed JPG, GIF or PNG. Max size of 800kB</p>
+                                        <div class="card card-info">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Profile</h3>
                                             </div>
-                                        </div>
-                                        <div class="validate-form mt-2">
-                                            <div class="row">
-                                            <div class="col-12 col-sm-6">
-                                                <div class="form-group">
-                                                <label for="account-username">Username</label>
-                                                <input type="text" class="form-control" id="account-username" name="username" placeholder="Username" value="{{ auth()->user()->username }}">
+                                            <div class="card-body">
+                                                <div class="media mb-1">
+                                                    <a href="#" class="mr-25">
+                                                        <img id="account-upload-preview" src="{{ auth()->user()->avatar ?: asset('vuexy/app-assets/images/portrait/small/avatar-s-11.jpg') }}" height="80" width="80" alt="" class="rounded mr-50">
+                                                    </a>
+                                                    <div class="media-body mt-75 ml-1">
+                                                        <label for="account-upload" class="btn btn-sm btn-primary mb-75 mr-75 waves-effect waves-float waves-light">Upload</label>
+                                                        <input type="file" id="account-upload" hidden="" name="avatar" accept="image/*">
+                                                        <p>Allowed JPG, GIF or PNG. Max size of 800kB</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-12 col-sm-6">
-                                                <div class="form-group">
-                                                <label for="account-name">Name</label>
-                                                <input type="text" class="form-control" id="account-name" name="name" placeholder="Name" value="{{ auth()->user()->name }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-6">
-                                                <div class="form-group">
-                                                <label for="account-e-mail">E-mail</label>
-                                                <input type="email" class="form-control" id="account-e-mail" name="email" placeholder="Email" value="{{ auth()->user()->email }}">
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-6">
-                                                <div class="form-group">
-                                                <label for="account-company">Company</label>
-                                                <input type="text" class="form-control" id="account-company" name="company" placeholder="Company name" value="{{ auth()->user()->company }}">
+                                                <div class="validate-form mt-2">
+                                                    <div class="row">
+                                                    <div class="col-12 col-sm-6">
+                                                        <div class="form-group">
+                                                        <label for="account-username">Username</label>
+                                                        <input type="text" class="form-control" id="account-username" name="username" placeholder="Username" value="{{ auth()->user()->username }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-6">
+                                                        <div class="form-group">
+                                                        <label for="account-name">Name</label>
+                                                        <input type="text" class="form-control" id="account-name" name="name" placeholder="Name" value="{{ auth()->user()->name }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-6">
+                                                        <div class="form-group">
+                                                        <label for="account-e-mail">E-mail</label>
+                                                        <input type="email" class="form-control" id="account-e-mail" name="email" placeholder="Email" value="{{ auth()->user()->email }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-6">
+                                                        <div class="form-group">
+                                                        <label for="account-company">Company</label>
+                                                        <input type="text" class="form-control" id="account-company" name="company" placeholder="Company name" value="{{ auth()->user()->company }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -488,7 +493,6 @@ $lang = new Language();
                                             <div class="card-header">
                                                 <h3 class="card-title">{{ $lang::settings('admin_genel_ayarlar') }}</h3>
                                             </div>
-
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="form-group col-md-12">
@@ -497,7 +501,6 @@ $lang = new Language();
                                                         <input type="text" value="{{ $genset->SiteURL }}" name="SiteURL"
                                                             id="form-field-166" class="form-control " required>
                                                     </div>
-
                                                     <div class="form-group col-md-12">
                                                         <label class="form-control-label"
                                                             for="inputBasicLastName">{{ $lang::settings('Bir_Gun_Proje') }}</label>
@@ -724,7 +727,6 @@ $lang = new Language();
                         <input type="text" name="title" class="form-control round modal-input-title" value="" required>
                         <button type="button" class="close text-danger" data-dismiss="modal">&times;</button>
                     </div>
-
                     @csrf
                     <div class="modal-body bg">
                         <div class="form-body mt-1">
