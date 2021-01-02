@@ -174,4 +174,8 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
 
     Route::get('/user/settings', 'GeneralSettingController@index')->name('user.settings.index');
     Route::post('/user/settings', 'GeneralSettingController@store')->name('user.settings.store');
+
+    Route::get('/user/profile', 'ProfileController@index')->name('profile');
+    Route::post('/user/profile', 'ProfileController@update')->name('profile.update');
+    Route::post('/user/profile/password', 'ProfileController@password')->name('profile.change.password');
 });

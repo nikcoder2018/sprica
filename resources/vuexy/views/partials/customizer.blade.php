@@ -421,7 +421,6 @@
                         $(`#nav-type-${value}`).click();
                     }
                     if (key === 'footer-layout') {
-                        console.log($(`#footer-type-${value}`));
                         $(`#footer-type-${value}`).click();
                     }
                     if (key === 'navbar-color') {

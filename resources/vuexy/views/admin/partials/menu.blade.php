@@ -100,7 +100,7 @@
                 </ul>
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="clock"></i>
                     <span class="menu-title text-truncate">Times Management</span>
@@ -117,7 +117,8 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
+
             <li class="nav-item">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="book"></i>

@@ -15,7 +15,7 @@ use App\EmailTemplate;
 use App\EmailTrigger;
 use App\EmailAction;
 use App\EmailCommand;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -52,14 +52,35 @@ class SettingsController extends Controller
         $user = $request->user();
 
         // theme
-        $user->setSetting('theme', $request->theme);
+        if ($request->has('theme')) {
+            $user->setSetting('theme', $request->input('theme'));
+        }
 
         // default start time
-        $user->setSetting('default_start_time', $request->default_start_time);
+        if ($request->has('default_start_time')) {
+            $user->setSetting('default_start_time', $request->input('default_start_time'));
+        }
 
         // working hours
-        $user->setSetting('working_hour', $request->working_hour);
+        if ($request->has('working_hour')) {
+            $user->setSetting('working_hour', $request->input('working_hour'));
+        }
 
+        if ($request->has('avatar') && $request->file('avatar')->isValid()) {
+            if ($user->avatar !== '') {
+                // GC
+                Storage::delete($user->getAttributes()['avatar']);
+            }
+
+            /**
+             * @var \Illuminate\Http\UploadedFile
+             */
+            $file = $request->file('avatar');
+            $user->avatar = $file->storePublicly('/public/users-avatar');
+        }
+
+        $user->fill($request->only(['username', 'name', 'email', 'company']));
+        $user->save();
 
 
         if ($request->expectsJson()) {
