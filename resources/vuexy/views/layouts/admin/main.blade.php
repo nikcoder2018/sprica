@@ -118,6 +118,8 @@
 
     @yield('scripts')
 
+    @yield('js')
+
     <script>
         $(window).on('load', function() {
             if (feather) {
