@@ -99,14 +99,6 @@
                     </li>
                 </ul>
             </li>
-
-            <li class="nav-item {{ Request::segment(1) === 'times' ? 'active' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('times.index') }}">
-                    <i data-feather="clock"></i>
-                    <span class="menu-title text-truncate">Times Management</span>
-                </a>
-            </li>
-
             <li class="nav-item">
                 <a class="d-flex align-items-center" href="#">
                     <i data-feather="book"></i>

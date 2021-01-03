@@ -1,30 +1,5 @@
 @extends('layouts.admin.main')
 
-
-@section('stylesheets')
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
-
-    <style>
-        .dataTables_paginate {
-            margin-top: 1.5rem !important;
-        }
-
-        .paginate_button {
-            padding: 4px 14px !important;
-            margin: 8px 4px !important;
-            background-color: #7367F0 !important;
-            border-radius: 8px !important;
-            color: white;
-        }
-
-        .paginate_button: hover {
-            color: white !important;
-        }
-
-    </style>
-@endsection
-
 @section('content')
     <div class="container">
         <div class="row">
@@ -80,12 +55,11 @@
                         </div>
                     </div>
                     <div class="card-body table-responsive">
-                        <table class="table">
+                        <table class="table table-striped table-actions">
                             <thead>
                                 <tr>
                                     <th class="text-center">ID</th>
                                     <th class="text-center">Hour/s</th>
-                                    <th class="text-center">Endtime</th>
                                     <th class="text-center">Break</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -95,7 +69,6 @@
                                     <tr data-id="{{ $time->id }}">
                                         <td class="text-center">{{ $time->id }}</td>
                                         <td class="text-center">{{ $time->hours }}</td>
-                                        <td class="text-center">{{ $time->endtime }}</td>
                                         <td class="text-center">{{ $time->break }}</td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-warning btn-sm mx-1" data-toggle="modal"

@@ -15,6 +15,7 @@ use App\EmailTemplate;
 use App\EmailTrigger;
 use App\EmailAction;
 use App\EmailCommand;
+use App\Time;
 use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
@@ -33,6 +34,7 @@ class SettingsController extends Controller
         $data['commands'] = EmailCommand::all();
         $stime = $request->user()->settings()->where('key', 'default_start_time')->first();
         $data['default_start_time'] = $stime ? $stime->value : '07:00';
+        $data['times'] = Time::all();
         return view('admin.contents.settings', $data);
     }
 
@@ -67,7 +69,7 @@ class SettingsController extends Controller
         }
 
         if ($request->has('avatar') && $request->file('avatar')->isValid()) {
-            if ($user->avatar !== '') {
+            if ($user->getAttributes()['avatar'] !== 'public/users-avatar/avatar.png') {
                 // GC
                 Storage::delete($user->getAttributes()['avatar']);
             }

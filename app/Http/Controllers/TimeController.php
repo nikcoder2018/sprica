@@ -22,11 +22,7 @@ class TimeController extends Controller
     {
         $times = Time::all();
 
-        if ($request->expectsJson()) {
-            return $times;
-        }
-
-        return view('admin.contents.times', ['times' => $times]);
+        return response()->json($times);
     }
 
     /**
@@ -37,7 +33,7 @@ class TimeController extends Controller
      */
     public function store(Request $request)
     {
-        return Time::create($request->only(['hours', 'endtime', 'break']));
+        return Time::create($request->only(['hours', 'break']));
     }
 
     /**
@@ -60,7 +56,7 @@ class TimeController extends Controller
      */
     public function update(Request $request, Time $time)
     {
-        $time->update($request->only(['hours', 'endtime', 'break']));
+        $time->update($request->only(['hours', 'break']));
 
         return $time;
     }

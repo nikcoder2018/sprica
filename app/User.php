@@ -47,6 +47,10 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::created(function ($user) {
+            if ($user->avatar === '') {
+                $user->avatar = 'public/users-avatar/avatar.png';
+            }
+
             collect([
                 [
                     'key' => 'theme',
