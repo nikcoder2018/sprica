@@ -46,9 +46,7 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::creating(function ($user) {
-            $builder = $user->settings();
-
+        static::created(function ($user) {
             collect([
                 [
                     'key' => 'theme',
@@ -82,8 +80,8 @@ class User extends Authenticatable
                     'key' => 'footer-layout',
                     'value' => 'static',
                 ],
-            ])->each(function ($entry) use ($builder) {
-                $builder->create($entry);
+            ])->each(function ($entry) use ($user) {
+                $user->setSetting($entry['key'], $entry['value']);
             });
         });
     }
