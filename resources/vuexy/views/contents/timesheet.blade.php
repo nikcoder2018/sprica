@@ -71,18 +71,18 @@
                                     <input type="text" name="start_date" id="date" class="form-control flatpickr-date-time"
                                         placeholder="YYYY-MM-DD HH:MM" />
                                 </div>
+                                <div class="form-group col-md-2">
+                                    <label>Hours</label>
+                                    <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
+                                </div>
                                 <div class="form-group col-md-4">
                                     <label>End Time</label>
-                                    <input type="text" name="end_time" class="form-control flatpickr-time"
+                                    <input type="text" id="end-time" name="end_time" class="form-control flatpickr-time"
                                         placeholder="HH:MM" />
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label>Hours</label>
-                                    <input type="number" name="duration" class="form-control" step="0.01" />
-                                </div>
-                                <div class="form-group col-md-2">
                                     <label>Break</label>
-                                    <input type="number" name="break" class="form-control" step="0.01" />
+                                    <input type="number" id="break" name="break" class="form-control" step="0.01" />
                                 </div>
                             </div>
                             <div class="row">
@@ -148,18 +148,19 @@
                                     <input type="text" name="start_date" class="form-control flatpickr-date-time"
                                         placeholder="YYYY-MM-DD HH:MM" />
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label>End Time</label>
-                                    <input type="text" name="end_time" class="form-control flatpickr-time"
-                                        placeholder="HH:MM" />
-                                </div>
                                 <div class="form-group col-md-2">
                                     <label>Hours</label>
-                                    <input type="number" name="duration" class="form-control" step="0.01" />
+                                    <input type="number" id="hours-update" name="duration" class="form-control"
+                                        step="0.01" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>End Time</label>
+                                    <input type="text" id="end-time-update" name="end_time"
+                                        class="form-control flatpickr-time" placeholder="HH:MM" />
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Break</label>
-                                    <input type="number" name="break" class="form-control" step="0.01" />
+                                    <input type="number" id="break-update" name="break" class="form-control" step="0.01" />
                                 </div>
                             </div>
                             <div class="row">
@@ -246,6 +247,44 @@
                 defaultMinute: time[1],
                 enableTime: true,
                 enableSeconds: true,
+            });
+
+            $('#hours').on('change', function() {
+                const hours = $(this)[0].value;
+                axios.get(`{{ route('times.search') }}?query=${hours}`, {
+                    headers: {
+                        Accept: 'application/json'
+                    }
+                }).then(response => {
+                    const times = response.data;
+                    if (times.length > 0) {
+                        const instance = times[0];
+                        // ex '02:00 PM' - string needs to be split
+                        const time = instance.endtime.split(':').map((item, index, array) =>
+                            index !== 1 ?
+                            ((item) => {
+                                // IIFE is used to check if 2nd element
+                                // of array contains pm
+                                // then we convert standard time
+                                // to military time 
+                                if (array[1].split(' ')[1] === 'PM') {
+                                    return Number(item) + 12;
+                                }
+                                // else we just return it as is
+                                return Number(item);
+
+                            })(item) :
+                            Number(item.split(' ')[0]));
+                        document.querySelector('#break').value = instance.break;
+                        const date = new Date(Date.now());
+                        date.setHours(time[0], time[1], 0);
+                        $('#end-time').flatpickr({
+                            defaultDate: date,
+                            enableTime: true,
+                            enableSeconds: true,
+                        });
+                    }
+                });
             });
         });
 

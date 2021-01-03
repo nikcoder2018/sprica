@@ -50,6 +50,8 @@
     @yield('external_css')
 
     @yield('stylesheets')
+
+    @yield('css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/extensions/ext-component-toastr.css') }}">
     <link rel="stylesheet" type="text/css"
@@ -57,7 +59,8 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/assets/css/style.css') }}">
     <!-- END: Custom CSS-->
-
+    <script src="https://kit.fontawesome.com/f99f1d9afb.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <!-- END: Head-->
 
@@ -108,7 +111,8 @@
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/charts/apexcharts.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
-    <script src="{{ asset(env('APP_THEME', 'default').'/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
     <!-- END: Page Vendor JS-->
     @yield('external_js')
 

@@ -55,7 +55,8 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/assets/css/style.css') }}">
     <!-- END: Custom CSS-->
-
+    <script src="https://kit.fontawesome.com/f99f1d9afb.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <!-- END: Head-->
 
@@ -116,6 +117,8 @@
     @yield('external_js')
 
     @yield('scripts')
+
+    @yield('js')
 
     <script>
         $(window).on('load', function() {
