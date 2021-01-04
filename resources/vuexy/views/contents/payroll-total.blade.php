@@ -58,7 +58,16 @@
     <div class="card">
         <h5 class="card-header">Search Filter</h5>
         <div class="d-flex justify-content-between align-items-center mx-50 row pt-0 pb-2">
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
+                <label>Employee</label>
+                <select class="select2 filters filter-employee form-control text-capitalize mb-md-0 mb-2xx">
+                    <option value=""> Select Employee </option>
+                    @foreach($users as $user)
+                    <option value="{{$user->id}}"> {{$user->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-4 form-group">
                 <label>Year</label>
                 <select name="year" class="form-control filters filter-year">
                     @for($i = date("Y")-1; $i<=date("Y");$i++)
@@ -66,7 +75,7 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-md-4 form-group">
                 <label>Month</label>
                 <select name="month" class="form-control filters filter-month">
                     <option value="">Select All</option>
