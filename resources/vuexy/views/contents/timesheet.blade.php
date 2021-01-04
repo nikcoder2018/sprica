@@ -260,29 +260,29 @@
                     if (times.length > 0) {
                         const instance = times[0];
                         // ex '02:00 PM' - string needs to be split
-                        const time = instance.endtime.split(':').map((item, index, array) =>
-                            index !== 1 ?
-                            ((item) => {
-                                // IIFE is used to check if 2nd element
-                                // of array contains pm
-                                // then we convert standard time
-                                // to military time 
-                                if (array[1].split(' ')[1] === 'PM') {
-                                    return Number(item) + 12;
-                                }
-                                // else we just return it as is
-                                return Number(item);
+                        // const time = instance.endtime.split(':').map((item, index, array) =>
+                        //     index !== 1 ?
+                        //     ((item) => {
+                        //         // IIFE is used to check if 2nd element
+                        //         // of array contains pm
+                        //         // then we convert standard time
+                        //         // to military time 
+                        //         if (array[1].split(' ')[1] === 'PM') {
+                        //             return Number(item) + 12;
+                        //         }
+                        //         // else we just return it as is
+                        //         return Number(item);
 
-                            })(item) :
-                            Number(item.split(' ')[0]));
+                        //     })(item) :
+                        //     Number(item.split(' ')[0]));
                         document.querySelector('#break').value = instance.break;
-                        const date = new Date(Date.now());
-                        date.setHours(time[0], time[1], 0);
-                        $('#end-time').flatpickr({
-                            defaultDate: date,
-                            enableTime: true,
-                            enableSeconds: true,
-                        });
+                        // const date = new Date(Date.now());
+                        // date.setHours(time[0], time[1], 0);
+                        // $('#end-time').flatpickr({
+                        //     defaultDate: date,
+                        //     enableTime: true,
+                        //     enableSeconds: true,
+                        // });
                     }
                 });
             });

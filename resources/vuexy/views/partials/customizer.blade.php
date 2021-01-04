@@ -459,7 +459,7 @@
                     if (key === 'collapsible-mode') {
                         if (value === 'on') {
                             setTimeout(() => {
-                                //
+                                $(`#collapse-sidebar-switch`).click();
                             }, 15000);
                         }
                     }
