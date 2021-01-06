@@ -185,4 +185,8 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('/times/update', 'TimeController@update')->name('times.update');
     Route::post('/times/delete', 'TimeController@destroy')->name('times.destroy');
     Route::get('/times/search', 'TimeController@search')->name('times.search');
+
+    Route::get('/global-settings', 'GlobalSettingController@index')->name('global-settings.index');
+    Route::get('/global-settings/get', 'GlobalSettingController@get')->name('global-settings.get');
+    Route::post('/global-settings/set', 'GlobalSettingController@set')->name('global-settings.set');
 });

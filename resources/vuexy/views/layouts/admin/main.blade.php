@@ -57,6 +57,14 @@
     <!-- END: Custom CSS-->
     <script src="https://kit.fontawesome.com/f99f1d9afb.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        @media(min-width: 576px) {
+            td.control {
+                display: none !important;
+            }
+        }
+
+    </style>
 </head>
 <!-- END: Head-->
 

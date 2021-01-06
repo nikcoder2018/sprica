@@ -68,6 +68,9 @@ class TimeTrackingController extends Controller
         $timelog->project_id = $request->project_id;
         $timelog->expenses_id = $request->expenses_id;
         $timelog->note = $request->note;
+        if ($request->has('end_date')) {
+            $timelog->end_date = $request->end_date;
+        }
         $timelog->save();
 
         if ($timelog)

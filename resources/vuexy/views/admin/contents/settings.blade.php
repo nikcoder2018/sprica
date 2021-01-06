@@ -497,6 +497,24 @@ $lang = new Language();
                                         </div>
                                     </div>
                                     <div class="card">
+                                        <div class="card-header">
+                                            <form id="timetrack-mode-form" action="{{ route('global-settings.set') }}">
+                                                @csrf
+                                                <input type="hidden" name="key" value="timetracking-mode">
+                                                <div class="form-group">
+                                                    <label for="timetrack-mode">Timetracking Mode</label>
+                                                    <select name="value" id="timetrack-mode" class="form-control">
+                                                        <option value="Mode 1" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 1') selected @endif>Mode 1 (Worker can set date, starting hour and work hours)</option>
+                                                        <option value="Mode 2" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') selected @endif>Mode 2 (Worker can set starting date, hour, end date and work hours)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-info btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                         <div class="card-body p-0 table-responsive">
                                             <table class="table table-striped table-time-management">
                                                 <thead>
@@ -649,6 +667,36 @@ $lang = new Language();
             };
 
             axios.defaults.headers.common['Accept'] = 'application/json';
+
+            (() => {
+                let running = false;
+                $('#timetrack-mode-form').submit(async function(e) {
+                    if(!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    const form = $(this);
+                    form.find('button[type="submit"]').addClass('disabled');
+                    form.find('button[type="submit"]').attr('disabled', true);
+                    form.find('button[type="submit"]').html(`<i class="fas fa-circle-notch fa-spin"></i>`);
+                    try {
+                        e.preventDefault();
+
+                        const url = form.attr('action');
+                        const data = form.serialize();
+                        await axios.post(url, data);
+                        toastr.success('Timetracking mode set successfully!');
+                    } catch(_) {
+                        toastr.error('Unable to save timetracking mode. Please try again later.');
+                    } finally {
+                        form.find('button[type="submit"]').removeClass('disabled');
+                        form.find('button[type="submit"]').attr('disabled', false);
+                        form.find('button[type="submit"]').html('Save');
+                        running = false;
+                    }
+                });
+            })();
 
             $('#add-time-form').submit(function(e) {
                 e.preventDefault();
