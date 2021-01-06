@@ -59,6 +59,10 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         @media(min-width: 576px) {
+            th.control {
+                display: none !important;
+            }
+
             td.control {
                 display: none !important;
             }
