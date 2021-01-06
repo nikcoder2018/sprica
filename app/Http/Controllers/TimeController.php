@@ -42,9 +42,10 @@ class TimeController extends Controller
      * @param  \App\Time  $time
      * @return \Illuminate\Http\Response
      */
-    public function show(Time $time)
+    public function show(Request $request)
     {
-        //
+        $time = Time::findOrFail($request->input('time_id'));
+        return $time;
     }
 
     /**
@@ -54,8 +55,9 @@ class TimeController extends Controller
      * @param  \App\Time  $time
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Time $time)
+    public function update(Request $request)
     {
+        $time = Time::findOrFail($request->input('time_id'));
         $time->update($request->only(['hours', 'break']));
 
         return $time;
@@ -67,8 +69,9 @@ class TimeController extends Controller
      * @param  \App\Time  $time
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Time $time)
+    public function destroy(Request $request)
     {
+        $time = Time::findOrFail($request->input('time_id'));
         $time->delete();
         return response('', 204);
     }

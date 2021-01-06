@@ -80,6 +80,13 @@
                                     <input type="text" id="end-time" name="end_time" class="form-control flatpickr-time"
                                         placeholder="HH:MM" />
                                 </div>
+                                @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
+                                    <div class="form-group col-md-4">
+                                        <label>End Date</label>
+                                        <input type="text" id="end-date" name="end_date" class="form-control flatpickr-date"
+                                            placeholder="YYYY-MM-DD" />
+                                    </div>
+                                @endif
                                 <div class="form-group col-md-2">
                                     <label>Break</label>
                                     <input type="number" id="break" name="break" class="form-control" step="0.01" />
@@ -158,6 +165,13 @@
                                     <input type="text" id="end-time-update" name="end_time"
                                         class="form-control flatpickr-time" placeholder="HH:MM" />
                                 </div>
+                                @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
+                                    <div class="form-group col-md-4">
+                                        <label>End Date</label>
+                                        <input type="text" id="end-date" name="end_date" class="form-control flatpickr-date"
+                                            placeholder="YYYY-MM-DD" />
+                                    </div>
+                                @endif
                                 <div class="form-group col-md-2">
                                     <label>Break</label>
                                     <input type="number" id="break-update" name="break" class="form-control" step="0.01" />
@@ -242,9 +256,14 @@
     <script defer>
         $(document).ready(() => {
             const time = '{{ $default_start_time }}'.split(':').map((item) => Number(item));
-            window.int = $('#date').flatpickr({
+            $('#date').flatpickr({
                 defaultHour: time[0],
                 defaultMinute: time[1],
+                enableTime: true,
+                enableSeconds: true,
+            });
+
+            $('#end-date').flatpickr({
                 enableTime: true,
                 enableSeconds: true,
             });

@@ -180,8 +180,13 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('/user/profile/password', 'ProfileController@password')->name('profile.change.password');
 
     Route::get('/times', 'TimeController@index')->name('times.index');
+    Route::get('/times/show', 'TimeController@show')->name('times.show');
     Route::post('/times', 'TimeController@store')->name('times.store');
-    Route::post('/times/{time}/update', 'TimeController@update')->name('times.update');
-    Route::post('/times/{time}/delete', 'TimeController@destroy')->name('times.destroy');
+    Route::post('/times/update', 'TimeController@update')->name('times.update');
+    Route::post('/times/delete', 'TimeController@destroy')->name('times.destroy');
     Route::get('/times/search', 'TimeController@search')->name('times.search');
+
+    Route::get('/global-settings', 'GlobalSettingController@index')->name('global-settings.index');
+    Route::get('/global-settings/get', 'GlobalSettingController@get')->name('global-settings.get');
+    Route::post('/global-settings/set', 'GlobalSettingController@set')->name('global-settings.set');
 });

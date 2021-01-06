@@ -497,8 +497,26 @@ $lang = new Language();
                                         </div>
                                     </div>
                                     <div class="card">
+                                        <div class="card-header">
+                                            <form id="timetrack-mode-form" action="{{ route('global-settings.set') }}">
+                                                @csrf
+                                                <input type="hidden" name="key" value="timetracking-mode">
+                                                <div class="form-group">
+                                                    <label for="timetrack-mode">Timetracking Mode</label>
+                                                    <select name="value" id="timetrack-mode" class="form-control">
+                                                        <option value="Mode 1" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 1') selected @endif>Mode 1 (Worker can set date, starting hour and work hours)</option>
+                                                        <option value="Mode 2" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') selected @endif>Mode 2 (Worker can set starting date, hour, end date and work hours)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-info btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                         <div class="card-body p-0 table-responsive">
-                                            <table class="table table-striped table-actions">
+                                            <table class="table table-striped table-time-management">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center">ID</th>
@@ -514,85 +532,12 @@ $lang = new Language();
                                                             <td class="text-center">{{ $time->hours }}</td>
                                                             <td class="text-center">{{ $time->break }}</td>
                                                             <td class="text-center">
-                                                                <a href="#" data-toggle="modal" data-target="#editTimeModal{{ $time->id }}"><i
-                                                                        class="fa fa-fw fa-edit text-primary"></i></a>
-                                                                <div class="modal fade" id="editTimeModal{{ $time->id }}" tabindex="-1"
-                                                                    role="dialog" aria-labelledby="editTimeModalLabel{{ $time->id }}"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title" id="editTimeModalLabel{{ $time->id }}">
-                                                                                    Edit Time</h5>
-                                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                                    aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
-                                                                            </div>
-                                                                            <form class="edit-time-form"
-                                                                                action="{{ route('times.update', ['time' => $time->id]) }}"
-                                                                                data-id="{{ $time->id }}">
-                                                                                @csrf
-                                                                                <div class="modal-body">
-                                                                                    <div class="form-group">
-                                                                                        <label for="hours-{{ $time->id }}">Hour/s</label>
-                                                                                        <input type="text" name="hours"
-                                                                                            id="hours-{{ $time->id }}" placeholder="Hours"
-                                                                                            class="form-control form-control-sm"
-                                                                                            value="{{ $time->hours }}">
-                                                                                    </div>
-                                                                                    <div class="form-group">
-                                                                                        <label for="break-{{ $time->id }}">Break</label>
-                                                                                        <input type="text" name="break"
-                                                                                            id="break-{{ $time->id }}" step=".01" placeholder="Break"
-                                                                                            class="form-control form-control-sm"
-                                                                                            value="{{ $time->break }}">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-primary btn-sm">Save</button>
-                                                                                    <button type="button" class="btn btn-secondary btn-sm"
-                                                                                        data-dismiss="modal">Close</button>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <a href="#" data-toggle="modal"
-                                                                    data-target="#deleteTimeModal{{ $time->id }}"><i
-                                                                        class="fa fa-fw fa-trash text-danger "></i></a>
-                                                                <div class="modal fade" id="deleteTimeModal{{ $time->id }}" tabindex="-1"
-                                                                    role="dialog" aria-labelledby="deleteTimeModalLabel{{ $time->id }}"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title"
-                                                                                    id="deleteTimeModalLabel{{ $time->id }}">
-                                                                                    Delete Time</h5>
-                                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                                    aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
-                                                                            </div>
-                                                                            <form class="delete-time-form"
-                                                                                action="{{ route('times.destroy', ['time' => $time->id]) }}"
-                                                                                data-id="{{ $time->id }}">
-                                                                                @csrf
-                                                                                <div class="modal-body">
-                                                                                    Are you sure you want to delete this time?
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <button type="submit"
-                                                                                        class="btn btn-danger btn-sm">Confirm</button>
-                                                                                    <button type="button" class="btn btn-secondary btn-sm"
-                                                                                        data-dismiss="modal">Close</button>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                                <a href="#" class="edit-time-button" data-id="{{ $time->id }}">
+                                                                    <i class="fa fa-fw fa-edit text-primary"></i>
+                                                                </a>
+                                                                <a href="#" class="delete-time-button" data-id="{{ $time->id }}">
+                                                                    <i class="fa fa-fw fa-trash text-danger"></i>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -693,15 +638,90 @@ $lang = new Language();
 @section('js')
     <script>
         $(document).ready(() => {
+
+            const registerTimeButtons = () => {
+                $('.edit-time-button').click(async function(e) {
+                    e.preventDefault();
+                    const id = $(this).attr('data-id');
+                    try {
+                        const { data } = await axios.get(`{{ route('times.show') }}?time_id=${id}`);
+                        const form = $('.edit-time-form');
+                        form.attr('data-id', id);
+                        form.find('input#hours-edit').val(data.hours);
+                        form.find('input#break-edit').val(data.break);
+                        $('#time-edit-input').val(data.id);
+                        $('#editTimeModal').modal('show');
+                    } catch(error) {
+                        toastr.error('Time record does not exist.');
+                    }
+                });
+
+                $('.delete-time-button').click(function(e) {
+                    e.preventDefault();
+                    const id = $(this).attr('data-id');
+                    const form = $('.delete-time-form');
+                    form.attr('data-id', id);
+                    $('#time-delete-input').val(id);
+                    $('#deleteTimeModal').modal('show');
+                });
+            };
+
+            axios.defaults.headers.common['Accept'] = 'application/json';
+
+            (() => {
+                let running = false;
+                $('#timetrack-mode-form').submit(async function(e) {
+                    if(!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    const form = $(this);
+                    form.find('button[type="submit"]').addClass('disabled');
+                    form.find('button[type="submit"]').attr('disabled', true);
+                    form.find('button[type="submit"]').html(`<i class="fas fa-circle-notch fa-spin"></i>`);
+                    try {
+                        e.preventDefault();
+
+                        const url = form.attr('action');
+                        const data = form.serialize();
+                        await axios.post(url, data);
+                        toastr.success('Timetracking mode set successfully!');
+                    } catch(_) {
+                        toastr.error('Unable to save timetracking mode. Please try again later.');
+                    } finally {
+                        form.find('button[type="submit"]').removeClass('disabled');
+                        form.find('button[type="submit"]').attr('disabled', false);
+                        form.find('button[type="submit"]').html('Save');
+                        running = false;
+                    }
+                });
+            })();
+
             $('#add-time-form').submit(function(e) {
                 e.preventDefault();
 
                 const url = $(this).attr('action');
                 const data = $(this).serialize();
-                axios.post(url, data).then(() => {
+                axios.post(url, data).then(({ data }) => {
                     $('#addTimeModal').on('hidden.bs.modal', () => {
                         toastr.success('Time added successfully.');
-                        window.location.reload();
+                        $('.table-time-management tbody').append(`
+                            <tr data-id="${data.id}">
+                                <td class="text-center">${data.id}</td>
+                                <td class="text-center">${data.hours}</td>
+                                <td class="text-center">${data.break}</td>
+                                
+                                <td class="text-center">
+                                    <a href="#" class="edit-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-edit text-primary"></i>
+                                    </a>
+                                    <a href="#" class="delete-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>`).hide().fadeIn(1000);
+                        registerTimeButtons();
                     });
                     $('#addTimeModal').modal('hide');
                 });
@@ -711,14 +731,33 @@ $lang = new Language();
                 e.preventDefault();
                 const form = $(this);
                 const id = form.attr('data-id');
-                const modal = $(`#editTimeModal${id}`);
+                const modal = $(`#editTimeModal`);
                 const url = form.attr('action');
                 const data = form.serialize();
 
-                axios.post(url, data).then(() => {
+                axios.post(url, data).then(({ data }) => {
                     modal.on('hidden.bs.modal', () => {
                         toastr.success('Time updated successfully.');
-                        window.location.reload();
+                        $(`.table-time-management tbody tr[data-id="${data.id}"]`).hide()
+                            .replaceWith(
+                                `
+                            <tr data-id="${data.id}">
+                                <td class="text-center">${data.id}</td>
+                                <td class="text-center">${data.hours}</td>
+                                <td class="text-center">${data.break}</td>
+                                
+                                <td class="text-center">
+                                    <a href="#" class="edit-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-edit text-primary"></i>
+                                    </a>
+                                    <a href="#" class="delete-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+                            ).fadeIn(1000);
+                        registerTimeButtons();
                     });
                     modal.modal('hide');
                 });
@@ -728,23 +767,99 @@ $lang = new Language();
                 e.preventDefault();
                 const form = $(this);
                 const id = form.attr('data-id');
-                const modal = $(`#deleteTimeModal${id}`);
+                const modal = $(`#deleteTimeModal`);
                 const url = form.attr('action');
                 modal.on('hidden.bs.modal', () => {
-                    axios.post(url).then(() => {
+                    axios.post(url, form.serialize()).then(() => {
                         toastr.success('Time deleted successfully.');
-                        window.location.reload();
+                        console.log($(`.table-time-management tbody tr[data-id="${id}"]`));
+                        $(`.table-time-management tbody tr[data-id="${id}"]`).fadeOut(1000).remove();
                     });
                 });
                 modal.modal('hide');
-
             });
+
+            registerTimeButtons();
         });
 
     </script>
 @endsection
 
-@section('modals')
+@section('modals')  
+    <div class="modal fade" id="editTimeModal" tabindex="-1"
+        role="dialog" aria-labelledby="editTimeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTimeModalLabel">
+                        Edit Time</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="edit-time-form"
+                    action="{{ route('times.update') }}">
+                    @csrf
+                    <input type="hidden" name="time_id" id="time-edit-input" />
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="hours-edit">Hour/s</label>
+                            <input type="text" name="hours"
+                                id="hours-edit" placeholder="Hours"
+                                class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <label for="break-edit">Break</label>
+                            <input type="text" name="break"
+                                id="break-edit" step=".01" placeholder="Break"
+                                class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                            class="btn btn-primary btn-sm">Save</button>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteTimeModal" tabindex="-1"
+        role="dialog" aria-labelledby="deleteTimeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        id="deleteTimeModalLabel">
+                        Delete Time</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="delete-time-form"
+                    action="{{ route('times.destroy') }}">
+                    @csrf
+                    <input type="hidden" name="time_id" id="time-delete-input" />
+                    <div class="modal-body">
+                        Are you sure you want to delete this time?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                            class="btn btn-danger btn-sm">Confirm</button>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="add_code_modal">
         <div class="modal-dialog modal-lg">
             <form class="form-add-code" method="POST" action="{{ route('admin.settings.code-add') }}">
