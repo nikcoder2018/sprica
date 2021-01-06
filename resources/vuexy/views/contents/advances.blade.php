@@ -112,6 +112,64 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="edit-advance-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('advances.update')}}">
+                    @csrf
+                    <input type="hidden" name="id">
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <label>Employee</label>
+                          <select name="user_id" class="select2 form-control">
+                              @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                              @endforeach
+                          </select>
+                        </div>
+                      </div>
+
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                              <label>Receive On</label>
+                              <input type="text" name="received_at" class="form-control flatpickr-date" placeholder="YYYY-MM-DD" />
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label>Debit On</label>
+                            <input type="text" name="debit_at" class="form-control flatpickr-date" placeholder="YYYY-MM-DD" />
+                          </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Amount</label>
+                            <input type="number" name="amount" step="0.01"  class="form-control">
+                          </div>
+                          <div class="col-md-6">
+                            <label>Paid By</label>
+                            <select name="paid_by" class="select2 form-control">
+                              <option value="cash">Cash</option>
+                              <option value="bank">Bank</option>
+                            </select>
+                          </div>
+                        </div>
+          
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @section('external_js')

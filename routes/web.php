@@ -53,10 +53,6 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('/control/delete', 'Admin\HRController@control_deletetime')->name('admin.hr-control.delete');
     Route::post('/control/confirmall', 'Admin\HRController@control_confirmall')->name('admin.hr-control.confirmall');
 
-    Route::get('/wages', 'Admin\HRController@wages')->name('admin.hr-wage');
-    Route::get('/wages_total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');
-    Route::get('/wages_advance', 'Admin\HRController@wages_advance')->name('admin.hr-wages-advance');
-
     Route::get('controlling', 'ControllingController@index')->name('controlling.index');
     Route::get('controlling/data', 'ControllingController@data');
     Route::get('payroll', 'PayrollController@index')->name('payroll.index');
@@ -65,15 +61,17 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::get('payroll-total', 'PayrollTotalController@index')->name('payrolltotal.index');
     Route::get('payroll-total/data', 'PayrollTotalController@data');
 
-    Route::resource('advances', 'AdvancesController', ['except' => ['show']]);
+    Route::resource('advances', 'AdvancesController', ['except' => ['show', 'update', 'destroy']]);
     Route::get('advances/all', 'AdvancesController@all');
+    Route::post('advances/update', 'AdvancesController@update')->name('advances.update');
+    Route::get('advances/{id}/delete', 'AdvancesController@destroy')->name('advances.delete');
 
-    Route::get('/projects', 'Admin\ProjectsController@index')->name('admin.projects');
-    Route::get('/projects/create', 'Admin\ProjectsController@create')->name('admin.projects.create');
-    Route::get('/projects/{id}/details', 'Admin\ProjectsController@show')->name('admin.projects.details');
-    Route::post('/projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');
-    Route::post('/projects/update', 'Admin\ProjectsController@update')->name('admin.projects.update');
-    Route::post('/projects/delete', 'Admin\ProjectsController@destroy')->name('admin.projects.destroy');
+    Route::get('projects', 'Admin\ProjectsController@index')->name('admin.projects');
+    Route::get('projects/create', 'Admin\ProjectsController@create')->name('admin.projects.create');
+    Route::get('projects/{id}/details', 'Admin\ProjectsController@show')->name('admin.projects.details');
+    Route::post('projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');
+    Route::post('projects/update', 'Admin\ProjectsController@update')->name('admin.projects.update');
+    Route::post('projects/delete', 'Admin\ProjectsController@destroy')->name('admin.projects.destroy');
 
     Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
     Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
