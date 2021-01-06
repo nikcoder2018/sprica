@@ -62,12 +62,21 @@ $(function() {
                     width: '80px',
                     orderable: false,
                     render: function(data, type, full, meta) {
+                        // return (
+                        //     `<div class="d-flex align-items-center col-actions">
+                        //       <a class="mr-1 btn-edit" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons['edit-2'].toSvg({ class: 'font-medium-2' })}</a>
+                        //       <a class="mr-1 btn-delete" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons['delete'].toSvg({ class: 'font-medium-2' })}</a>
+                        //     </div>
+                        //     `
+                        // );
                         return (
-                            `<div class="d-flex align-items-center col-actions">
-                              <a class="mr-1 btn-edit" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons['edit-2'].toSvg({ class: 'font-medium-2' })}</a>
-                              <a class="mr-1 btn-delete" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons['delete'].toSvg({ class: 'font-medium-2' })}</a>
-                            </div>
-                            `
+                            `<div class="btn-group">
+                                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="mr-1 dropdown-item btn-edit" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons['edit-2'].toSvg({ class: 'font-medium-2' })} Edit</a>
+                                    <a class="mr-1 dropdown-item btn-delete" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons['trash'].toSvg({ class: 'font-medium-2' })} Delete</a>
+                                </div>
+                            </div>`
                         );
                     }
                 }
