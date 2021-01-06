@@ -168,7 +168,6 @@ $(function() {
         });
     });
 
-
     $(new_advance_modal).on('submit', 'form', function(e) {
         e.preventDefault();
         var form = this;
