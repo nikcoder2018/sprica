@@ -88,7 +88,10 @@ $(function() {
                 {
                     targets: 6,
                     render: function(data, type, row) {
-                        return `<span>${row.break} Hours</span>`;
+                        if (row.break != null)
+                            return `<span>${row.break} Hours</span>`;
+                        else
+                            return '';
                     }
                 },
                 {
