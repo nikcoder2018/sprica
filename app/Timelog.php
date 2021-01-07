@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Timelog extends Model
 {
     protected $table = "timelogs";
-    protected $fillable = ['user_id', 'project_id','expenses_id', 'start_date', 'end_time', 'duration', 'break', 'confirmation', 'payable', 'code', 'tags','note'];
+    protected $fillable = ['user_id', 'project_id','expenses_id', 'start_date', 'start_time', 'end_date', 'end_time', 'duration', 'break', 'confirmation', 'payable', 'code', 'tags','note'];
 
-    protected $dates = ['start_date','end_date','created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at'];
     
     public function tags(){
         return $this->belongsToMany(Tag::class);
@@ -18,7 +18,7 @@ class Timelog extends Model
     public function users(){
         return $this->belongsToMany(User::class);
     }
-    
+
     function user(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }

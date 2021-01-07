@@ -16,14 +16,17 @@ $(function() {
         API_URL = '/timesheet/logs',
         URL = '/timesheet',
         API_TOKEN = $('[name=api-token]').attr('content'),
-        dateTimePickr = $('.flatpickr-date-time'),
-        timePickr = $('.flatpickr-time'),
+        startDatePickr = $('input[name=start_date]'),
+        startTimePickr = $('input[name=start_time]'),
+        endDatePickr = $('input[name=end_date]'),
+        endTimePickr = $('input[name=end_time]'),
         new_timelog_modal = '#new-timelog-modal',
         edit_timelog_modal = '#edit-timelog-modal';
 
     // datatable
     if (dtTimelogTable.length) {
         var dtTimelog = dtTimelogTable.DataTable({
+            responsive: {},
             processing: true,
             serverSide: true,
             ajax: {
@@ -37,9 +40,10 @@ $(function() {
             columns: [
                 // columns according to JSON
                 { data: 'id' },
-                { data: 'date' },
-                { data: 'begin' },
-                { data: 'end' },
+                { data: 'start_date' },
+                { data: 'start_time' },
+                { data: 'end_date' },
+                { data: 'end_time' },
                 { data: 'duration' },
                 { data: 'project' },
                 { data: '' }
@@ -51,7 +55,31 @@ $(function() {
                     targets: 0
                 },
                 {
+                    targets: 1,
+                    render: function(data, type, row) {
+                        return moment(row.start_date).format('MMMM D, Y');
+                    }
+                },
+                {
+                    targets: 2,
+                    render: function(data, type, row) {
+                        return moment(row.start_date + ' ' + row.start_time).format(moment.HTML5_FMT.TIME);
+                    }
+                },
+                {
                     targets: 4,
+                    render: function(data, type, row) {
+                        return moment(row.end_date + ' ' + row.end_time).format(moment.HTML5_FMT.TIME);
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function(data, type, row) {
+                        return moment(row.end_date).format('MMMM D, Y');
+                    }
+                },
+                {
+                    targets: 5,
                     render: function(data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     }
@@ -62,13 +90,6 @@ $(function() {
                     width: '80px',
                     orderable: false,
                     render: function(data, type, full, meta) {
-                        // return (
-                        //     `<div class="d-flex align-items-center col-actions">
-                        //       <a class="mr-1 btn-edit" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons['edit-2'].toSvg({ class: 'font-medium-2' })}</a>
-                        //       <a class="mr-1 btn-delete" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons['delete'].toSvg({ class: 'font-medium-2' })}</a>
-                        //     </div>
-                        //     `
-                        // );
                         return (
                             `<div class="btn-group">
                                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}</a>
@@ -116,7 +137,7 @@ $(function() {
                     display: $.fn.dataTable.Responsive.display.modal({
                         header: function(row) {
                             var data = row.data();
-                            return 'Details of ' + data.title;
+                            return 'Details of ' + data.project;
                         }
                     }),
                     type: 'column',
@@ -139,6 +160,7 @@ $(function() {
             drawCallback: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
             }
+
         });
     }
 
@@ -148,9 +170,13 @@ $(function() {
         $(edit_timelog_modal).modal('show');
 
         const timelog = await $.get('/timesheet/edit/' + id);
-        const end_time = moment(moment(timelog.date_start).format(moment.HTML5_FMT.DATE) + ' ' + timelog.end_time).format(moment.HTML5_FMT.TIME);
+        const end_time = moment(timelog.end_date + ' ' + timelog.end_time).format(moment.HTML5_FMT.TIME);
+        const start_time = moment(timelog.start_date + ' ' + timelog.start_time).format(moment.HTML5_FMT.TIME);
+
         form.find('input[name=id]').val(timelog.id);
-        form.find('input[name=start_date]').val(timelog.dateStart);
+        form.find('input[name=start_date]').val(timelog.start_date);
+        form.find('input[name=start_time]').val(start_time);
+        form.find('input[name=end_date]').val(timelog.end_date);
         form.find('input[name=end_time]').val(end_time);
         form.find('input[name=duration]').val(timelog.duration);
         form.find('input[name=break]').val(timelog.break);
@@ -168,7 +194,7 @@ $(function() {
         }
 
         $('.select2').trigger('change');
-        //form.find('select[name=project_id]').val(timelog.project_id);
+
     });
 
     $(dtTimelogTable).on('click', '.btn-delete', async function() {
@@ -198,6 +224,7 @@ $(function() {
             }
         });
     });
+
     $(new_timelog_modal).on('submit', 'form', function(e) {
         e.preventDefault();
         var form = this;
@@ -247,32 +274,42 @@ $(function() {
     });
 
 
-    // Date & TIme
-    if (dateTimePickr.length) {
-        dateTimePickr.flatpickr({
-            enableTime: true,
-            defaultHour: 7,
-            onChange: function(selectedDates, dateStr, instanc) {
+    if (startDatePickr.length) {
+        startDatePickr.flatpickr({
+            onChange: (selectedDates, dateStr, instanc) => {
                 if ($(new_timelog_modal).hasClass('show')) {
+                    var start_time = $(new_timelog_modal).find('input[name=start_time]').val();
                     var end_time = $(new_timelog_modal).find('input[name=end_time]').val();
-
+                    var end_date = $(new_timelog_modal).find('input[name=end_date]').val();
                     if (end_time == '') return;
 
-                    var start = moment(dateStr);
-                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + end_time);
+                    var start = moment(dateStr + ' ' + start_time);
+                    var end;
+                    if (typeof end_date != 'undefined') {
+                        end = moment(end_date + ' ' + end_time);
+                    } else {
+                        end = moment(dateStr + ' ' + end_time);
 
+                    }
                     var duration = moment.duration(end.diff(start));
 
                     var hours = duration.asHours();
                     $(new_timelog_modal).find('input[name=duration]').val(hours);
                 }
                 if ($(edit_timelog_modal).hasClass('show')) {
+                    var start_time = $(edit_timelog_modal).find('input[name=start_time]').val();
                     var end_time = $(edit_timelog_modal).find('input[name=end_time]').val();
+                    var end_date = $(edit_timelog_modal).find('input[name=end_date]').val();
 
                     if (end_time == '') return;
 
-                    var start = moment(dateStr);
-                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + end_time);
+                    var start = moment(dateStr + ' ' + start_time);
+                    var end;
+                    if (typeof end_date != 'undefined') {
+                        end = moment(end_date + ' ' + end_time);
+                    } else {
+                        end = moment(dateStr + ' ' + end_time);
+                    }
 
                     var duration = moment.duration(end.diff(start));
 
@@ -282,20 +319,28 @@ $(function() {
             }
         });
     }
-    var clickCount = 0,
-        time = 0;
-    if (timePickr.length) {
-        timePickr.flatpickr({
+    var startTimeClickCount = 0,
+        startTime = 0;
+    if (startTimePickr.length) {
+        startTimePickr.flatpickr({
             enableTime: true,
             noCalendar: true,
-            defaultHour: 22,
-            onChange: function(selectedDates, dateStr, instanc) {
-                clickCount++;
-                if (clickCount == 1) time = 22
-                else time = dateStr;
+            defaultHour: 7,
+            onChange: (selectedDates, timeStr, instance) => {
+                startTimeClickCount++;
+                if (startTimeClickCount == 1) startTime = 7
+                else startTime = timeStr;
                 if ($(new_timelog_modal).hasClass('show')) {
-                    var start = moment($(new_timelog_modal).find('input[name=start_date]').val());
-                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + time);
+                    var start_date = $(new_timelog_modal).find('input[name=start_date]').val();
+                    var end_time = $(new_timelog_modal).find('input[name=end_time]').val();
+
+                    var start = moment(start_date + ' ' + startTime);
+                    var end;
+                    if (typeof end_date != 'undefined') {
+                        end = moment(end_date + ' ' + end_time);
+                    } else {
+                        end = moment(start_date + ' ' + end_time);
+                    }
 
                     var duration = moment.duration(end.diff(start));
 
@@ -304,16 +349,116 @@ $(function() {
 
                 }
                 if ($(edit_timelog_modal).hasClass('show')) {
-                    var start = moment($(edit_timelog_modal).find('input[name=start_date]').val());
-                    var end = moment(moment(start).format(moment.HTML5_FMT.DATE) + ' ' + time);
+                    var start_date = $(edit_timelog_modal).find('input[name=start_date]').val();
+                    var end_time = $(edit_timelog_modal).find('input[name=end_time]').val();
 
+                    var start = moment(start_date + ' ' + startTime);
+                    var end;
+                    if (typeof end_date != 'undefined') {
+                        end = moment(end_date + ' ' + end_time);
+                    } else {
+                        end = moment(start_date + ' ' + end_time);
+                    }
                     var duration = moment.duration(end.diff(start));
 
                     var hours = duration.asHours();
                     $(edit_timelog_modal).find('input[name=duration]').val(hours);
 
                 }
+            }
+        });
+    }
 
+    if (endDatePickr.length) {
+        endDatePickr.flatpickr({
+            onChange: (selectedDates, dateStr, instanc) => {
+                if ($(new_timelog_modal).hasClass('show')) {
+                    var start_date = $(new_timelog_modal).find('input[name=start_date]').val();
+                    var start_time = $(new_timelog_modal).find('input[name=start_time]').val();
+                    var end_time = $(new_timelog_modal).find('input[name=end_time]').val();
+
+                    if (end_time == '') return;
+
+                    var start = moment(start_date + ' ' + start_time);
+                    var end = moment(dateStr + ' ' + end_time);
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(new_timelog_modal).find('input[name=duration]').val(hours);
+                }
+                if ($(edit_timelog_modal).hasClass('show')) {
+                    var start_date = $(edit_timelog_modal).find('input[name=start_date]').val();
+                    var start_time = $(edit_timelog_modal).find('input[name=start_time]').val();
+                    var end_time = $(edit_timelog_modal).find('input[name=end_time]').val();
+
+
+                    if (end_time == '') return;
+
+                    var start = moment(start_date + ' ' + start_time);
+                    var end = moment(dateStr + ' ' + end_time);
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(edit_timelog_modal).find('input[name=duration]').val(hours);
+                }
+            }
+        });
+    }
+    var endTimeClickCount = 0,
+        endTime = 0;
+    if (endTimePickr.length) {
+        endTimePickr.flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            defaultHour: 22,
+            onChange: (selectedDates, timeStr, instance) => {
+                endTimeClickCount++;
+                if (endTimeClickCount == 1) endTime = 22
+                else endTime = timeStr;
+                if ($(new_timelog_modal).hasClass('show')) {
+                    var start_date = $(new_timelog_modal).find('input[name=start_date]').val();
+                    var start_time = $(new_timelog_modal).find('input[name=start_time]').val();
+                    var end_date = $(new_timelog_modal).find('input[name=end_date]').val();
+
+                    var start = moment(start_date + ' ' + start_time);
+                    var end;
+                    if (typeof end_date != 'undefined') {
+                        end = moment(end_date + ' ' + endTime);
+                    } else {
+                        end = moment(start_date + ' ' + endTime);
+                    }
+
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(new_timelog_modal).find('input[name=duration]').val(hours);
+
+                }
+                if ($(edit_timelog_modal).hasClass('show')) {
+                    var start_date = $(edit_timelog_modal).find('input[name=start_date]').val();
+                    var start_time = $(edit_timelog_modal).find('input[name=start_time]').val();
+                    var end_date = $(edit_timelog_modal).find('input[name=end_date]').val();
+                    var end_time = $(edit_timelog_modal).find('input[name=end_time]').val();
+
+                    if (end_time != null) {
+                        endTime = end_time;
+                    }
+
+                    var start = moment(start_date + ' ' + start_time);
+                    var end;
+                    if (typeof end_date != 'undefined') {
+                        end = moment(end_date + ' ' + endTime);
+                    } else {
+                        end = moment(start_date + ' ' + endTime);
+                    }
+                    var duration = moment.duration(end.diff(start));
+
+                    var hours = duration.asHours();
+                    $(edit_timelog_modal).find('input[name=duration]').val(hours);
+
+                }
             }
         });
     }
