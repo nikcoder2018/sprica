@@ -45,6 +45,7 @@ $(function() {
                 { data: 'end_date' },
                 { data: 'end_time' },
                 { data: 'duration' },
+                { data: 'break' },
                 { data: 'project' },
                 { data: '' }
             ],
@@ -82,6 +83,12 @@ $(function() {
                     targets: 5,
                     render: function(data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
+                    }
+                },
+                {
+                    targets: 6,
+                    render: function(data, type, row) {
+                        return `<span>${row.break} Hours</span>`;
                     }
                 },
                 {

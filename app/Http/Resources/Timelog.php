@@ -21,6 +21,7 @@ class Timelog extends JsonResource
             'end_date' => $this->end_date,
             'end_time' => $this->end_time,
             'duration' => $this->duration,
+            'break' => $this->break,
             'project' => $this->project->title
         ];
     }

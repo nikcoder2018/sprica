@@ -40,6 +40,7 @@
                             <th>End Date</th>
                             <th>End Time</th>
                             <th>Duration</th>
+                            <th>Break</th>
                             <th>Project</th>
                             <th class="cell-fit">Actions</th>
                         </tr>
