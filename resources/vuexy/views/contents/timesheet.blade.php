@@ -75,11 +75,13 @@
                                     <label>Hours</label>
                                     <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label>End Time</label>
-                                    <input type="text" id="end-time" name="end_time" class="form-control flatpickr-time"
-                                        placeholder="HH:MM" />
-                                </div>
+                                @if (\App\GlobalSetting::get('timetracking-mode') !== 'Mode 2')
+                                    <div class="form-group col-md-4">
+                                        <label>End Time</label>
+                                        <input type="text" id="end-time" name="end_time" class="form-control flatpickr-time"
+                                            placeholder="HH:MM" />
+                                    </div>
+                                @endif
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-4">
                                         <label>End Date</label>
@@ -160,11 +162,13 @@
                                     <input type="number" id="hours-update" name="duration" class="form-control"
                                         step="0.01" />
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label>End Time</label>
-                                    <input type="text" id="end-time-update" name="end_time"
-                                        class="form-control flatpickr-time" placeholder="HH:MM" />
-                                </div>
+                                @if (\App\GlobalSetting::get('timetracking-mode') !== 'Mode 2')
+                                    <div class="form-group col-md-4">
+                                        <label>End Time</label>
+                                        <input type="text" id="end-time-update" name="end_time"
+                                            class="form-control flatpickr-time" placeholder="HH:MM" />
+                                    </div>
+                                @endif
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-4">
                                         <label>End Date</label>

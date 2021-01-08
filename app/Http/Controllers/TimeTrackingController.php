@@ -45,13 +45,20 @@ class TimeTrackingController extends Controller
         $timelog = Timelog::create([
             'user_id' => auth()->user()->id,
             'start_date' => $request->start_date,
-            'end_time' => $request->end_time,
             'duration' => $request->duration,
             'break' => $request->break,
             'project_id' => $request->project_id,
             'expenses_id' => $request->expenses_id,
             'note' => $request->note
         ]);
+
+        if ($request->has('end_time')) {
+            $timelog->end_time = $request->input('end_time');
+        }
+
+        if ($request->has('end_date')) {
+            $timelog->end_date = $request->end_date;
+        }
 
         $timelog->tags()->sync($request->input('tags', []));
 
@@ -62,12 +69,16 @@ class TimeTrackingController extends Controller
     {
         $timelog = Timelog::find($request->id);
         $timelog->start_date = $request->start_date;
-        $timelog->end_time = $request->end_time;
         $timelog->duration = $request->duration;
         $timelog->break = $request->break;
         $timelog->project_id = $request->project_id;
         $timelog->expenses_id = $request->expenses_id;
         $timelog->note = $request->note;
+
+        if ($request->has('end_time')) {
+            $timelog->end_time = $request->input('end_time');
+        }
+
         if ($request->has('end_date')) {
             $timelog->end_date = $request->end_date;
         }
