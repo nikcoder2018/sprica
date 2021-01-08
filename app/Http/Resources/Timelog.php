@@ -16,10 +16,12 @@ class Timelog extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->start_date->format('M d, Y'),
-            'begin' => $this->start_date->format('h:i A'),
-            'end' => date('h:i A',strtotime($this->end_time)),
+            'start_date' => $this->start_date,
+            'start_time' => $this->start_time,
+            'end_date' => $this->end_date,
+            'end_time' => $this->end_time,
             'duration' => $this->duration,
+            'break' => $this->break,
             'project' => $this->project->title
         ];
     }

@@ -24,3 +24,4 @@ Route::get('/projects/calendar/events', 'Admin\ProjectsController@calendar_event
 Route::get('/users/all', 'UsersController@all');
 Route::get('/permissions/all', 'PermissionsController@all');
 Route::get('/roles/all', 'RolesController@all');
+Route::get('/projects/all', 'ProjectsController@all');

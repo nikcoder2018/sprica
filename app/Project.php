@@ -9,23 +9,33 @@ class Project extends Model
     //
     protected $table = 'projects';
     protected $fillable = ['client_id', 'title', 'number', 'description', 'category_id', 'department_id', 'budget', 'spent', 'start_date', 'deadline', 'status', 'vacation', 'default'];
+    protected $appends = ['hours'];
 
-    // function members(){
-    //     return $this->hasMany(ProjectMember::class, 'project_id', 'ProjeID')->with('member_detail');
-    // }
-    // function tasks(){
-    //     return $this->hasMany(Task::class, 'project_id', 'ProjeID')->with('assigned');
-    // }
+    function members(){
+        return $this->belongsToMany(User::class);
+    }
 
-    // function tasks_completed(){
-    //     return $this->hasMany(Task::class, 'project_id', 'ProjeID')->where('status','completed'); 
-    // }
+    function tasks(){
+        return $this->hasMany(Task::class, 'project_id', 'id')->with('assigned');
+    }
 
-    // function timelogs(){
-    //     return $this->hasMany(Watches::class, 'ProjeID', 'ProjeID')->with('user');
-    // }
+    function tasks_completed(){
+        return $this->hasMany(Task::class, 'project_id', 'id')->where('status','completed'); 
+    }
 
-    // function activities(){
-    //     return $this->hasMany(ProjectActivity::class, 'project_id', 'ProjeID')->with('user');
-    // }
+    function timelogs(){
+        return $this->hasMany(Timelog::class, 'project_id', 'id');
+    }
+
+    function client(){
+        return $this->belongsTo(Client::class);
+    }
+
+    function getHoursAttribute(){
+        return $this->timelogs()->sum('duration');
+    }
+
+    function activities(){
+        return $this->hasMany(ProjectActivity::class, 'project_id', 'id')->with('user');
+    }
 }

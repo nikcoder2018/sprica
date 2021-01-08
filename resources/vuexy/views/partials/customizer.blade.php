@@ -430,6 +430,7 @@
 
         const sync = (done) => {
             $.get("{{ route('user.settings.index') }}", data => {
+                console.log(data);
                 data.forEach(({
                     key,
                     value

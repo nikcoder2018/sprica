@@ -74,7 +74,8 @@ class AdvancesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $advance = Advance::find($id);
+        return response()->json($advance);
     }
 
     /**
@@ -84,9 +85,17 @@ class AdvancesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $advance = Advance::find($request->id);
+        $advance->received_at = $request->received_at;
+        $advance->debit_at = $request->debit_at;
+        $advance->amount = $request->amount;
+        $advance->paid_by = $request->paid_by;
+        $advance->save();
+
+        if($advance)
+            return response()->json(array('success' => true, 'msg' => 'Updated Successful'));
     }
 
     /**
@@ -97,6 +106,9 @@ class AdvancesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = Advance::find($id);
+        $delete->delete();
+        if($delete)
+            return response()->json(array('success' => true, 'msg' => 'Delete Successful'));
     }
 }

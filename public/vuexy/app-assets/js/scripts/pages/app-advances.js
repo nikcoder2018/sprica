@@ -53,11 +53,13 @@ $(function() {
                     orderable: false,
                     render: function(data, type, full, meta) {
                         return (
-                            `<div class="d-flex align-items-center col-actions">
-                              <a class="mr-1 btn-edit" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons['edit-2'].toSvg({ class: 'font-medium-2' })}</a>
-                              <a class="mr-1 btn-delete" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons['delete'].toSvg({ class: 'font-medium-2' })}</a>
-                            </div>
-                            `
+                            `<div class="btn-group">
+                                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}</a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="mr-1 dropdown-item btn-edit" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons['edit-2'].toSvg({ class: 'font-medium-2' })} Edit</a>
+                                    <a class="mr-1 dropdown-item btn-delete" href="javascript:void(0);" data-id="${full.id}" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons['trash'].toSvg({ class: 'font-medium-2' })} Delete</a>
+                                </div>
+                            </div>`
                         );
                     }
                 }
@@ -123,6 +125,49 @@ $(function() {
         });
     }
 
+    dtAdvanceTable.on('click', '.btn-edit', async function() {
+        const id = $(this).data('id');
+        const advance = await $.get('/advances/' + id + '/edit');
+        let form = $(edit_advance_modal).find('form');
+        form.find('input[name=id]').val(advance.id);
+        form.find('select[name=user_id]').val(advance.user_id);
+        form.find('input[name=received_at]').val(advance.received_at);
+        form.find('input[name=debit_at]').val(advance.debit_at);
+        form.find('input[name=amount]').val(advance.amount);
+        form.find('select[name=paid_by]').val(advance.paid_by);
+
+        form.find('select[name=user_id]').trigger('change');
+        $(edit_advance_modal).modal('show');
+    });
+
+    dtAdvanceTable.on('click', '.btn-delete', async function() {
+        let id = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-danger ml-1'
+            },
+            buttonsStyling: false
+        }).then(async function(result) {
+            if (result.isConfirmed) {
+                const deleteData = await $.get(`/advances/${id}/delete`);
+                if (deleteData.success) {
+                    toastr['success'](deleteData.msg, 'Deleted!', {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl
+                    });
+                    dtAdvance.ajax.reload();
+                }
+            }
+        });
+    });
+
     $(new_advance_modal).on('submit', 'form', function(e) {
         e.preventDefault();
         var form = this;
@@ -133,6 +178,29 @@ $(function() {
             success: function(resp) {
                 if (resp.success) {
                     $(new_advance_modal).modal('hide');
+                    $(form)[0].reset();
+
+                    toastr['success'](resp.msg, 'Success!', {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl
+                    });
+
+                    dtAdvance.ajax.reload();
+                }
+            }
+        });
+    });
+    $(edit_advance_modal).on('submit', 'form', function(e) {
+        e.preventDefault();
+        var form = this;
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(resp) {
+                if (resp.success) {
+                    $(edit_advance_modal).modal('hide');
                     $(form)[0].reset();
 
                     toastr['success'](resp.msg, 'Success!', {

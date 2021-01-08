@@ -20,7 +20,6 @@
 @section('stylesheets')
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/pages/app-permissions-list.css') }}">
-
 @endsection
 
 @section('header')
@@ -36,10 +35,12 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Date</th>
-                            <th>Begin</th>
-                            <th>End</th>
+                            <th>Start Date</th>
+                            <th>Start Time</th>
+                            <th>End Date</th>
+                            <th>End Time</th>
                             <th>Duration</th>
+                            <th>Break</th>
                             <th>Project</th>
                             <th class="cell-fit">Actions</th>
                         </tr>
@@ -66,12 +67,13 @@
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
                                     <label>Start Date</label>
-                                    <input type="text" name="start_date" id="date" class="form-control flatpickr-date-time"
-                                        placeholder="YYYY-MM-DD HH:MM" />
+                                    <input type="text" name="start_date" id="start_date" class="form-control"
+                                        placeholder="YYYY-MM-DD" />
                                 </div>
                                 <div class="form-group col-md-2">
+<<<<<<< HEAD
                                     <label>Hours</label>
                                     <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
                                 </div>
@@ -82,17 +84,33 @@
                                             placeholder="HH:MM" />
                                     </div>
                                 @endif
+=======
+                                    <label>Start Time</label>
+                                    <input type="text" name="start_time" id="start_time" class="form-control"
+                                        placeholder="YYYY-MM-DD" />
+                                </div>
+>>>>>>> 799c4d9d9f747838149377d086b9c54958ed6d0a
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-2">
                                         <label>End Date</label>
-                                        <input type="text" id="end-date" name="end_date" class="form-control flatpickr-date"
+                                        <input type="text" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
                                 @endif
+                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
+                                    <label>End Time</label>
+                                    <input type="text" id="end_time" name="end_time" class="form-control"
+                                        placeholder="HH:MM" />
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Hours</label>
+                                    <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
+                                </div>
                                 <div class="form-group col-md-2">
                                     <label>Break</label>
                                     <input type="number" id="break" name="break" class="form-control" step="0.01" />
                                 </div>
+                                
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -152,33 +170,35 @@
                         <input type="hidden" name="id">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
                                     <label>Start Date</label>
-                                    <input type="text" name="start_date" class="form-control flatpickr-date-time"
-                                        placeholder="YYYY-MM-DD HH:MM" />
+                                    <input type="text" name="start_date" id="start_date" class="form-control"
+                                        placeholder="YYYY-MM-DD" />
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label>Hours</label>
-                                    <input type="number" id="hours-update" name="duration" class="form-control"
-                                        step="0.01" />
+                                    <label>Start Time</label>
+                                    <input type="text" name="start_time" id="start_time" class="form-control"
+                                        placeholder="YYYY-MM-DD" />
                                 </div>
-                                @if (\App\GlobalSetting::get('timetracking-mode') !== 'Mode 2')
-                                    <div class="form-group col-md-4">
-                                        <label>End Time</label>
-                                        <input type="text" id="end-time-update" name="end_time"
-                                            class="form-control flatpickr-time" placeholder="HH:MM" />
-                                    </div>
-                                @endif
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-2">
                                         <label>End Date</label>
-                                        <input type="text" id="end-date" name="end_date" class="form-control flatpickr-date"
+                                        <input type="text" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
                                 @endif
+                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
+                                    <label>End Time</label>
+                                    <input type="text" id="end_time" name="end_time" class="form-control"
+                                        placeholder="HH:MM" />
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label>Hours</label>
+                                    <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
+                                </div>
                                 <div class="form-group col-md-2">
                                     <label>Break</label>
-                                    <input type="number" id="break-update" name="break" class="form-control" step="0.01" />
+                                    <input type="number" id="break" name="break" class="form-control" step="0.01" />
                                 </div>
                             </div>
                             <div class="row">
