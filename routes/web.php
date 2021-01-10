@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -190,5 +191,6 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
 
     Route::prefix('/finance')->group(function () {
         Route::get('/expenses', 'ExpenseController@view')->name('finance.expenses.index');
+        Route::get('/invoices', 'InvoiceController@view')->name('finance.invoices.index');
     });
 });

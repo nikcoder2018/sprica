@@ -27,3 +27,4 @@ Route::get('/roles/all', 'RolesController@all');
 Route::get('/projects/all', 'ProjectsController@all');
 
 Route::apiResource('/finance/expenses', 'ExpenseController');
+Route::apiResource('/finance/invoices', 'InvoiceController');

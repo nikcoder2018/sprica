@@ -154,7 +154,7 @@
                         </a>
                     </li>
                     <li class="{{ Request::segment(2) === 'invoices' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="">
+                        <a class="d-flex align-items-center" href="{{ route('finance.invoices.index') }}">
                             <i data-feather="circle"></i><span class="menu-item">Invoices</span>
                         </a>
                     </li>
