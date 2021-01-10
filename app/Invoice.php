@@ -17,7 +17,7 @@ class Invoice extends Model
 
     protected static function booted()
     {
-        static::creating(function ($invoice) {
+        static::saving(function ($invoice) {
             $invoice->items = collect($invoice->items)->map(function ($item) {
                 $item->cost = (float)$item->cost;
                 $item->quantity = (float)$item->quantity;
