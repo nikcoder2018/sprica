@@ -187,4 +187,8 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::get('/global-settings', 'GlobalSettingController@index')->name('global-settings.index');
     Route::get('/global-settings/get', 'GlobalSettingController@get')->name('global-settings.get');
     Route::post('/global-settings/set', 'GlobalSettingController@set')->name('global-settings.set');
+
+    Route::prefix('/finance')->group(function () {
+        Route::get('/expenses', 'ExpenseController@view')->name('finance.expenses.index');
+    });
 });

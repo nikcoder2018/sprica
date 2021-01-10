@@ -73,23 +73,10 @@
                                         placeholder="YYYY-MM-DD" />
                                 </div>
                                 <div class="form-group col-md-2">
-<<<<<<< HEAD
-                                    <label>Hours</label>
-                                    <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
-                                </div>
-                                @if (\App\GlobalSetting::get('timetracking-mode') !== 'Mode 2')
-                                    <div class="form-group col-md-4">
-                                        <label>End Time</label>
-                                        <input type="text" id="end-time" name="end_time" class="form-control flatpickr-time"
-                                            placeholder="HH:MM" />
-                                    </div>
-                                @endif
-=======
                                     <label>Start Time</label>
                                     <input type="text" name="start_time" id="start_time" class="form-control"
                                         placeholder="YYYY-MM-DD" />
                                 </div>
->>>>>>> 799c4d9d9f747838149377d086b9c54958ed6d0a
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-2">
                                         <label>End Date</label>
@@ -270,8 +257,7 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/polyfill.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/forms/select/select2.full.min.js') }}">
     </script>
-    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}">
-    </script>
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
 @endsection
 
 @section('scripts')

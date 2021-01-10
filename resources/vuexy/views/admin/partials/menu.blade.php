@@ -158,21 +158,23 @@
                             <i data-feather="circle"></i><span class="menu-item">Invoices</span>
                         </a>
                     </li>
-                    <li class="{{ Request::segment(2) === 'payments' ? 'active' : null }}">
+                    {{-- <li
+                        class="{{ Request::segment(2) === 'payments' ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="">
                             <i data-feather="circle"></i><span class="menu-item">Payments</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="{{ Request::segment(2) === 'expenses' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="">
+                        <a class="d-flex align-items-center" href="{{ route('finance.expenses.index') }}">
                             <i data-feather="circle"></i><span class="menu-item">Expenses</span>
                         </a>
                     </li>
-                    <li class="{{ Request::segment(2) === 'credit_note' ? 'active' : null }}">
+                    {{-- <li
+                        class="{{ Request::segment(2) === 'credit_note' ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="">
                             <i data-feather="circle"></i><span class="menu-item">Credit Note</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             <li class="nav-item {{ Request::segment(1) === 'documents' ? 'active' : null }}">

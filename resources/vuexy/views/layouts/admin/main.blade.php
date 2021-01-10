@@ -125,6 +125,9 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/core/app.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/customizer.js') }}"></script>
     <!-- END: Theme JS-->
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"></script>
+    <script>dayjs.extend(dayjs_plugin_relativeTime)</script>
 
     @yield('external_js')
 

@@ -25,3 +25,5 @@ Route::get('/users/all', 'UsersController@all');
 Route::get('/permissions/all', 'PermissionsController@all');
 Route::get('/roles/all', 'RolesController@all');
 Route::get('/projects/all', 'ProjectsController@all');
+
+Route::apiResource('/finance/expenses', 'ExpenseController');
