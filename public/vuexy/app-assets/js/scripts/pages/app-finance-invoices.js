@@ -98,6 +98,28 @@ $(() => {
                         form.attr("action", "/api/finance/invoices");
                         form.attr("method", "POST");
                         modal.find(".modal-title").text("Add Invoice");
+                        $("#invoice-form-items").html(`
+                        <div class="invoice-form-item">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-danger btn-sm invoice-form-item-remove-button">Remove Item</button>
+                            </div>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" name="items[0][name]" placeholder="Name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="items[0][description]" placeholder="Description" class="form-control" cols="30" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Cost</label>
+                                <input type="number" name="items[0][cost]" placeholder="Cost" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" name="items[0][quantity]" placeholder="Quantity" class="form-control">
+                            </div>
+                        </div>`);
                         modal.find("form")[0].reset();
                         modal.modal("show");
                     },
