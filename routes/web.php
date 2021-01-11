@@ -192,5 +192,6 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::prefix('/finance')->group(function () {
         Route::get('/expenses', 'ExpenseController@view')->name('finance.expenses.index');
         Route::get('/invoices', 'InvoiceController@view')->name('finance.invoices.index');
+        Route::get('/estimates', 'EstimateController@view')->name('finance.estimates.index');
     });
 });

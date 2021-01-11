@@ -28,3 +28,4 @@ Route::get('/projects/all', 'ProjectsController@all');
 
 Route::apiResource('/finance/expenses', 'ExpenseController');
 Route::apiResource('/finance/invoices', 'InvoiceController');
+Route::apiResource('/finance/estimates', 'EstimateController');

@@ -149,7 +149,7 @@
                     <i data-feather="dollar-sign"></i><span class="menu-title text-truncate">Finance</span></a>
                 <ul class="menu-content">
                     <li class="{{ Request::segment(2) === 'estimates' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="">
+                        <a class="d-flex align-items-center" href="{{ route('finance.estimates.index') }}">
                             <i data-feather="circle"></i><span class="menu-item">Estimates</span>
                         </a>
                     </li>
