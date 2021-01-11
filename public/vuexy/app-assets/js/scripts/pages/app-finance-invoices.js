@@ -204,7 +204,7 @@ $(() => {
         try {
             const form = $(this);
             const url = form.attr("action");
-            const data = new FormData(this);
+            const data = $(this).serialize();
             const method = form.attr("method").toLowerCase();
 
             await axios[method](url, data);
@@ -306,6 +306,44 @@ $(() => {
         item.fadeOut({
             complete: () => item.remove(),
         });
+    });
+
+    $(".btn-print").on("click", async function () {
+        const html = viewModal.find(".card").html();
+        const printWindow = window.open("", "PRINT");
+
+        const promises = [];
+
+        document.querySelectorAll("link").forEach((link) => {
+            if (link.href.includes(".css")) {
+                promises.push(axios.get(link.href));
+            }
+        });
+
+        const css = await Promise.all(promises);
+
+        printWindow.document.write(`<html><head><title>Invoice</title>`);
+        printWindow.document.write(
+            css
+                .map((css) => {
+                    return `<style>${css.data}</style>`;
+                })
+                .join("")
+        );
+
+        const card = document.createElement("div");
+
+        card.classList.add("card");
+        card.innerHTML = html;
+
+        printWindow.document.write("</head><body>");
+        printWindow.document.write(card.outerHTML);
+        printWindow.document.write("</body></html>");
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     });
 
     table.on("click", ".btn-view", async function (e) {
