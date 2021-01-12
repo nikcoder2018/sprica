@@ -16,7 +16,7 @@ class EstimateController extends Controller
 
     public function generate()
     {
-        $i = Estimate::count();
+        $i = Estimate::count() + 1;
         return "#{$i}";
     }
 
