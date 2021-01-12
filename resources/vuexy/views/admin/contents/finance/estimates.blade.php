@@ -63,7 +63,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="estimate_number">Estimate Number</label>
-                            <input type="text" name="estimate_number" id="estimate_number" placeholder="Estimate Number" class="form-control">
+                            <input type="text" name="estimate_number" id="estimate_number" readonly placeholder="Estimate Number" class="form-control disabled">
                         </div>
                         <div class="form-group">
                             <label for="valid_until">Valid Until</label>
@@ -81,22 +81,31 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" name="items[0][name]" placeholder="Name" class="form-control">
+                                        <input type="text" name="items[0][name]" placeholder="Name" class="form-control form-name">
                                     </div>
                                     <div class="form-group">
                                         <label>Description</label>
-                                        <textarea name="items[0][description]" placeholder="Description" class="form-control" cols="30" rows="3"></textarea>
+                                        <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label>Cost</label>
-                                        <input type="number" name="items[0][cost]" placeholder="Cost" class="form-control">
+                                        <input type="number" name="items[0][cost]" placeholder="Cost" class="form-control form-cost">
                                     </div>
                                     <div class="form-group">
                                         <label>Quantity</label>
-                                        <input type="number" name="items[0][quantity]" placeholder="Quantity" class="form-control">
+                                        <input type="number" name="items[0][quantity]" placeholder="Quantity" class="form-control form-quantity">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Amount</label>
+                                        <input type="text" name="items[0][amount]" placeholder="Amount" disabled class="form-control form-amount disabled" value="$ 0">
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label for="total">Total</label>
+                            <input type="text" name="total" id="total" disabled placeholder="Total" class="disabled form-control form-total" value="$ 0">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -193,6 +202,5 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js') }}"></script>
-    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js//scripts/pages/app-finance-estimates.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/pages/app-finance-estimates.js') }}"></script>
 @endsection
