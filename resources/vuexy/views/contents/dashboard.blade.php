@@ -217,7 +217,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/toolbox.svg" alt="Toolbar svg" />
+                                                    <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/toolbox.svg') }}" alt="Toolbar svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -255,7 +255,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/parachute.svg" alt="Parachute svg" />
+                                                    <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/parachute.svg') }}" alt="Parachute svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -293,7 +293,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/brush.svg" alt="Brush svg" />
+                                                    <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/brush.svg') }}" alt="Brush svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -331,7 +331,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/star.svg" alt="Star svg" />
+                                                    <img src=".{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/star.svg') }}" alt="Star svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -369,7 +369,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/book.svg" alt="Book svg" />
+                                                    <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/book.svg') }}" alt="Book svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -407,7 +407,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/rocket.svg" alt="Rocket svg" />
+                                                    <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/rocket.svg') }}" alt="Rocket svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -445,7 +445,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="avatar rounded">
                                                 <div class="avatar-content">
-                                                    <img src="../../../app-assets/images/icons/speaker.svg" alt="Speaker svg" />
+                                                    <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/speaker.svg') }}" alt="Speaker svg" />
                                                 </div>
                                             </div>
                                             <div>
@@ -506,7 +506,7 @@
                 <div class="card-body">
                     <div class="browser-states">
                         <div class="media">
-                            <img src="../../../app-assets/images/icons/google-chrome.png" class="rounded mr-1" height="30" alt="Google Chrome" />
+                            <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/google-chrome.png') }}" class="rounded mr-1" height="30" alt="Google Chrome" />
                             <h6 class="align-self-center mb-0">Google Chrome</h6>
                         </div>
                         <div class="d-flex align-items-center">
@@ -516,7 +516,7 @@
                     </div>
                     <div class="browser-states">
                         <div class="media">
-                            <img src="../../../app-assets/images/icons/mozila-firefox.png" class="rounded mr-1" height="30" alt="Mozila Firefox" />
+                            <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/mozila-firefox.png') }}" class="rounded mr-1" height="30" alt="Mozila Firefox" />
                             <h6 class="align-self-center mb-0">Mozila Firefox</h6>
                         </div>
                         <div class="d-flex align-items-center">
@@ -526,7 +526,7 @@
                     </div>
                     <div class="browser-states">
                         <div class="media">
-                            <img src="../../../app-assets/images/icons/apple-safari.png" class="rounded mr-1" height="30" alt="Apple Safari" />
+                            <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/apple-safari.png') }}" class="rounded mr-1" height="30" alt="Apple Safari" />
                             <h6 class="align-self-center mb-0">Apple Safari</h6>
                         </div>
                         <div class="d-flex align-items-center">
@@ -536,7 +536,7 @@
                     </div>
                     <div class="browser-states">
                         <div class="media">
-                            <img src="../../../app-assets/images/icons/internet-explorer.png" class="rounded mr-1" height="30" alt="Internet Explorer" />
+                            <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/internet-explorer.png') }}" class="rounded mr-1" height="30" alt="Internet Explorer" />
                             <h6 class="align-self-center mb-0">Internet Explorer</h6>
                         </div>
                         <div class="d-flex align-items-center">
@@ -546,7 +546,7 @@
                     </div>
                     <div class="browser-states">
                         <div class="media">
-                            <img src="../../../app-assets/images/icons/opera.png" class="rounded mr-1" height="30" alt="Opera Mini" />
+                            <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/icons/opera.png') }}" class="rounded mr-1" height="30" alt="Opera Mini" />
                             <h6 class="align-self-center mb-0">Opera Mini</h6>
                         </div>
                         <div class="d-flex align-items-center">

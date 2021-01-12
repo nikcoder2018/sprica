@@ -48,6 +48,9 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::resource('documents', 'DocumentsController');
 
     Route::get('/control', 'Admin\HRController@control')->name('admin.hr-control');
+    Route::get('/control/wage', 'Admin\HRController@wages')->name('admin.hr-wage');
+    Route::get('/control/wage/total', 'Admin\HRController@wages_total')->name('admin.hr-wages-total');
+    Route::post('/control/wage/advance', 'Admin\HRController@wages_advance_store')->name('admin.hr-wages-advance');
     Route::post('/control/add', 'Admin\HRController@control_addtime')->name('admin.hr-control.add');
     Route::post('/control/edit', 'Admin\HRController@control_edittime')->name('admin.hr-control.edit');
     Route::post('/control/update', 'Admin\HRController@control_updatetime')->name('admin.hr-control.update');
