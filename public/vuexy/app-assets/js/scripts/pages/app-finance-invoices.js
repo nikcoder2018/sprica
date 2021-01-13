@@ -1,6 +1,10 @@
 $(() => {
     $("#date_of_issue").flatpickr({
-        enableTime: true,
+        enableTime: false,
+    });
+
+    $("#due_date").flatpickr({
+        enableTime: false,
     });
 
     const table = $("#invoices-table");
@@ -13,11 +17,12 @@ $(() => {
             columns: [
                 // columns according to JSON
                 { data: "id" },
-                { data: "name" },
-                { data: "email" },
+                { data: "project" },
                 { data: "address" },
                 { data: "invoice_number" },
                 { data: "date_of_issue" },
+                { data: "date_due" },
+                { data: "status" },
                 { data: "total" },
                 { data: "" },
             ],
@@ -29,6 +34,18 @@ $(() => {
                     targets: 0,
                 },
                 {
+                    targets: 1,
+                    render: function (data, type, row, meta) {
+                        return data.title;
+                    },
+                },
+                {
+                    targets: 4,
+                    render: function (data, type, row, meta) {
+                        return dayjs(data).format("MMMM DD, YYYY");
+                    },
+                },
+                {
                     targets: 5,
                     render: function (data, type, row, meta) {
                         return dayjs(data).format("MMMM DD, YYYY");
@@ -36,6 +53,17 @@ $(() => {
                 },
                 {
                     targets: 6,
+                    render: function (data, type, row, meta) {
+                        const badges = {
+                            Unpaid: "danger",
+                            Paid: "success",
+                            "Partially Paid": "warning",
+                        };
+                        return `<span class="badge badge-${badges[data]}">${data}</span>`;
+                    },
+                },
+                {
+                    targets: 7,
                     render: function (data, type, row, meta) {
                         return `$ ${data}`;
                     },
@@ -92,7 +120,7 @@ $(() => {
                 {
                     text: "Add Invoice",
                     className: "btn btn-primary btn-add-record ml-2",
-                    action: function (e, dt, button, config) {
+                    action: async function (e, dt, button, config) {
                         const modal = $("#add-invoice-modal");
                         const form = $("#add-invoice-form");
                         form.attr("action", "/api/finance/invoices");
@@ -121,6 +149,22 @@ $(() => {
                             </div>
                         </div>`);
                         modal.find("form")[0].reset();
+                        const invoiceNumberInput = form.find("#invoice_number");
+                        try {
+                            const { data } = await axios.get(
+                                "/api/finance/invoices/generate"
+                            );
+                            invoiceNumberInput.val(data);
+                            invoiceNumberInput.attr("readonly", true);
+                            invoiceNumberInput.addClass("disabled");
+                        } catch (_) {
+                            toastr.info(
+                                "Unable to generate Invoice Number.",
+                                "Notice"
+                            );
+                            invoiceNumberInput.attr("readonly", false);
+                            invoiceNumberInput.removeClass("disabled");
+                        }
                         modal.modal("show");
                     },
                 },
@@ -165,12 +209,13 @@ $(() => {
     const form = $("#add-invoice-form");
 
     viewModal.on("hidden.bs.modal", () => {
-        viewModal.find("#view-invoice-name").html("");
-        viewModal.find("#view-invoice-email").html("");
+        viewModal.find("#view-invoice-project").html("");
         viewModal.find("#view-invoice-address").html("");
         viewModal.find("#view-invoice-number").html("");
         viewModal.find("#view-invoice-date-of-issue").html("");
+        viewModal.find("#view-invoice-due-date").html("");
         viewModal.find("#view-invoice-items").html("");
+        viewModal.find("#view-invoice-status").html("");
         viewModal.find("#view-invoice-total").html("");
     });
 
@@ -352,15 +397,22 @@ $(() => {
             const button = $(this);
             const id = button.attr("data-id");
             const { data } = await axios.get(`/api/finance/invoices/${id}`);
-            $("#view-invoice-name").html(data.name);
-            $("#view-invoice-email").html(data.email);
+            $("#view-invoice-project").html(data.project.title);
             $("#view-invoice-address").html(data.address);
             const number = document.createElement("b");
             number.innerHTML = data.invoice_number;
             $("#view-invoice-number").html(`Invoice Number: `);
             $("#view-invoice-number").append(number);
+            $("#view-invoice-status").html(`Status: <b>${data.status}</b>`);
             $("#view-invoice-date-of-issue").html(
-                dayjs(data.date_of_issue).format("MMMM D, YYYY")
+                `Invoice Date: <b>${dayjs(data.date_of_issue).format(
+                    "MMMM D, YYYY"
+                )}</b>`
+            );
+            $("#view-invoice-due-date").html(
+                `Due Date: <b>${dayjs(data.due_date).format(
+                    "MMMM D, YYYY"
+                )}</b>`
             );
             viewModal.modal("show");
             const tbody = $("#view-invoice-items");
@@ -404,13 +456,17 @@ $(() => {
             const id = button.attr("data-id");
             const { data } = await axios.get(`/api/finance/invoices/${id}`);
 
-            form.find("#name").val(data.name);
-            form.find("#email").val(data.email);
+            form.find("#project_id").val(data.project_id);
             form.find("#address").val(data.address);
             form.find("#invoice_number").val(data.invoice_number);
+            form.find("#status").val(data.status);
             $("#date_of_issue").flatpickr({
                 defaultDate: dayjs(data.date_of_issue).toDate(),
-                enableTime: true,
+                enableTime: false,
+            });
+            $("#due_date").flatpickr({
+                defaultDate: dayjs(data.due_date).toDate(),
+                enableTime: false,
             });
 
             form.attr("action", `/api/finance/invoices/${id}`);

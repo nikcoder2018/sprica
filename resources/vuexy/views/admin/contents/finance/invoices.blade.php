@@ -36,11 +36,12 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Address</th>
+                            <th>Project</th>
+                            <th>Shipping Address</th>
                             <th>Invoice Number</th>
-                            <th>Date of Issue</th>
+                            <th>Invoice Date</th>
+                            <th>Date Due</th>
+                            <th>Status</th>
                             <th>Total</th>
                             <th class="cell-fit">Actions</th>
                         </tr>
@@ -65,24 +66,38 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" placeholder="Name" class="form-control">
+                            <label for="project_id">Project</label>
+                            <select name="project_id" id="project_id" class="form-control">
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}">
+                                        {{ $project->title }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" placeholder="Email" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <input type="text" name="address" id="address" placeholder="Address" class="form-control">
+                            <label for="address">Shipping Address</label>
+                            <input type="text" name="address" id="address" placeholder="Shipping Address" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="invoice_number">Invoice Number</label>
-                            <input type="text" name="invoice_number" id="invoice_number" placeholder="Invoice Number" class="form-control">
+                            <input type="text" name="invoice_number" id="invoice_number" placeholder="Invoice Number" readonly class="form-control disabled">
                         </div>
                         <div class="form-group">
-                            <label for="date_of_issue">Date of Issue</label>
+                            <label for="date_of_issue">Invoice Date</label>
                             <input type="text" name="date_of_issue" id="date_of_issue" placeholder="Date of Issue" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="due_date">Due Date</label>
+                            <input type="text" name="due_date" id="due_date" placeholder="Due Date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">State</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="Paid">Paid</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Partially Paid">Partially Paid</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="items">Items</label>
@@ -135,12 +150,12 @@
                     <div class="card">
                         <div class="card-header">
                             <div id="view-invoice-header">
-                                <h4 id="view-invoice-name" class="card-title d-block"></h4>
-                                <p class="card-text d-block" id="view-invoice-email"></p>
+                                <p class="card-text d-block" id="view-invoice-project"></p>
                                 <p class="card-text d-block" id="view-invoice-address"></p>
                                 <p class="card-text d-block" id="view-invoice-date-of-issue"></p>
-                                <p id="view-invoice-number" class="card-text"></p>
-                                <p class="card-text d-block" id="view-invoice-date-of-issue"></p>
+                                <p class="card-text d-block" id="view-invoice-number"></p>
+                                <p class="card-text d-block" id="view-invoice-due-date"></p>
+                                <p class="card-text d-block" id="view-invoice-status"></p>
                             </div>
                         </div>
                         <div class="table-responsive">

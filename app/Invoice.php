@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    protected $fillable = ['name', 'email', 'address', 'invoice_number', 'date_of_issue', 'items'];
+    protected $fillable = ['project_id', 'address', 'invoice_number', 'date_of_issue', 'items', 'due_date', 'status'];
     protected $casts = [
         'items' => JSON::class,
+        'due_date' => 'datetime',
     ];
     protected $dates = ['date_of_issue'];
-
+    protected $with = ['project'];
     protected $appends = ['total'];
 
     protected static function booted()
@@ -33,5 +34,10 @@ class Invoice extends Model
             $total += $item->cost * $item->quantity;
         }
         return $total;
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 }
