@@ -3,6 +3,24 @@ $(() => {
         enableTime: false,
     });
 
+    // Get users current locale
+    let locale;
+    if (window.navigator.languages) {
+        locale = window.navigator.languages[0];
+    } else {
+        locale = window.navigator.userLanguage || window.navigator.language;
+    }
+
+    // built-in js formatter for currency
+    const formatter = new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency: "USD",
+    });
+
+    const format = (value) => {
+        return formatter.format(value).replace(/\D00(?=\D*$)/, "");
+    };
+
     const table = $("#estimates-table");
     let datatable;
 
@@ -177,34 +195,18 @@ $(() => {
     const form = $("#add-estimate-form");
 
     const calculateTotals = () => {
-        // Get users current locale
-        let locale;
-        if (window.navigator.languages) {
-            locale = window.navigator.languages[0];
-        } else {
-            locale = window.navigator.userLanguage || window.navigator.language;
-        }
-
-        // built-in js formatter for currency
-        const formatter = new Intl.NumberFormat(locale, {
-            style: "currency",
-            currency: "USD",
-        });
-
         const data = [];
         form.find(".form-cost").each(function () {
             const cost = Number($(this).val()) || 0;
-            const parent = $(this).parent().parent();
+            const parent = $(this).parents(".estimate-form-item");
             const quantityInput = parent.find(".form-quantity");
             const amountInput = parent.find(".form-amount");
             const quantity = Number(quantityInput.val()) || 0;
             const amount = cost * quantity;
-            amountInput.val(formatter.format(amount));
+            amountInput.val(format(amount));
             data.push(amount);
         });
-        form.find("#total").val(
-            formatter.format(data.reduce((i, x) => i + x, 0))
-        );
+        form.find("#total").val(format(data.reduce((i, x) => i + x, 0)));
     };
 
     form.on("keyup", ".form-cost", () => calculateTotals());
@@ -360,7 +362,10 @@ $(() => {
         const button = $(this);
         const item = button.parent().parent(".estimate-form-item");
         item.fadeOut({
-            complete: () => item.remove(),
+            complete: () => {
+                item.remove();
+                calculateTotals();
+            },
         });
     });
 
@@ -499,7 +504,7 @@ $(() => {
                     "Amount",
                     "input",
                     "text",
-                    `$ ${item.cost * item.quantity}`
+                    format(item.cost * item.quantity)
                 );
                 $(amount)
                     .find(".form-amount")
