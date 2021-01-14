@@ -360,8 +360,8 @@ $(() => {
         );
         input.setAttribute("placeholder", title);
         const div = wrap(label);
-        div.append(input);
         div.classList.add(`form-group-${lowercase}`);
+        div.append(input);
         return div;
     };
 

@@ -115,26 +115,26 @@ $(() => {
                         modal.find(".modal-title").text("Add Estimate");
                         $("#estimate-form-items").html(`
                             <div class="estimate-form-item">
-                                <div class="form-group">
+                                <div class="form-group form-group-button">
                                     <button type="button" class="btn btn-danger btn-sm estimate-form-item-remove-button">Remove Item</button>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group form-group-name">
                                     <label>Name</label>
                                     <input type="text" name="items[0][name]" placeholder="Name" class="form-control form-name">
                                 </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
-                                </div>
-                                <div class="form-group">
+                                <div class="form-group form-group-cost">
                                     <label>Cost</label>
                                     <input type="number" name="items[0][cost]" placeholder="Cost" class="form-control form-cost">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group form-group-quantity">
                                     <label>Quantity</label>
                                     <input type="number" name="items[0][quantity]" placeholder="Quantity" class="form-control form-quantity">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group form-group-description">
+                                    <label>Description</label>
+                                    <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
+                                </div>
+                                <div class="form-group form-group-amount">
                                     <label>Amount</label>
                                     <input type="text" name="items[0][amount]" placeholder="Amount" disabled class="form-control form-amount disabled" value="$ 0">
                                 </div>
@@ -257,26 +257,26 @@ $(() => {
             form[0].reset();
             $("#estimate-form-items").html(`
             <div class="estimate-form-item">
-                <div class="form-group">
+                <div class="form-group form-group-button">
                     <button type="button" class="btn btn-danger btn-sm estimate-form-item-remove-button">Remove Item</button>
                 </div>
-                <div class="form-group">
+                <div class="form-group form-group-name">
                     <label>Name</label>
                     <input type="text" name="items[0][name]" placeholder="Name" class="form-control form-name">
                 </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
-                </div>
-                <div class="form-group">
+                <div class="form-group form-group-cost">
                     <label>Cost</label>
                     <input type="number" name="items[0][cost]" placeholder="Cost" class="form-control form-cost">
                 </div>
-                <div class="form-group">
+                <div class="form-group form-group-quantity">
                     <label>Quantity</label>
                     <input type="number" name="items[0][quantity]" placeholder="Quantity" class="form-control form-quantity">
                 </div>
-                <div class="form-group">
+                <div class="form-group form-group-description">
+                    <label>Description</label>
+                    <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
+                </div>
+                <div class="form-group form-group-amount">
                     <label>Amount</label>
                     <input type="text" name="items[0][amount]" placeholder="Amount" disabled class="form-control form-amount disabled" value="$ 0">
                 </div>
@@ -321,6 +321,7 @@ $(() => {
         );
         input.setAttribute("placeholder", title);
         const div = wrap(label);
+        div.classList.add(`form-group-${lowercase}`);
         div.append(input);
         return div;
     };
@@ -337,11 +338,16 @@ $(() => {
         removeButton.classList.add("estimate-form-item-remove-button");
         removeButton.innerHTML = "Remove Item";
 
-        wrapper.append(wrap(removeButton));
+        wrapper.append(
+            ((button) => {
+                button.classList.add("form-group-button");
+                return button;
+            })(wrap(removeButton))
+        );
         wrapper.append(makeInput("Name", "input"));
-        wrapper.append(makeInput("Description", "textarea"));
         wrapper.append(makeInput("Cost", "input", "number"));
         wrapper.append(makeInput("Quantity", "input", "number"));
+        wrapper.append(makeInput("Description", "textarea"));
 
         const amount = makeInput("Amount", "input", "text", "$ 0");
         $(amount)
@@ -436,17 +442,19 @@ $(() => {
 
                 row.appendChild(wrap(item.name));
                 row.appendChild(wrap(item.description));
-                row.appendChild(wrap(`$ ${item.cost}`));
+                row.appendChild(wrap(format(item.cost)));
                 row.appendChild(wrap(item.quantity));
-                row.appendChild(wrap(`$ ${item.cost * item.quantity}`));
+                row.appendChild(wrap(format(item.cost * item.quantity)));
 
                 tbody.append(row);
                 $(row).fadeIn(500 * (index + 1));
             });
             const total = document.createElement("b");
-            total.innerHTML = `$ ${data.items
-                .map((item) => item.cost * item.quantity)
-                .reduce((i, x) => i + x, 0)}`;
+            total.innerHTML = format(
+                data.items
+                    .map((item) => item.cost * item.quantity)
+                    .reduce((i, x) => i + x, 0)
+            );
             total.style.display = "none";
             $("#view-estimate-total").html(total);
             $(total).fadeIn(500);
@@ -485,8 +493,17 @@ $(() => {
                 removeButton.classList.add("estimate-form-item-remove-button");
                 removeButton.innerHTML = "Remove Item";
 
-                wrapper.append(wrap(removeButton));
+                wrapper.append(
+                    ((button) => {
+                        button.classList.add("form-group-button");
+                        return button;
+                    })(wrap(removeButton))
+                );
                 wrapper.append(makeInput("Name", "input", "text", item.name));
+                wrapper.append(makeInput("Cost", "input", "number", item.cost));
+                wrapper.append(
+                    makeInput("Quantity", "input", "number", item.quantity)
+                );
                 wrapper.append(
                     makeInput(
                         "Description",
@@ -494,10 +511,6 @@ $(() => {
                         "text",
                         item.description
                     )
-                );
-                wrapper.append(makeInput("Cost", "input", "number", item.cost));
-                wrapper.append(
-                    makeInput("Quantity", "input", "number", item.quantity)
                 );
 
                 const amount = makeInput(

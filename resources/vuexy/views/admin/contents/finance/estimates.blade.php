@@ -18,6 +18,51 @@
             border-radius: 0.357rem;
             border: 1px solid #EBE9F1;
             margin: 1rem 0;
+            display : -webkit-box;
+            display : -webkit-flex;
+            display : -ms-flexbox;
+            display :         flex;
+            -webkit-flex-wrap : wrap;
+                -ms-flex-wrap : wrap;
+                    flex-wrap : wrap;
+            margin-right : -1rem;
+            margin-left : -1rem;
+        }
+
+        .form-group-button, .form-group-name,
+        .form-group-description, .form-group-cost,
+        .form-group-quantity, .form-group-amount {
+            position : relative !important;
+            width : 100% !important;
+            padding-right : 1rem !important;
+            padding-left : 1rem !important;
+            -webkit-box-flex : 0;
+            -webkit-flex : 0 0 100%;
+                -ms-flex : 0 0 100%;
+                    flex : 0 0 100%;
+            max-width : 100%;
+        }
+
+        @media(min-width: 768px) {
+            /* col-md-6 */
+            .form-group-name, .form-group-cost, .form-group-quantity {
+                -webkit-box-flex : 0;
+                -webkit-flex : 0 0 50%;
+                    -ms-flex : 0 0 50%;
+                        flex : 0 0 50%;
+                max-width : 50%;
+            }
+        }
+
+        @media(min-width: 992px) {
+            /* col-lg-4 */
+            .form-group-name, .form-group-cost, .form-group-quantity {
+                -webkit-box-flex : 0;
+                -webkit-flex : 0 0 33.33333%;
+                    -ms-flex : 0 0 33.33333%;
+                        flex : 0 0 33.33333%;
+                max-width : 33.33333%;
+            }
         }
     </style>
 @endsection
@@ -61,13 +106,19 @@
                 <form action="/api/finance/estimates" id="add-estimate-form" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="estimate_number">Estimate Number</label>
-                            <input type="text" name="estimate_number" id="estimate_number" readonly placeholder="Estimate Number" class="form-control disabled">
-                        </div>
-                        <div class="form-group">
-                            <label for="valid_until">Valid Until</label>
-                            <input type="text" name="valid_until" id="valid_until" placeholder="Valid Until" class="form-control">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="estimate_number">Estimate Number</label>
+                                    <input type="text" name="estimate_number" id="estimate_number" readonly placeholder="Estimate Number" class="form-control disabled">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="valid_until">Valid Until</label>
+                                    <input type="text" name="valid_until" id="valid_until" placeholder="Valid Until" class="form-control">
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="items">Items</label>
@@ -76,26 +127,26 @@
                             </div>
                             <div id="estimate-form-items">
                                 <div class="estimate-form-item">
-                                    <div class="form-group">
+                                    <div class="form-group form-group-button">
                                         <button type="button" class="btn btn-danger btn-sm estimate-form-item-remove-button">Remove Item</button>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group form-group-name">
                                         <label>Name</label>
                                         <input type="text" name="items[0][name]" placeholder="Name" class="form-control form-name">
                                     </div>
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
-                                    </div>
-                                    <div class="form-group">
+                                    <div class="form-group form-group-cost">
                                         <label>Cost</label>
                                         <input type="number" name="items[0][cost]" placeholder="Cost" class="form-control form-cost">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group form-group-quantity">
                                         <label>Quantity</label>
                                         <input type="number" name="items[0][quantity]" placeholder="Quantity" class="form-control form-quantity">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group form-group-description">
+                                        <label>Description</label>
+                                        <textarea name="items[0][description]" placeholder="Description" class="form-control form-description" cols="30" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group form-group-amount">
                                         <label>Amount</label>
                                         <input type="text" name="items[0][amount]" placeholder="Amount" disabled class="form-control form-amount disabled" value="$ 0">
                                     </div>
