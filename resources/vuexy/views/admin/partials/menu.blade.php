@@ -129,7 +129,7 @@
                 </a>
                 <ul class="menu-content">
                     <li class="{{ Request::segment(1) === 'projects' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.projects') }}">
+                        <a class="d-flex align-items-center" href="{{ route('projects.index') }}">
                             <i data-feather="circle"></i><span class="menu-item">All</span>
                         </a>
                     </li>
