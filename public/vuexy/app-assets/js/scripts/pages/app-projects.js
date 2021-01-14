@@ -5,6 +5,7 @@ $(function() {
         isRtl = $('html').attr('data-textdirection') === 'rtl',
         API_URL = '/api/projects/all',
         URL = '/projects',
+        datePickr = $('.flatpickr-date'),
         new_modal = $('#new-modal'),
         edit_modal = $('#edit-modal');
 
@@ -18,6 +19,7 @@ $(function() {
                 { data: 'id' },
                 { data: 'title' },
                 { data: 'client' },
+                { data: 'leader' },
                 { data: 'members' },
                 { data: 'progress' },
                 { data: 'hours' },
@@ -32,6 +34,31 @@ $(function() {
                 },
                 {
                     targets: 3,
+                    render: function(data, type, row) {
+                        var avatarGroup = '';
+                        var avatar = '/vuexy/app-assets/images/avatars/noface.png';
+                        if (row.leader != null) {
+                            if (row.leader.avatar != '') {
+                                avatar = row.leader.avatar;
+                            }
+
+                            avatarGroup += `
+                            <div data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" class="avatar pull-up my-0" data-original-title="${row.leader.name}">
+                                <img src="${avatar}" alt="Avatar" height="26" width="26">
+                            </div>
+                            `;
+                            return `
+                            <div class="avatar-group">
+                                ${avatarGroup}
+                            </div>
+                            `;
+                        } else {
+                            return '';
+                        }
+                    }
+                },
+                {
+                    targets: 4,
                     render: function(data, type, row) {
                         var avatarGroup = '';
                         $.each(row.members, function(index, member) {
@@ -54,7 +81,7 @@ $(function() {
                     }
                 },
                 {
-                    targets: 4,
+                    targets: 5,
                     render: function(data, type, row) {
                         return `
                         <div class="progress-wrapper">
@@ -67,23 +94,26 @@ $(function() {
                     }
                 },
                 {
-                    targets: 5,
+                    targets: 6,
                     render: function(data, type, row) {
                         return `<span>${row.hours} Hours</span>`;
                     }
                 },
                 {
-                    targets: 6,
+                    targets: 7,
                     render: function(data, type, row) {
                         switch (row.status) {
-                            case 'on_process':
-                                return `<span class="badge badge-primary badge-light-primary mr-1">On Proccess</span>`;
+                            case 'notstarted':
+                                return `<span class="badge badge-secondary badge-light-secondary mr-1">Not Started</span>`;
                                 break;
-                            case 'on_progress':
-                                return `<span class="badge badge-info badge-light-info mr-1">On Progress</span>`;
+                            case 'inprogress':
+                                return `<span class="badge badge-info badge-light-info mr-1">In Progress</span>`;
                                 break;
-                            case 'on_hold':
+                            case 'onhold':
                                 return `<span class="badge badge-warning badge-warning-info mr-1">On Hold</span>`;
+                                break;
+                            case 'canceled':
+                                return `<span class="badge badge-danger badge-light-danger mr-1">Canceled</span>`;
                                 break;
                             case 'completed':
                                 return `<span class="badge badge-success badge-light-success mr-1">Completed</span>`;
@@ -195,14 +225,27 @@ $(function() {
     $(dtTable).on('click', '.btn-edit', async function() {
         let id = $(this).data().id;
         let form = $(edit_modal).find('form');
+        let members = [];
         $(edit_modal).modal('show');
 
         const project = await $.get(`${URL}/${id}/edit`);
 
+        $.each(project.members, function(index, member) {
+            members.push(member.id);
+        });
         form.find('input[name=id]').val(project.id);
-        form.find('input[name=title]').val(project.title);
+        form.find('input[name=name]').val(project.title);
+        form.find('textarea[name=description]').val(project.description);
+        form.find('input[name=start_date]').val(project.start_date);
+        form.find('input[name=deadline]').val(project.deadline);
+        form.find('input[name=budget]').val(project.budget);
+        form.find('input[name=spent]').val(project.spent);
+        form.find('select[name=leader]').val(project.leader_id);
+        form.find('select[name=currency]').val(project.currency);
+        form.find('select[name=status]').val(project.status);
+        form.find('.members_edit').val(members);
+        form.find('.members_edit').trigger('change');
     });
-
     $(edit_modal).on('submit', 'form', function(e) {
         e.preventDefault();
         var form = this;
@@ -242,7 +285,7 @@ $(function() {
             buttonsStyling: false
         }).then(async function(result) {
             if (result.isConfirmed) {
-                const deleteData = await $.get(`${URL}/${id}/delete`);
+                const deleteData = await $.ajax({ url: `${URL}/${id}`, type: 'DELETE', data: { _token: $('meta[name=csrf-token]').attr('content') } });
                 if (deleteData.success) {
                     toastr['success'](deleteData.msg, 'Deleted!', {
                         closeButton: true,
@@ -255,4 +298,10 @@ $(function() {
         });
     });
 
+    // Date & TIme
+    if (datePickr.length) {
+        datePickr.flatpickr({
+            enableTime: false
+        });
+    }
 });

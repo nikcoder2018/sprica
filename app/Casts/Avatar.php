@@ -18,7 +18,11 @@ class Avatar implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        return Storage::url($value);
+        if($value)
+            return Storage::url($value);
+        else 
+            return $value;
+        
     }
 
     /**

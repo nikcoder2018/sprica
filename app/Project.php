@@ -8,13 +8,15 @@ class Project extends Model
 {
     //
     protected $table = 'projects';
-    protected $fillable = ['client_id', 'title', 'number', 'description', 'category_id', 'department_id', 'budget', 'spent', 'start_date', 'deadline', 'status', 'vacation', 'default'];
+    protected $fillable = ['client_id', 'title', 'number', 'description', 'category_id', 'department_id','lead_id', 'budget', 'spent','currency', 'start_date', 'deadline', 'status', 'vacation', 'default'];
     protected $appends = ['hours'];
 
     function members(){
         return $this->belongsToMany(User::class);
     }
-
+    function leader(){
+        return $this->hasOne(User::class, 'id', 'leader_id');
+    }
     function tasks(){
         return $this->hasMany(Task::class, 'project_id', 'id')->with('assigned');
     }

@@ -24,7 +24,7 @@ class ProjectsController extends Controller
 
     public function all(){
         //return response()->json(Role::all());
-        $projects = Project::with(['client','tasks', 'tasks_completed'])->whereNotIn('title',['Feiertag','Urlaub','Krank','KUG'])->orderBy('id', 'DESC')->get();
+        $projects = Project::with(['client','tasks','leader','tasks_completed'])->whereNotIn('title',['Feiertag','Urlaub','Krank','KUG'])->orderBy('id', 'DESC')->get();
         
         return DataTables::of(ResourceProject::collection($projects))->toJson();
     }
@@ -44,32 +44,18 @@ class ProjectsController extends Controller
     }
     public function store(Request $request){
         $project = Project::create([
-            'ProjeBASLIK' => $request->name,
+            'leader_id' => $request->leader,
+            'title' => $request->name,
             'description' => $request->description,
-            'client' => $request->company,
+            'start_date' => $request->start_date,
+            'deadline' => $request->deadline,
             'budget' => $request->budget,
             'spent' => $request->spent,
+            'currency' => $request->currency,
             'status' => $request->status
         ]);
 
-        foreach($request->members as $member){
-            ProjectMember::create([
-                'project_id' => $project->ProjeID,
-                'user_id' => $member
-            ]);
-        }
-
-        $leader = ProjectMember::where('project_id', $project->id)->where('user_id',$request->leader);
-        if($leader->exists()){
-            $leader->leader = 1;
-            $leader->save();
-        }else{
-            ProjectMember::create([
-                'project_id' => $project->ProjeID,
-                'user_id' => $request->leader,
-                'leader' => 1
-            ]);
-        }
+        $project->members()->sync($request->input('members', []));
 
         if($project){
             return response()->json(array('success' => true, 'msg' => 'New project added successfully.'));
@@ -90,50 +76,25 @@ class ProjectsController extends Controller
             return response()->json(array('success' => true, 'msg' => 'New member added successfully.', 'row' => $renderRow));
         }
     }
-    public function edit(Request $request){
-        $project = Project::with('members')->where('ProjeID',$request->id)->first();
-
+    public function edit(Project $project){
+        $members = User::all();
+        $project->load('members');
         return response()->json($project);
     }
     
     public function update(Request $request){
         $project = Project::find($request->id);
-        $project->ProjeBASLIK = $request->name;
+        $project->title = $request->name;
         $project->description = $request->description;
-        $project->client = $request->company;
+        $project->start_date = $request->star_date;
+        $project->deadline = $request->deadline;
+        $project->leader_id = $request->leader;
         $project->budget = $request->budget;
         $project->spent = $request->spent;
         $project->status = $request->status;
         $project->save();
+        $project->members()->sync($request->input('members', []));
 
-        $membersIds = array();
-
-        if($request->members){
-            foreach($request->members as $member){
-                if(!ProjectMember::where('project_id', $project->ProjeID)->where('user_id', $member)->exists()){
-                    ProjectMember::create([
-                        'project_id' => $project->ProjeID,
-                        'user_id' => $member
-                    ]);
-                }
-    
-                array_push($membersIds, $member);
-            }
-        }
-        ProjectMember::where('project_id', $project->ProjeID)->whereNotIn('user_id', $membersIds)->delete();
-
-        $leader = ProjectMember::where('project_id', $project->ProjeID)->where('user_id',$request->leader);
-        if($leader->exists()){
-            $leader = ProjectMember::where('project_id', $project->ProjeID)->where('user_id',$request->leader)->first();
-            $leader->leader = 1;
-            $leader->save();
-        }else{
-            ProjectMember::create([
-                'project_id' => $project->ProjeID,
-                'user_id' => $request->leader,
-                'leader' => 1
-            ]);
-        }
         if($project){
             return response()->json(array('success' => true, 'msg' => 'Project updated successfully.'));
         }else{
@@ -141,8 +102,8 @@ class ProjectsController extends Controller
         }
     }
 
-    public function destroy(Request $request){
-        $project = Project::find($request->id);
+    public function destroy($id){
+        $project = Project::find($id);
         $project->delete();
 
         if($project){

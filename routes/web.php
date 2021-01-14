@@ -67,14 +67,10 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('advances/update', 'AdvancesController@update')->name('advances.update');
     Route::get('advances/{id}/delete', 'AdvancesController@destroy')->name('advances.delete');
 
-    Route::get('projects', 'Admin\ProjectsController@index')->name('admin.projects');
-    Route::get('projects/create', 'Admin\ProjectsController@create')->name('admin.projects.create');
+    Route::resource('projects','ProjectsController', ['except' => ['show', 'update']]);
+    Route::post('projects/update', 'ProjectsController@update')->name('projects.update');
     Route::get('projects/{id}/details', 'Admin\ProjectsController@show')->name('admin.projects.details');
-    Route::post('projects/edit', 'Admin\ProjectsController@edit')->name('admin.projects.edit');
-    Route::post('projects/update', 'Admin\ProjectsController@update')->name('admin.projects.update');
-    Route::post('projects/delete', 'Admin\ProjectsController@destroy')->name('admin.projects.destroy');
 
-    Route::post('/projects/store', 'Admin\ProjectsController@store')->name('admin.projects.store');
     Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
     Route::post('/projects/remove-member', 'Admin\ProjectsController@remove_member')->name('admin.projects.remove-member');
 
