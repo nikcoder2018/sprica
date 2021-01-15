@@ -1,10 +1,32 @@
 $(() => {
-    $("#date").flatpickr({
-        enableTime: true,
+    $("#purchase_date").flatpickr({
+        enableTime: false,
     });
 
     const table = $("#expenses-table");
+
     let datatable;
+
+    const addExpenseModal = $("#add-expense-modal");
+    const addExpenseForm = $("#add-expense-form");
+
+    const refreshCategories = async () => {
+        try {
+            const { data } = await axios.get(
+                "/api/finance/expenses/categories"
+            );
+            const select = addExpenseForm.find("#category_id");
+            select.html("");
+            data.forEach((category) => {
+                const option = $(document.createElement("option"));
+                option.val(category.id);
+                option.text(category.name);
+                select.append(option);
+            });
+        } catch (_) {
+            toastr.error("Unable to fetch categories.");
+        }
+    };
 
     if (table.length) {
         datatable = table.DataTable({
@@ -14,8 +36,10 @@ $(() => {
                 // columns according to JSON
                 { data: "id" },
                 { data: "name" },
-                { data: "cost" },
-                { data: "date" },
+                { data: "price" },
+                { data: "user" },
+                { data: "purchased_from" },
+                { data: "purchased_date" },
                 { data: "" },
             ],
             columnDefs: [
@@ -26,8 +50,36 @@ $(() => {
                     targets: 0,
                 },
                 {
+                    targets: 2,
+                    render: function (data, type, full, meta) {
+                        let locale;
+                        if (window.navigator.languages) {
+                            locale = window.navigator.languages[0];
+                        } else {
+                            locale =
+                                window.navigator.userLanguage ||
+                                window.navigator.language;
+                        }
+
+                        const formatter = new Intl.NumberFormat(locale, {
+                            style: "currency",
+                            currency: full.currency.toUpperCase(),
+                        });
+
+                        return formatter
+                            .format(data)
+                            .replace(/\D00(?=\D*$)/, "");
+                    },
+                },
+                {
                     targets: 3,
-                    render: function (data, type, row, meta) {
+                    render: function (data, type, full, meta) {
+                        return data.name;
+                    },
+                },
+                {
+                    targets: 5,
+                    render: function (data, type, full, meta) {
                         return dayjs(data).format("MMMM DD, YYYY");
                     },
                 },
@@ -84,13 +136,14 @@ $(() => {
                     text: "Add Expense",
                     className: "btn btn-primary btn-add-record ml-2",
                     action: function (e, dt, button, config) {
-                        const modal = $("#add-expense-modal");
-                        const form = $("#add-expense-form");
-                        form.attr("action", "/api/finance/expenses");
-                        form.attr("method", "POST");
-                        modal.find(".modal-title").text("Add Expense");
-                        modal.find("form")[0].reset();
-                        modal.modal("show");
+                        refreshCategories();
+                        addExpenseForm.attr("action", "/api/finance/expenses");
+                        addExpenseForm.attr("method", "POST");
+                        addExpenseModal
+                            .find(".modal-title")
+                            .text("Add Expense");
+                        addExpenseModal.find("form")[0].reset();
+                        addExpenseModal.modal("show");
                     },
                 },
             ],
@@ -121,7 +174,6 @@ $(() => {
             },
             initComplete: function () {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
-                // Adding role filter once table initialized
             },
             drawCallback: function () {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
@@ -131,13 +183,38 @@ $(() => {
 
     const viewModal = $("#view-expense-modal");
     const deleteModal = $("#delete-expense-modal");
-    const form = $("#add-expense-form");
+    const addCategoryModal = $("#add-category-modal");
+    const addCategoryForm = $("#add-category-form");
+    const addCategoryButton = $("#add-category-button");
+
+    addCategoryButton.on("click", () => {
+        addExpenseModal.modal("hide");
+        addCategoryModal.modal("show");
+    });
+
+    addCategoryForm.on("submit", async (e) => {
+        e.preventDefault();
+        try {
+            const url = addCategoryForm.attr("action");
+            const data = addCategoryForm.serialize();
+            await axios.post(url, data);
+            toastr.info("Category saved successfully.", "Notice");
+            refreshCategories();
+            addCategoryModal.modal("hide");
+        } catch (_) {
+            toastr.error("Unable to save category.");
+        }
+    });
+
+    addCategoryModal.on("hidden.bs.modal", () => {
+        addExpenseModal.modal("show");
+    });
 
     viewModal.on("hidden.bs.modal", () => {
-        viewModal.find("#view-expense-name").html("");
-        viewModal.find("#view-expense-cost").html("");
-        viewModal.find("#view-expense-description").html("");
-        viewModal.find("#view-expense-date").html("");
+        viewModal.find("#view-expense-name").text("");
+        viewModal.find("#view-expense-price").text("");
+        viewModal.find("#view-expense-employee").text("");
+        viewModal.find("#view-expense-purchased-from").text("");
     });
 
     deleteModal.on("click", "#confirm-button", async () => {
@@ -159,24 +236,23 @@ $(() => {
         deleteModal.find("#confirm-button").attr("data-id", "-1");
     });
 
-    form.on("submit", async function (e) {
-        const modal = $("#add-expense-modal");
+    addExpenseForm.on("submit", async (e) => {
         e.preventDefault();
 
-        const button = form.find('button[type="submit"]');
+        const button = addExpenseForm.find('button[type="submit"]');
         button.addClass("disabled");
         button.attr("disabled", true);
         button.html('<i class="fas fa-circle-notch fa-spin"></i>');
         try {
-            const form = $(this);
-            const url = form.attr("action");
-            const data = form.serialize();
-            const method = form.attr("method").toLowerCase();
-
-            await axios[method](url, data);
-            modal.modal("hide");
+            const url = addExpenseForm.attr("action");
+            const form = addExpenseForm[0];
+            const data = new FormData(form);
+            const method = addExpenseForm.attr("method").toUpperCase();
+            data.append("_method", method);
+            await axios.post(url, data);
+            addExpenseModal.modal("hide");
             toastr.success("Expense saved successfully.");
-            form[0].reset();
+            form.reset();
         } catch (error) {
             toastr.error("Unable to save expense.");
         } finally {
@@ -193,12 +269,30 @@ $(() => {
             const button = $(this);
             const id = button.attr("data-id");
             const { data } = await axios.get(`/api/finance/expenses/${id}`);
-            viewModal.find("#view-expense-name").html(data.name);
-            viewModal.find("#view-expense-cost").html(data.cost);
-            viewModal.find("#view-expense-description").html(data.description);
+
+            let locale;
+            if (window.navigator.languages) {
+                locale = window.navigator.languages[0];
+            } else {
+                locale =
+                    window.navigator.userLanguage || window.navigator.language;
+            }
+
+            const formatter = new Intl.NumberFormat(locale, {
+                style: "currency",
+                currency: data.currency.toUpperCase(),
+            });
+
+            viewModal.find("#view-expense-name").text(data.name);
             viewModal
-                .find("#view-expense-date")
-                .html(dayjs(data.date).format("MMMM DD, YYYY"));
+                .find("#view-expense-price")
+                .text(formatter.format(data.price).replace(/\D00(?=\D*$)/, ""));
+            viewModal.find("#view-expense-employee").text(data.user.name);
+            viewModal.find("#view-expense-project").text(data.project.title);
+            viewModal.find("#view-expense-category").text(data.category.name);
+            viewModal
+                .find("#view-expense-purchased-from")
+                .text(data.purchased_from);
             viewModal.modal("show");
         } catch (error) {
             toastr.error("Expense does not exist.");
@@ -211,18 +305,24 @@ $(() => {
             const button = $(this);
             const id = button.attr("data-id");
             const { data } = await axios.get(`/api/finance/expenses/${id}`);
-            form.find("#name").val(data.name);
-            form.find("#description").val(data.description);
-            form.find("#cost").val(data.cost);
-            form.find("#date").flatpickr({
-                defaultDate: dayjs(data.date).toDate(),
-                enableTime: true,
+            await refreshCategories();
+            addExpenseForm.attr("action", `/api/finance/expenses/${id}`);
+            addExpenseForm.attr("method", "PUT");
+
+            addExpenseForm.find("#user_id").val(data.user_id);
+            addExpenseForm.find("#project_id").val(data.project_id);
+            addExpenseForm.find("#name").val(data.name);
+            addExpenseForm.find("#purchased_from").val(data.purchased_from);
+            addExpenseForm.find("#purchase_date").flatpickr({
+                defaultDate: dayjs(data.purchase_date).toDate(),
+                enableTime: false,
             });
-            form.attr("action", `/api/finance/expenses/${id}`);
-            form.attr("method", "PUT");
-            const modal = $("#add-expense-modal");
-            modal.find(".modal-title").text("Edit Expense");
-            modal.modal("show");
+            addExpenseForm.find("#category_id").val(data.category_id);
+            addExpenseForm.find("#price").val(data.price);
+            addExpenseForm.find("#currency").val(data.currency);
+
+            addExpenseModal.find(".modal-title").text("Edit Expense");
+            addExpenseModal.modal("show");
         } catch (error) {
             toastr.error("Expense does not exist.");
         }

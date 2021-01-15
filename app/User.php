@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Casts\Avatar;
+use App\Casts\File;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -39,7 +39,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'avatar' => Avatar::class,
+        'avatar' => File::class,
     ];
 
     protected $dates = ['created_at', 'updated_at'];
