@@ -84,8 +84,10 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('/employees/filters', 'Admin\EmployeesController@filters')->name('admin.employees.filter');
     Route::post('/employees/delete', 'Admin\EmployeesController@destroy')->name('admin.employees.destroy');
 
-    Route::resource('leaves', 'LeavesController');
-    
+    Route::resource('holidays', 'HolidaysController');
+    Route::resource('leave', 'LeavesController');
+    Route::resource('leavetype', 'LeaveTypesController');
+
     Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
     Route::post('/profile/update', 'Admin\ProfileController@update')->name('admin.profile.update');
 

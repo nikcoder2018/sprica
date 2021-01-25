@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-
+use App\LeaveType;
 class LeaveTypesController extends Controller
 {
     /**
@@ -34,7 +35,13 @@ class LeaveTypesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+        ]);
+        $leavetype = LeaveType::create($data);
+
+        if($leavetype)
+            return response()->json(array('success' => true, 'msg' => 'New leave type created'));
     }
 
     /**
@@ -54,9 +61,9 @@ class LeaveTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(LeaveType $leavetype)
     {
-        //
+        return response()->json($leavetype);
     }
 
     /**
@@ -66,9 +73,16 @@ class LeaveTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, LeaveType $leavetype)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $leavetype->update($data);
+        
+        if($leavetype)
+            return response()->json(['success' => true, 'msg' => 'Update Successful', 'details' => $leavetype]);
     }
 
     /**
@@ -77,8 +91,9 @@ class LeaveTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(LeaveType $leavetype)
     {
-        //
+        if($leavetype->delete())
+            return response()->json(['success' => true, 'msg' => 'Delete Successful']);
     }
 }

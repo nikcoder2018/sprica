@@ -34,7 +34,15 @@ class LeavesController extends Controller
      */
     public function store(Request $request)
     {
-        $leave = Leave::create($request->only(['user_id','type_id','status', 'duration_type', 'reason']));
+        $data = $request->validate([
+            'user_id' => 'required',
+            'type_id' => 'required',
+            'status' => 'required|string',
+            'duration_type' => 'required|string',
+            'reason' => 'nullable|string'
+        ]);
+
+        $leave = Leave::create($data);
         $leave->sync_dates($leave->id, $request->input('dates', []));
 
         if($leave)
@@ -58,9 +66,12 @@ class LeavesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Leave $leave)
     {
-        //
+        if($leave->exists())
+            return response()->json($leave);
+        else 
+            return response()->json(['success' => false, 'msg' => "Data doesn't exists"]);
     }
 
     /**
@@ -70,9 +81,20 @@ class LeavesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Leave $leave)
     {
-        //
+        $data = $request->validate([
+            'type_id' => 'required',
+            'status' => 'required|string',
+            'duration_type' => 'required|string',
+            'reason' => 'nullable|string'
+        ]);
+
+        $leave->update($data);
+        $leave->sync_dates($leave->id,$request->input('dates', []));
+
+        if($leave)
+            return response()->json(['success' => true, 'msg' => 'Update Successful', 'details' => $leave]);
     }
 
     /**
@@ -81,8 +103,9 @@ class LeavesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Leave $leave)
     {
-        //
+        if($leave->delete())
+            return response()->json(['success' => true, 'msg' => 'Delete Successful']);
     }
 }

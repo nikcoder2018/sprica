@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Holiday;
 class HolidaysController extends Controller
 {
     /**
@@ -34,7 +34,15 @@ class HolidaysController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'date' => 'required',
+            'occasion' => 'required:string'
+        ]);
+
+        $holiday = Holiday::create($data);
+
+        if($holiday)
+            return response()->json(['success' => true, 'msg' => 'New Holiday Created']);
     }
 
     /**
@@ -54,9 +62,9 @@ class HolidaysController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Holiday $holiday)
     {
-        //
+        return $holiday;
     }
 
     /**
@@ -66,9 +74,17 @@ class HolidaysController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Holiday $holiday)
     {
-        //
+        $data = $request->validate([
+            'date' => 'required',
+            'occasion' => 'required:string'
+        ]);
+
+        $holiday->update($data);
+
+        if($holiday)
+            return response()->json(['success' => true, 'msg' => 'Update Successful', 'details' => $holiday]);
     }
 
     /**
@@ -77,8 +93,9 @@ class HolidaysController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Holiday $holiday)
     {
-        //
+        if($holiday->delete())
+            return response()->json(['success' => true, 'msg' => 'Delete Successful']);
     }
 }

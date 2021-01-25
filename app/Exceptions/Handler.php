@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -50,6 +51,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+        if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            // a JSON response for example
+            return response()->json(['message' => trans('exceptions.model_not_found')], 404);
+        }
+
         if($this->isHttpException($e))
         {
             switch ($e->getStatusCode()) 
