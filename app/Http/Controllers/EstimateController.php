@@ -14,6 +14,12 @@ class EstimateController extends Controller
         return view('admin.contents.finance.estimates');
     }
 
+    public function generate()
+    {
+        $i = Estimate::count() + 1;
+        return "#{$i}";
+    }
+
     /**
      * Display a listing of the resource.
      *

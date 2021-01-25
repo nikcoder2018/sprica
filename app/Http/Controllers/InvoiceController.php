@@ -3,15 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Invoice;
+use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class InvoiceController extends Controller
 {
     public function view()
     {
-        return view('admin.contents.finance.invoices');
+        return view('admin.contents.finance.invoices', [
+            'projects' => Project::all(),
+        ]);
+    }
+
+    public function generate()
+    {
+        $i = Invoice::count() + 1;
+        return "#{$i}";
     }
 
     /**
@@ -33,11 +43,12 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email'],
+            'project_id' => ['required', Rule::exists('projects', 'id')],
             'address' => ['required', 'string', 'max:255'],
             'invoice_number' => ['required', 'string', 'max:255'],
             'date_of_issue' => ['required', 'date'],
+            'due_date' => ['required', 'date'],
+            'status' => ['required', 'string', Rule::in(['Unpaid', 'Paid', 'Partially Paid'])],
             'items' => ['required', 'array'],
             'items.*.name' => ['required', 'string', 'max:255'],
             'items.*.description' => ['nullable', 'string', 'max:255'],
@@ -69,11 +80,12 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $data = $request->validate([
-            'name' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email'],
+            'project_id' => ['required', Rule::exists('projects', 'id')],
             'address' => ['nullable', 'string', 'max:255'],
             'invoice_number' => ['nullable', 'string', 'max:255'],
             'date_of_issue' => ['nullable', 'date'],
+            'due_date' => ['nullable', 'date'],
+            'status' => ['nullable', 'string', Rule::in(['Unpaid', 'Paid', 'Partially Paid'])],
             'items' => ['nullable', 'array'],
             'items.*.name' => ['nullable', 'string', 'max:255'],
             'items.*.description' => ['nullable', 'string', 'max:255'],

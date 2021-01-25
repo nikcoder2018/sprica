@@ -164,13 +164,13 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Start Time</label>
-                                    <input type="text" name="start_time" id="start_time" class="form-control"
+                                    <input type="date" name="start_time" id="start_time" class="form-control"
                                         placeholder="YYYY-MM-DD" />
                                 </div>
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-2">
                                         <label>End Date</label>
-                                        <input type="text" id="end_date" name="end_date" class="form-control"
+                                        <input type="date" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
                                 @endif
@@ -258,6 +258,7 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/forms/select/select2.full.min.js') }}">
     </script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> --}}
 @endsection
 
 @section('scripts')
@@ -271,11 +272,13 @@
                 defaultMinute: time[1],
                 enableTime: true,
                 enableSeconds: true,
+                disableMobile: true,
             });
 
             $('#end-date').flatpickr({
                 enableTime: true,
                 enableSeconds: true,
+                disableMobile: true,
             });
 
             $('#hours').on('change', function() {
@@ -311,6 +314,7 @@
                         //     defaultDate: date,
                         //     enableTime: true,
                         //     enableSeconds: true,
+                        //     disableMobile: true,
                         // });
                     }
                 });

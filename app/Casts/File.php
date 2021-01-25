@@ -5,7 +5,7 @@ namespace App\Casts;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Facades\Storage;
 
-class Avatar implements CastsAttributes
+class File implements CastsAttributes
 {
     /**
      * Cast the given value.

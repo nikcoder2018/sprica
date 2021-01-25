@@ -27,9 +27,11 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Name</th>
-                            <th>Cost</th>
-                            <th>Date</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                            <th>Employee</th>
+                            <th>Purchased From</th>
+                            <th>Purchase Date</th>
                             <th class="cell-fit">Actions</th>
                         </tr>
                     </thead>
@@ -41,7 +43,7 @@
 
 @section('modals')
     <div class="modal fade" id="add-expense-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalCenterTitle">Add Expense</h5>
@@ -52,21 +54,99 @@
                 <form action="/api/finance/expenses" id="add-expense-form" method="POST">
                     @csrf
                     <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="user_id">Choose Member</label>
+                                    <select name="user_id" id="user_id" class="form-control">
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="project_id">Project</label>
+                                    <select name="project_id" id="project_id" class="form-control">
+                                        @foreach ($projects as $project)
+                                            <option value="{{ $project->id }}">
+                                                {{ $project->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" id="name" placeholder="Name" class="form-control">
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="purchased_from">Purchased From</label>
+                                    <input type="text" name="purchased_from" id="purchased_from" placeholder="Purchased From" class="form-control">
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="name">Purchase Date</label>
+                                    <input type="text" name="purchase_date" id="purchase_date" placeholder="Purchase Date" class="form-control">
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="category_id">
+                                        Expense Category
+                                        <i id="add-category-button" class="fas fa-plus fa-border rounded-circle" style="cursor: pointer;"></i>
+                                    </label>
+                                    <select name="category_id" id="category_id" class="form-control">
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="price">Price</label>
+                                    <input type="number" name="price" id="price" placeholder="Price" class="form-control">
+                                </div>
+                                <div class="form-group col-12 col-md-6 col-lg-4">
+                                    <label for="currency">Currency</label>
+                                    <select name="currency" id="currency" class="form-control">
+                                        <option value="USD">Dollars - ($)</option>
+                                        <option value="GBP">Pounds - (£)</option>
+                                        <option value="INR">Rupee - (₹)</option>
+                                        <option value="EUR">Euro - (€)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-12 col-md-6">
+                                    <label for="bill">Bill</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="bill" name="bill">
+                                        <label class="custom-file-label" for="bill">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="add-category-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Category</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <form id="add-category-form" action="/api/finance/expenses/categories" method="POST">
+                    <div class="modal-body">
+                        @csrf
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" name="name" id="name" placeholder="Name" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea name="description" placeholder="Description" id="description" cols="30" rows="5" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="cost">Cost</label>
-                            <input type="number" name="cost" id="cost" class="form-control" placeholder="Cost" />
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Date</label>
-                            <input type="text" name="date" id="date" class="form-control" placeholder="Date" />
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -87,15 +167,34 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h4 id="view-expense-name"></h4>
-                    <div class="my-1">
-                        Cost: <b id="view-expense-cost"></b>
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="form-group col-12 col-md-6">
+                                <label>Name</label>
+                                <p id="view-expense-name"></p>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Project</label>
+                                <p id="view-expense-project"></p>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Category</label>
+                                <p id="view-expense-category"></p>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Price</label>
+                                <p id="view-expense-price"></p>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Employee</label>
+                                <p id="view-expense-employee"></p>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Purchased From</label>
+                                <p id="view-expense-purchased-from"></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="my-1">
-                        Date: <b id="view-expense-date"></b>
-                    </div>
-                    <div id="view-expense-description"></div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
@@ -132,6 +231,5 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js') }}"></script>
-    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js//scripts/pages/app-finance-expenses.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/pages/app-finance-expenses.js') }}"></script>
 @endsection
