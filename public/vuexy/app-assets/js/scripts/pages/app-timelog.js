@@ -8,7 +8,7 @@
     Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 
-$(function () {
+$(function() {
     "use strict";
 
     var dtTimelogTable = $(".timelog-list-table"),
@@ -49,22 +49,24 @@ $(function () {
                 { data: "project" },
                 { data: "" },
             ],
-            columnDefs: [
-                {
+            columnDefs: [{
                     // For Responsive
                     className: "control",
                     responsivePriority: 2,
                     targets: 0,
+                    render: function() {
+                        return '';
+                    }
                 },
                 {
                     targets: 1,
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return moment(row.start_date).format("MMMM D, Y");
                     },
                 },
                 {
                     targets: 2,
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return moment(
                             row.start_date + " " + row.start_time
                         ).format(moment.HTML5_FMT.TIME);
@@ -72,7 +74,7 @@ $(function () {
                 },
                 {
                     targets: 4,
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return moment(row.end_date + " " + row.end_time).format(
                             moment.HTML5_FMT.TIME
                         );
@@ -80,19 +82,19 @@ $(function () {
                 },
                 {
                     targets: 3,
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return moment(row.end_date).format("MMMM D, Y");
                     },
                 },
                 {
                     targets: 5,
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     },
                 },
                 {
                     targets: 6,
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         if (row.break != null)
                             return `<span>${row.break} Hours</span>`;
                         else return "";
@@ -103,18 +105,18 @@ $(function () {
                     targets: -1,
                     width: "80px",
                     orderable: false,
-                    render: function (data, type, full, meta) {
+                    render: function(data, type, full, meta) {
                         return `<div class="btn-group">
                                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons[
                                     "more-vertical"
                                 ].toSvg({ class: "font-small-4" })}</a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="mr-1 dropdown-item btn-edit" href="javascript:void(0);" data-id="${
+                                    <a class="mr-1 dropdown-item btn-edit btn-responsive-edit" href="javascript:void(0);" data-id="${
                                         full.id
                                     }" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons[
                             "edit-2"
                         ].toSvg({ class: "font-medium-2" })} Edit</a>
-                                    <a class="mr-1 dropdown-item btn-delete" href="javascript:void(0);" data-id="${
+                                    <a class="mr-1 dropdown-item btn-delete btn-responsive-delete" href="javascript:void(0);" data-id="${
                                         full.id
                                     }" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons[
                             "trash"
@@ -124,9 +126,10 @@ $(function () {
                     },
                 },
             ],
-            order: [[1, "desc"]],
-            dom:
-                '<"row d-flex justify-content-between align-items-center m-1"' +
+            order: [
+                [1, "desc"]
+            ],
+            dom: '<"row d-flex justify-content-between align-items-center m-1"' +
                 '<"col-lg-6 d-flex align-items-center"l<"dt-action-buttons text-xl-right text-lg-left text-lg-right text-left "B>>' +
                 '<"col-lg-6 d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap pr-lg-1 p-0"f<"invoice_status ml-sm-2">>' +
                 ">t" +
@@ -145,20 +148,18 @@ $(function () {
                 },
             },
             // Buttons with Dropdown
-            buttons: [
-                {
-                    text: "Add Time",
-                    className: "btn btn-primary btn-add-record ml-2",
-                    action: function (e, dt, button, config) {
-                        $(new_timelog_modal).modal("show");
-                    },
+            buttons: [{
+                text: "Add Time",
+                className: "btn btn-primary btn-add-record ml-2",
+                action: function(e, dt, button, config) {
+                    $(new_timelog_modal).modal("show");
                 },
-            ],
+            }, ],
             // For responsive popup
             responsive: {
                 details: {
                     display: $.fn.dataTable.Responsive.display.modal({
-                        header: function (row) {
+                        header: function(row) {
                             var data = row.data();
                             return "Details of " + data.project;
                         },
@@ -166,8 +167,7 @@ $(function () {
                     type: "column",
                     renderer: $.fn.dataTable.Responsive.renderer.tableAll({
                         tableClass: "table",
-                        columnDefs: [
-                            {
+                        columnDefs: [{
                                 targets: 1,
                                 visible: false,
                             },
@@ -179,17 +179,17 @@ $(function () {
                     }),
                 },
             },
-            initComplete: function () {
+            initComplete: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
                 // Adding role filter once table initialized
             },
-            drawCallback: function () {
+            drawCallback: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
             },
         });
     }
 
-    $(dtTimelogTable).on("click", ".btn-edit", async function () {
+    $(dtTimelogTable).on("click", ".btn-edit", async function() {
         var id = $(this).data("id");
         let form = $(edit_timelog_modal).find("form");
         $(edit_timelog_modal).modal("show");
@@ -213,7 +213,7 @@ $(function () {
         form.find("select[name=expenses_id]").val(timelog.expenses_id);
 
         var tags = [];
-        $.each(timelog.tags, function (index, tag) {
+        $.each(timelog.tags, function(index, tag) {
             tags.push(tag.id);
         });
         if (tags.length != 0) {
@@ -225,7 +225,44 @@ $(function () {
         $(".select2").trigger("change");
     });
 
-    $(dtTimelogTable).on("click", ".btn-delete", async function () {
+    $(document).on("click", ".btn-responsive-edit", async function() {
+        var id = $(this).data("id");
+        let form = $(edit_timelog_modal).find("form");
+        $('.dtr-bs-modal').modal('hide');
+        $(edit_timelog_modal).modal("show");
+
+        const timelog = await $.get("/timesheet/edit/" + id);
+        const end_time = moment(
+            timelog.end_date + " " + timelog.end_time
+        ).format(moment.HTML5_FMT.TIME);
+        const start_time = moment(
+            timelog.start_date + " " + timelog.start_time
+        ).format(moment.HTML5_FMT.TIME);
+
+        form.find("input[name=id]").val(timelog.id);
+        form.find("input[name=start_date]").val(timelog.start_date);
+        form.find("input[name=start_time]").val(start_time);
+        form.find("input[name=end_date]").val(timelog.end_date);
+        form.find("input[name=end_time]").val(end_time);
+        form.find("input[name=duration]").val(timelog.duration);
+        form.find("input[name=break]").val(timelog.break);
+        form.find("select[name=project_id]").val(timelog.project_id);
+        form.find("select[name=expenses_id]").val(timelog.expenses_id);
+
+        var tags = [];
+        $.each(timelog.tags, function(index, tag) {
+            tags.push(tag.id);
+        });
+        if (tags.length != 0) {
+            form.find(".tags-input").select2("val", tags);
+        } else {
+            form.find(".tags-input").val("");
+        }
+
+        $(".select2").trigger("change");
+    });
+
+    $(dtTimelogTable).on("click", ".btn-delete", async function() {
         let id = $(this).data("id");
         Swal.fire({
             title: "Are you sure?",
@@ -238,7 +275,7 @@ $(function () {
                 cancelButton: "btn btn-outline-danger ml-1",
             },
             buttonsStyling: false,
-        }).then(async function (result) {
+        }).then(async function(result) {
             if (result.isConfirmed) {
                 const deleteData = await $.get(`/timesheet/${id}/delete`);
                 if (deleteData.success) {
@@ -253,14 +290,14 @@ $(function () {
         });
     });
 
-    $(new_timelog_modal).on("submit", "form", function (e) {
+    $(new_timelog_modal).on("submit", "form", function(e) {
         e.preventDefault();
         var form = this;
         $.ajax({
             url: $(this).attr("action"),
             type: "POST",
             data: $(this).serialize(),
-            success: function (resp) {
+            success: function(resp) {
                 if (resp.success) {
                     $(new_timelog_modal).modal("hide");
                     $(form)[0].reset();
@@ -277,14 +314,14 @@ $(function () {
         });
     });
 
-    $(edit_timelog_modal).on("submit", "form", function (e) {
+    $(edit_timelog_modal).on("submit", "form", function(e) {
         e.preventDefault();
         var form = this;
         $.ajax({
             url: $(this).attr("action"),
             type: "POST",
             data: $(this).serialize(),
-            success: function (resp) {
+            success: function(resp) {
                 if (resp.success) {
                     $(edit_timelog_modal).modal("hide");
                     $(form)[0].reset();
@@ -552,7 +589,7 @@ $(function () {
 
     $(new_timelog_modal)
         .find("input[name=duration]")
-        .on("keyup", function () {
+        .on("keyup", function() {
             var duration = $(this).val();
             var start = $(new_timelog_modal)
                 .find("input[name=start_date]")
@@ -564,7 +601,7 @@ $(function () {
         });
     $(edit_timelog_modal)
         .find("input[name=duration]")
-        .on("keyup", function () {
+        .on("keyup", function() {
             var duration = $(this).val();
             var start = $(edit_timelog_modal)
                 .find("input[name=start_date]")
@@ -574,7 +611,7 @@ $(function () {
                 .format(moment.HTML5_FMT.TIME);
             $(edit_timelog_modal).find("input[name=end_time]").val(end);
         });
-    $(".select2").each(function () {
+    $(".select2").each(function() {
         var $this = $(this);
         $this.wrap('<div class="position-relative"></div>');
         $this.select2({
