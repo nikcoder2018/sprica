@@ -69,8 +69,6 @@
                             <div class="row">
                                 <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
                                     <label>Start Date</label>
-                                    <input type="datetime-local" class="form-control"
-                                        placeholder="YYYY-MM-DD" />
                                     <input type="text" name="start_date" id="start_date" class="form-control"
                                         placeholder="YYYY-MM-DD" />
                                 </div>
