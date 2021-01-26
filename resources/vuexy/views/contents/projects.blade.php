@@ -102,7 +102,7 @@
                                     <label>Amount spent</label>
                                     <input type="number" name="spent" class="form-control">
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label>Currency</label>
                                     <select class="form-control select2bs4" name="currency" style="width: 100%;">
                                         <option value="usd">Dollars (USD)</option>
@@ -110,7 +110,7 @@
                                         <option value="eur">Euros (EUR)</option>
                                         <option value="inr">Rupee (INR)</option>
                                     </select>
-                                </div>
+                                </div> --}}
                                 <h4 class="card-title">Client Info</h4>
                                 <div class="form-group">
                                     <label>Client Name/Company</label>
@@ -198,7 +198,7 @@
                                     <label>Amount spent</label>
                                     <input type="number" name="spent" class="form-control">
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label>Currency</label>
                                     <select class="form-control select2bs4" name="currency" style="width: 100%;">
                                         <option value="usd">Dollars (USD)</option>
@@ -206,7 +206,7 @@
                                         <option value="eur">Euros (EUR)</option>
                                         <option value="inr">Rupee (INR)</option>
                                     </select>
-                                </div>
+                                </div> --}}
                                 <h4 class="card-title">Client Info</h4>
                                 <div class="form-group">
                                     <label>Client Name/Company</label>

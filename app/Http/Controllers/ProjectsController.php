@@ -51,7 +51,7 @@ class ProjectsController extends Controller
             'deadline' => $request->deadline,
             'budget' => $request->budget,
             'spent' => $request->spent,
-            'currency' => $request->currency,
+            //'currency' => $request->currency,
             'status' => $request->status
         ]);
 

@@ -241,7 +241,7 @@ $(function() {
         form.find('input[name=budget]').val(project.budget);
         form.find('input[name=spent]').val(project.spent);
         form.find('select[name=leader]').val(project.leader_id);
-        form.find('select[name=currency]').val(project.currency);
+        //form.find('select[name=currency]').val(project.currency);
         form.find('select[name=status]').val(project.status);
         form.find('.members_edit').val(members);
         form.find('.members_edit').trigger('change');
