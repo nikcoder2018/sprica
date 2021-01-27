@@ -41,9 +41,9 @@ $(function () {
                 // columns according to JSON
                 { data: "id" },
                 { data: "start_date" },
-                { data: "start_time" },
+                // { data: "start_time" },
                 { data: "end_date" },
-                { data: "end_time" },
+                // { data: "end_time" },
                 { data: "duration" },
                 { data: "break" },
                 { data: "project" },
@@ -59,39 +59,25 @@ $(function () {
                 {
                     targets: 1,
                     render: function (data, type, row) {
-                        return moment(row.start_date).format("MMMM D, Y");
+                        return dayjs(data).format("MMMM DD, YYYY HH:mm A");
                     },
                 },
                 {
                     targets: 2,
                     render: function (data, type, row) {
-                        return moment(
-                            row.start_date + " " + row.start_time
-                        ).format(moment.HTML5_FMT.TIME);
-                    },
-                },
-                {
-                    targets: 4,
-                    render: function (data, type, row) {
-                        return moment(row.end_date + " " + row.end_time).format(
-                            moment.HTML5_FMT.TIME
-                        );
+                        return data !== null
+                            ? dayjs(data).format("MMMM DD, YYYY HH:mm A")
+                            : "N\\A";
                     },
                 },
                 {
                     targets: 3,
                     render: function (data, type, row) {
-                        return moment(row.end_date).format("MMMM D, Y");
-                    },
-                },
-                {
-                    targets: 5,
-                    render: function (data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     },
                 },
                 {
-                    targets: 6,
+                    targets: 4,
                     render: function (data, type, row) {
                         if (row.break != null)
                             return `<span>${row.break} Hours</span>`;
@@ -204,9 +190,9 @@ $(function () {
 
         form.find("input[name=id]").val(timelog.id);
         form.find("input[name=start_date]").val(timelog.start_date);
-        form.find("input[name=start_time]").val(start_time);
+        // form.find("input[name=start_time]").val(start_time);
         form.find("input[name=end_date]").val(timelog.end_date);
-        form.find("input[name=end_time]").val(end_time);
+        // form.find("input[name=end_time]").val(end_time);
         form.find("input[name=duration]").val(timelog.duration);
         form.find("input[name=break]").val(timelog.break);
         form.find("select[name=project_id]").val(timelog.project_id);
@@ -304,25 +290,26 @@ $(function () {
     if (startDatePickr.length) {
         startDatePickr.flatpickr({
             disableMobile: true,
+            enableTime: true,
             onChange: (selectedDates, dateStr, instanc) => {
                 if ($(new_timelog_modal).hasClass("show")) {
-                    var start_time = $(new_timelog_modal)
-                        .find("input[name=start_time]")
-                        .val();
-                    var end_time = $(new_timelog_modal)
-                        .find("input[name=end_time]")
-                        .val();
+                    // var start_time = $(new_timelog_modal)
+                    //     .find("input[name=start_time]")
+                    //     .val();
+                    // var end_time = $(new_timelog_modal)
+                    //     .find("input[name=end_time]")
+                    //     .val();
                     var end_date = $(new_timelog_modal)
                         .find("input[name=end_date]")
                         .val();
                     if (end_time == "") return;
 
-                    var start = moment(dateStr + " " + start_time);
+                    var start = moment(dateStr);
                     var end;
                     if (typeof end_date != "undefined") {
-                        end = moment(end_date + " " + end_time);
+                        end = moment(end_date);
                     } else {
-                        end = moment(dateStr + " " + end_time);
+                        end = moment(dateStr);
                     }
                     var duration = moment.duration(end.diff(start));
 
@@ -332,9 +319,9 @@ $(function () {
                         .val(hours);
                 }
                 if ($(edit_timelog_modal).hasClass("show")) {
-                    var start_time = $(edit_timelog_modal)
-                        .find("input[name=start_time]")
-                        .val();
+                    // var start_time = $(edit_timelog_modal)
+                    //     .find("input[name=start_time]")
+                    //     .val();
                     var end_time = $(edit_timelog_modal)
                         .find("input[name=end_time]")
                         .val();
@@ -344,12 +331,12 @@ $(function () {
 
                     if (end_time == "") return;
 
-                    var start = moment(dateStr + " " + start_time);
+                    var start = moment(dateStr);
                     var end;
                     if (typeof end_date != "undefined") {
-                        end = moment(end_date + " " + end_time);
+                        end = moment(end_date);
                     } else {
-                        end = moment(dateStr + " " + end_time);
+                        end = moment(dateStr);
                     }
 
                     var duration = moment.duration(end.diff(start));
@@ -370,110 +357,111 @@ $(function () {
             enableTime: true,
             noCalendar: true,
             defaultHour: 7,
-            onChange: (selectedDates, timeStr, instance) => {
-                startTimeClickCount++;
-                if (startTimeClickCount == 1) startTime = 7;
-                else startTime = timeStr;
-                if ($(new_timelog_modal).hasClass("show")) {
-                    var start_date = $(new_timelog_modal)
-                        .find("input[name=start_date]")
-                        .val();
-                    var end_time = $(new_timelog_modal)
-                        .find("input[name=end_time]")
-                        .val();
+            // onChange: (selectedDates, timeStr, instance) => {
+            //     startTimeClickCount++;
+            //     if (startTimeClickCount == 1) startTime = 7;
+            //     else startTime = timeStr;
+            //     if ($(new_timelog_modal).hasClass("show")) {
+            //         var start_date = $(new_timelog_modal)
+            //             .find("input[name=start_date]")
+            //             .val();
+            //         // var end_time = $(new_timelog_modal)
+            //         //     .find("input[name=end_time]")
+            //         //     .val();
 
-                    var start = moment(start_date + " " + startTime);
-                    var end;
-                    if (typeof end_date != "undefined") {
-                        end = moment(end_date + " " + end_time);
-                    } else {
-                        end = moment(start_date + " " + end_time);
-                    }
+            //         var start = moment(start_date);
+            //         var end;
+            //         if (typeof end_date != "undefined") {
+            //             end = moment(end_date);
+            //         } else {
+            //             end = moment(start_date);
+            //         }
 
-                    var duration = moment.duration(end.diff(start));
+            //         var duration = moment.duration(end.diff(start));
 
-                    var hours = duration.asHours();
-                    $(new_timelog_modal)
-                        .find("input[name=duration]")
-                        .val(hours);
-                }
-                if ($(edit_timelog_modal).hasClass("show")) {
-                    var start_date = $(edit_timelog_modal)
-                        .find("input[name=start_date]")
-                        .val();
-                    var end_time = $(edit_timelog_modal)
-                        .find("input[name=end_time]")
-                        .val();
+            //         var hours = duration.asHours();
+            //         $(new_timelog_modal)
+            //             .find("input[name=duration]")
+            //             .val(hours);
+            //     }
+            //     if ($(edit_timelog_modal).hasClass("show")) {
+            //         var start_date = $(edit_timelog_modal)
+            //             .find("input[name=start_date]")
+            //             .val();
+            //         // var end_time = $(edit_timelog_modal)
+            //         //     .find("input[name=end_time]")
+            //         //     .val();
 
-                    var start = moment(start_date + " " + startTime);
-                    var end;
-                    if (typeof end_date != "undefined") {
-                        end = moment(end_date + " " + end_time);
-                    } else {
-                        end = moment(start_date + " " + end_time);
-                    }
-                    var duration = moment.duration(end.diff(start));
+            //         var start = moment(start_date);
+            //         var end;
+            //         if (typeof end_date != "undefined") {
+            //             end = moment(end_date);
+            //         } else {
+            //             end = moment(start_date);
+            //         }
+            //         var duration = moment.duration(end.diff(start));
 
-                    var hours = duration.asHours();
-                    $(edit_timelog_modal)
-                        .find("input[name=duration]")
-                        .val(hours);
-                }
-            },
+            //         var hours = duration.asHours();
+            //         $(edit_timelog_modal)
+            //             .find("input[name=duration]")
+            //             .val(hours);
+            //     }
+            // },
         });
     }
 
     if (endDatePickr.length) {
         endDatePickr.flatpickr({
             disableMobile: true,
-            onChange: (selectedDates, dateStr, instanc) => {
-                if ($(new_timelog_modal).hasClass("show")) {
-                    var start_date = $(new_timelog_modal)
-                        .find("input[name=start_date]")
-                        .val();
-                    var start_time = $(new_timelog_modal)
-                        .find("input[name=start_time]")
-                        .val();
-                    var end_time = $(new_timelog_modal)
-                        .find("input[name=end_time]")
-                        .val();
+            enableTime: true,
+            // onChange: (selectedDates, dateStr, instanc) => {
+            //     if ($(new_timelog_modal).hasClass("show")) {
+            //         var start_date = $(new_timelog_modal)
+            //             .find("input[name=start_date]")
+            //             .val();
+            //         // var start_time = $(new_timelog_modal)
+            //         //     .find("input[name=start_time]")
+            //         //     .val();
+            //         // var end_time = $(new_timelog_modal)
+            //         //     .find("input[name=end_time]")
+            //         //     .val();
 
-                    if (end_time == "") return;
+            //         // if (end_time == "") return;
 
-                    var start = moment(start_date + " " + start_time);
-                    var end = moment(dateStr + " " + end_time);
+            //         var start = moment(start_date);
+            //         var end = moment(dateStr);
 
-                    var duration = moment.duration(end.diff(start));
+            //         var duration = moment.duration(end.diff(start));
 
-                    var hours = duration.asHours();
-                    $(new_timelog_modal)
-                        .find("input[name=duration]")
-                        .val(hours);
-                }
-                if ($(edit_timelog_modal).hasClass("show")) {
-                    var start_date = $(edit_timelog_modal)
-                        .find("input[name=start_date]")
-                        .val();
-                    var start_time = $(edit_timelog_modal)
-                        .find("input[name=start_time]")
-                        .val();
-                    var end_time = $(edit_timelog_modal)
-                        .find("input[name=end_time]")
-                        .val();
+            //         var hours = duration.asHours();
+            //         $(new_timelog_modal)
+            //             .find("input[name=duration]")
+            //             .val(hours);
+            //     }
+            //     if ($(edit_timelog_modal).hasClass("show")) {
+            //         var start_date = $(edit_timelog_modal)
+            //             .find("input[name=start_date]")
+            //             .val();
+            //         // var start_time = $(edit_timelog_modal)
+            //         //     .find("input[name=start_time]")
+            //         //     .val();
+            //         // var end_time = $(edit_timelog_modal)
+            //         //     .find("input[name=end_time]")
+            //         //     .val();
 
-                    if (end_time == "") return;
+            //         // if (end_time == "") return;
 
-                    var start = moment(start_date + " " + start_time);
-                    var end = moment(dateStr + " " + end_time);
+            //         var start = moment(start_date);
+            //         var end = moment(dateStr);
 
-                    var duration = moment.duration(end.diff(start));
+            //         var duration = moment.duration(end.diff(start));
 
-                    var hours = duration.asHours();
-                    $(edit_timelog_modal)
-                        .find("input[name=duration]")
-                        .val(hours);
-                }
-            },
+            //         var hours = duration.asHours();
+            //         $(edit_timelog_modal)
+            //             .find("input[name=duration]")
+            //             .val(hours);
+            //     }
+            // },
         });
     }
     var endTimeClickCount = 0,
@@ -484,69 +472,69 @@ $(function () {
             enableTime: true,
             noCalendar: true,
             defaultHour: 22,
-            onChange: (selectedDates, timeStr, instance) => {
-                endTimeClickCount++;
-                if (endTimeClickCount == 1) endTime = 22;
-                else endTime = timeStr;
-                if ($(new_timelog_modal).hasClass("show")) {
-                    var start_date = $(new_timelog_modal)
-                        .find("input[name=start_date]")
-                        .val();
-                    var start_time = $(new_timelog_modal)
-                        .find("input[name=start_time]")
-                        .val();
-                    var end_date = $(new_timelog_modal)
-                        .find("input[name=end_date]")
-                        .val();
+            // onChange: (selectedDates, timeStr, instance) => {
+            //     endTimeClickCount++;
+            //     if (endTimeClickCount == 1) endTime = 22;
+            //     else endTime = timeStr;
+            //     if ($(new_timelog_modal).hasClass("show")) {
+            //         var start_date = $(new_timelog_modal)
+            //             .find("input[name=start_date]")
+            //             .val();
+            //         // var start_time = $(new_timelog_modal)
+            //         //     .find("input[name=start_time]")
+            //         //     .val();
+            //         var end_date = $(new_timelog_modal)
+            //             .find("input[name=end_date]")
+            //             .val();
 
-                    var start = moment(start_date + " " + start_time);
-                    var end;
-                    if (typeof end_date != "undefined") {
-                        end = moment(end_date + " " + endTime);
-                    } else {
-                        end = moment(start_date + " " + endTime);
-                    }
+            //         var start = moment(start_date);
+            //         var end;
+            //         if (typeof end_date != "undefined") {
+            //             end = moment(end_date);
+            //         } else {
+            //             end = moment(start_date);
+            //         }
 
-                    var duration = moment.duration(end.diff(start));
+            //         var duration = moment.duration(end.diff(start));
 
-                    var hours = duration.asHours();
-                    $(new_timelog_modal)
-                        .find("input[name=duration]")
-                        .val(hours);
-                }
-                if ($(edit_timelog_modal).hasClass("show")) {
-                    var start_date = $(edit_timelog_modal)
-                        .find("input[name=start_date]")
-                        .val();
-                    var start_time = $(edit_timelog_modal)
-                        .find("input[name=start_time]")
-                        .val();
-                    var end_date = $(edit_timelog_modal)
-                        .find("input[name=end_date]")
-                        .val();
-                    var end_time = $(edit_timelog_modal)
-                        .find("input[name=end_time]")
-                        .val();
+            //         var hours = duration.asHours();
+            //         $(new_timelog_modal)
+            //             .find("input[name=duration]")
+            //             .val(hours);
+            //     }
+            //     if ($(edit_timelog_modal).hasClass("show")) {
+            //         var start_date = $(edit_timelog_modal)
+            //             .find("input[name=start_date]")
+            //             .val();
+            //         // var start_time = $(edit_timelog_modal)
+            //         //     .find("input[name=start_time]")
+            //         //     .val();
+            //         var end_date = $(edit_timelog_modal)
+            //             .find("input[name=end_date]")
+            //             .val();
+            //         // var end_time = $(edit_timelog_modal)
+            //         //     .find("input[name=end_time]")
+            //         //     .val();
 
-                    if (end_time != null) {
-                        endTime = end_time;
-                    }
+            //         if (end_time != null) {
+            //             endTime = end_time;
+            //         }
 
-                    var start = moment(start_date + " " + start_time);
-                    var end;
-                    if (typeof end_date != "undefined") {
-                        end = moment(end_date + " " + endTime);
-                    } else {
-                        end = moment(start_date + " " + endTime);
-                    }
-                    var duration = moment.duration(end.diff(start));
+            //         var start = moment(start_date);
+            //         var end;
+            //         if (typeof end_date != "undefined") {
+            //             end = moment(end_date);
+            //         } else {
+            //             end = moment(start_date);
+            //         }
+            //         var duration = moment.duration(end.diff(start));
 
-                    var hours = duration.asHours();
-                    $(edit_timelog_modal)
-                        .find("input[name=duration]")
-                        .val(hours);
-                }
-            },
+            //         var hours = duration.asHours();
+            //         $(edit_timelog_modal)
+            //             .find("input[name=duration]")
+            //             .val(hours);
+            //     }
+            // },
         });
     }
 
@@ -572,7 +560,7 @@ $(function () {
             var end = moment(start)
                 .add(duration, "hours")
                 .format(moment.HTML5_FMT.TIME);
-            $(edit_timelog_modal).find("input[name=end_time]").val(end);
+            // $(edit_timelog_modal).find("input[name=end_time]").val(end);
         });
     $(".select2").each(function () {
         var $this = $(this);
