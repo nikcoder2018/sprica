@@ -261,6 +261,34 @@ $(function() {
 
         $(".select2").trigger("change");
     });
+    $(document).on("click", ".btn-responsive-delete", async function() {
+        let id = $(this).data("id");
+        $('.dtr-bs-modal').modal('hide');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-outline-danger ml-1",
+            },
+            buttonsStyling: false,
+        }).then(async function(result) {
+            if (result.isConfirmed) {
+                const deleteData = await $.get(`/timesheet/${id}/delete`);
+                if (deleteData.success) {
+                    toastr["success"](deleteData.msg, "Deleted!", {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl,
+                    });
+                    dtTimelog.ajax.reload();
+                }
+            }
+        });
+    });
 
     $(dtTimelogTable).on("click", ".btn-delete", async function() {
         let id = $(this).data("id");

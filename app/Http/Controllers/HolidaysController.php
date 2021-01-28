@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Holiday;
+
+use App\Http\Resources\Holiday as HolidayResource;
 class HolidaysController extends Controller
 {
     /**
@@ -13,7 +15,8 @@ class HolidaysController extends Controller
      */
     public function index()
     {
-        //
+        $data['title'] = 'Holidays';
+        return view('contents.holidays', $data);
     }
 
     /**
@@ -36,7 +39,8 @@ class HolidaysController extends Controller
     {
         $data = $request->validate([
             'date' => 'required',
-            'occasion' => 'required:string'
+            'occasion' => 'required:string',
+            'color' => 'required:string'
         ]);
 
         $holiday = Holiday::create($data);
@@ -97,5 +101,11 @@ class HolidaysController extends Controller
     {
         if($holiday->delete())
             return response()->json(['success' => true, 'msg' => 'Delete Successful']);
+    }
+    
+    public function events(){
+        $holidays = Holiday::all();
+
+        return response()->json(['events' => HolidayResource::collection($holidays)]);
     }
 }

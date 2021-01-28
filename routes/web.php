@@ -70,6 +70,12 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('advances/update', 'AdvancesController@update')->name('advances.update');
     Route::get('advances/{id}/delete', 'AdvancesController@destroy')->name('advances.delete');
 
+    Route::prefix('hr')->group(function(){
+        Route::resource('holidays', 'HolidaysController', ['except' => ['show']]);
+        Route::get('holidays/events', 'HolidaysController@events');
+    });
+    
+
     Route::resource('projects','ProjectsController', ['except' => ['show', 'update']]);
     Route::post('projects/update', 'ProjectsController@update')->name('projects.update');
     Route::get('projects/{id}/details', 'Admin\ProjectsController@show')->name('admin.projects.details');
