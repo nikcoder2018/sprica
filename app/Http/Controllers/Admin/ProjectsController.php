@@ -157,9 +157,10 @@ class ProjectsController extends Controller
         }
     }
     public function calendar(){
+        $data['title'] = 'Project Calendar';
         $data['projects'] = Project::all();
         $data['employees'] = User::where('status', 1)->get();
-        return view('admin.contents.projects_calendar', $data);
+        return view('contents.projects.calendar', $data);
     }
 
     public function calendar_resources(){
@@ -186,10 +187,10 @@ class ProjectsController extends Controller
             $tasks = TaskAssignment::with('task')->where('assign_to', $resourceId)->get();
 
             foreach($tasks as $task){
-                $project = Project::where('ProjeID', $task->task->project_id)->first();
+                $project = Project::where('id', $task->task->project_id)->first();
                 array_push($results, (object) array(
                     'resourceId' => $user->id,
-                    'title' => $project->ProjeBASLIK.'-'.$task->task->title,
+                    'title' => $project->title.'-'.$task->task->title,
                     'start' => $task->task->start_date,
                     'end' => $task->task->due_date
                 ));

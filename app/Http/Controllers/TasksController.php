@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,6 +12,10 @@ use App\TaskAssignment;
 use App\User;
 use App\Role;
 use App\EmailTrigger;
+
+use App\Http\Resources\Task as ResourceTask;
+
+use DataTables;
 class TasksController extends Controller
 {
     /**
@@ -21,13 +25,18 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $data['tasks'] = Task::with(['project','assigned'])->get();
+        $data['title'] = 'Tasks';
         $data['projects'] = Project::all();
         $data['employees'] = User::where('status', 1)->get();
-        #return response()->json($data); exit;
-        return view('admin.contents.tasks', $data);
+        return view('contents.tasks', $data);
     }
 
+    public function all(){
+        $tasks = Task::with(['assigned','project'])->get();
+        
+        return DataTables::of(ResourceTask::collection($tasks))->toJson();
+    }
+    
     /**
      * Show the form for creating a new resource.
      *

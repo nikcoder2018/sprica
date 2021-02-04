@@ -73,30 +73,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Calendar plugins
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        events: fetchEvents,
-        editable: true,
-        dragScroll: true,
-        dayMaxEvents: 2,
-        eventResizableFromStart: true,
-        customButtons: {
-            sidebarToggle: {
-                text: 'Sidebar'
-            }
-        },
+        timeZone: 'UTC',
+        initialView: 'resourceTimelineMonth',
+        aspectRatio: 1.5,
         headerToolbar: {
-            start: 'sidebarToggle, prev,next, title',
-            end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            left: 'prev,next',
+            center: 'title',
+            right: 'resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth'
         },
-        direction: direction,
-        initialDate: new Date(),
-        navLinks: true, // can click day/week names to navigate views
-        eventClassNames: function({ event: calendarEvent }) {
-            return [
-                // Background Color
-                'bg-light-' + calendarEvent._def.extendedProps.color
-            ];
-        }
+        editable: false,
+        eventDidMount: function(info) {
+            var tooltip = new Tooltip(info.el, {
+                title: info.event.extendedProps.title,
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body'
+            });
+        },
+        resourceAreaHeaderContent: 'Employees',
+        resources: '/api/projects/calendar/resource',
+        events: '/api/projects/calendar/events'
     });
 
     // Render calendar

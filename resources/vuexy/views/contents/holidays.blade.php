@@ -113,7 +113,7 @@
                             <i data-feather='plus-circle'></i> <span class="align-middle">Add Holiday</span>
                         </button>
                     </div>
-                    <div class="card-body pb-0">
+                    {{-- <div class="card-body pb-0">
                         <h5 class="section-label mb-1">
                             <span class="align-middle">Holidays</span>
                         </h5>
@@ -127,7 +127,7 @@
                                 <label class="custom-control-label" for="personal">New Year</label>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <!-- /Sidebar -->
