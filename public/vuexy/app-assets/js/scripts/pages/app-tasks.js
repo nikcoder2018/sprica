@@ -1,10 +1,10 @@
 $(function() {
     'use strict';
 
-    var dtTable = $('.projects-list-table'),
+    var dtTable = $('.tasks-list-table'),
         isRtl = $('html').attr('data-textdirection') === 'rtl',
-        API_URL = '/api/projects/all',
-        URL = '/projects',
+        API_URL = '/api/tasks/all',
+        URL = '/tasks',
         datePickr = $('.flatpickr-date'),
         new_modal = $('#new-modal'),
         edit_modal = $('#edit-modal');
@@ -12,17 +12,17 @@ $(function() {
     // datatable
     if (dtTable.length) {
         var dt = dtTable.DataTable({
+            processing: true,
+            serverSide: true,
             ajax: API_URL, // JSON file to add data
             autoWidth: false,
             columns: [
                 // columns according to JSON
                 { data: 'id' },
                 { data: 'title' },
-                { data: 'client' },
-                { data: 'leader' },
-                { data: 'members' },
-                { data: 'progress' },
-                { data: 'hours' },
+                { data: 'project' },
+                { data: 'assigned' },
+                { data: 'due' },
                 { data: 'status' },
                 { data: '' }
             ],
@@ -30,38 +30,16 @@ $(function() {
                     // For Responsive
                     className: 'control',
                     responsivePriority: 2,
-                    targets: 0
+                    targets: 0,
+                    render: function() {
+                        return '';
+                    }
                 },
                 {
                     targets: 3,
                     render: function(data, type, row) {
                         var avatarGroup = '';
-                        var avatar = '/vuexy/app-assets/images/avatars/noface.png';
-                        if (row.leader != null) {
-                            if (row.leader.avatar != '') {
-                                avatar = row.leader.avatar;
-                            }
-
-                            avatarGroup += `
-                            <div data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" class="avatar pull-up my-0" data-original-title="${row.leader.name}">
-                                <img src="${avatar}" alt="Avatar" height="26" width="26">
-                            </div>
-                            `;
-                            return `
-                            <div class="avatar-group">
-                                ${avatarGroup}
-                            </div>
-                            `;
-                        } else {
-                            return '';
-                        }
-                    }
-                },
-                {
-                    targets: 4,
-                    render: function(data, type, row) {
-                        var avatarGroup = '';
-                        $.each(row.members, function(index, member) {
+                        $.each(row.assigned, function(index, member) {
                             //default avatar if user avatar is not set
                             var avatar = '/vuexy/app-assets/images/avatars/noface.png';
                             if (member.avatar != '') {
@@ -78,47 +56,6 @@ $(function() {
                             ${avatarGroup}
                         </div>
                         `;
-                    }
-                },
-                {
-                    targets: 5,
-                    render: function(data, type, row) {
-                        return `
-                        <div class="progress-wrapper">
-                            <div id="example-caption-2">${row.progress}%</div>
-                            <div class="progress progress-bar-primary">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="${row.progress}" aria-valuemin="${row.progress}" aria-valuemax="100" style="width: 25%" aria-describedby="example-caption-2"></div>
-                            </div>
-                        </div>
-                        `;
-                    }
-                },
-                {
-                    targets: 6,
-                    render: function(data, type, row) {
-                        return `<span>${row.hours} Hours</span>`;
-                    }
-                },
-                {
-                    targets: 7,
-                    render: function(data, type, row) {
-                        switch (row.status) {
-                            case 'notstarted':
-                                return `<span class="badge badge-secondary badge-light-secondary mr-1">Not Started</span>`;
-                                break;
-                            case 'inprogress':
-                                return `<span class="badge badge-info badge-light-info mr-1">In Progress</span>`;
-                                break;
-                            case 'onhold':
-                                return `<span class="badge badge-warning badge-warning-info mr-1">On Hold</span>`;
-                                break;
-                            case 'canceled':
-                                return `<span class="badge badge-danger badge-light-danger mr-1">Canceled</span>`;
-                                break;
-                            case 'completed':
-                                return `<span class="badge badge-success badge-light-success mr-1">Completed</span>`;
-                                break;
-                        }
                     }
                 },
                 {
@@ -143,15 +80,15 @@ $(function() {
             dom: '<"row d-flex justify-content-between align-items-center m-1"' +
                 '<"col-lg-6 d-flex align-items-center"l<"dt-action-buttons text-xl-right text-lg-left text-lg-right text-left "B>>' +
                 '<"col-lg-6 d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap pr-lg-1 p-0"f<"invoice_status ml-sm-2">>' +
-                '>t' +
+                ">t" +
                 '<"d-flex justify-content-between mx-2 row"' +
                 '<"col-sm-12 col-md-6"i>' +
                 '<"col-sm-12 col-md-6"p>' +
-                '>',
+                ">",
             language: {
                 sLengthMenu: 'Show _MENU_',
                 search: 'Search',
-                searchPlaceholder: 'Search Projects',
+                searchPlaceholder: 'Search Tasks',
                 paginate: {
                     // remove previous & next text from pagination
                     previous: '&nbsp;',
@@ -160,7 +97,7 @@ $(function() {
             },
             // Buttons with Dropdown
             buttons: [{
-                text: 'Create Project',
+                text: 'Create Task',
                 className: 'btn btn-primary btn-add-record ml-2',
                 action: function(e, dt, button, config) {
                     $(new_modal).modal('show');

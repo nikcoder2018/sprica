@@ -2,7 +2,7 @@
 use App\Helpers\Language;
 $lang = new Language;
 ?>
-@extends('layouts.admin.main')
+@extends('layouts.main')
 
 @section('stylesheets')
 <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">

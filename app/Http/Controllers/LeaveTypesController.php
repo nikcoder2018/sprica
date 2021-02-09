@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-
-use App\TicketType;
-class TicketsTypeController extends Controller
+use App\LeaveType;
+class LeaveTypesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +14,7 @@ class TicketsTypeController extends Controller
      */
     public function index()
     {
-        $data['types'] = TicketType::all();
-        return view('admin.contents.tickets_types', $data);
+        //
     }
 
     /**
@@ -37,11 +35,13 @@ class TicketsTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $createType = TicketType::create([
-            'name' => $request->name
+        $data = $request->validate([
+            'name' => 'required',
         ]);
-        if($createType)
-            return response()->json(array('success' => true, 'msg' => 'Ticket Type Created'));
+        $leavetype = LeaveType::create($data);
+
+        if($leavetype)
+            return response()->json(array('success' => true, 'msg' => 'New leave type created'));
     }
 
     /**
@@ -61,10 +61,9 @@ class TicketsTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(LeaveType $leavetype)
     {
-        $typeData = TicketType::find($request->id);
-        return response()->json($typeData);
+        return response()->json($leavetype);
     }
 
     /**
@@ -74,14 +73,16 @@ class TicketsTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, LeaveType $leavetype)
     {
-        $type = TicketType::find($request->id);
-        $type->name = $request->name;
-        $type->save();
+        $data = $request->validate([
+            'name' => 'required',
+        ]);
 
-        if($type)
-            return response()->json(array('success' => true, 'msg' => 'Ticket Type Updated.'));
+        $leavetype->update($data);
+        
+        if($leavetype)
+            return response()->json(['success' => true, 'msg' => 'Update Successful', 'details' => $leavetype]);
     }
 
     /**
@@ -90,13 +91,9 @@ class TicketsTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(LeaveType $leavetype)
     {
-        $type = TicketType::find($request->id);
-        $type->delete();
-
-        if($type){
-            return response()->json(array('success' => true, 'msg' => 'Ticket Type Deleted!'));
-        }
+        if($leavetype->delete())
+            return response()->json(['success' => true, 'msg' => 'Delete Successful']);
     }
 }

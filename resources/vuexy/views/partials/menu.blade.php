@@ -38,7 +38,7 @@
             </li>
 
             <li class="nav-item {{ Request::segment(1) === 'todo' ? 'active' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('timetracking') }}">
+                <a class="d-flex align-items-center" href="{{ route('todo.index') }}">
                     <i data-feather="check-square"></i>
                     <span class="menu-title text-truncate">Todo</span>
                 </a>
@@ -120,6 +120,11 @@
                             <i data-feather="circle"></i><span class="menu-item">Employees</span>
                         </a>
                     </li>
+                    <li class="{{ Request::segment(1) === 'holidays' ? 'active' : null }}">
+                        <a class="d-flex align-items-center" href="{{ route('holidays.index') }}">
+                            <i data-feather="circle"></i><span class="menu-item">Holidays</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -138,7 +143,7 @@
                             <i data-feather="circle"></i><span class="menu-item">Task</span>
                         </a>
                     </li>
-                    <li class="{{ Request::segment(2) === 'users' ? 'calendar' : null }}">
+                    <li class="{{ Request::segment(2) === 'calendar' ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('admin.projects.calendar') }}">
                             <i data-feather="circle"></i><span class="menu-item">Calendar</span>
                         </a>

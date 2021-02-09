@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Project extends JsonResource
+class Task extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,18 +14,12 @@ class Project extends JsonResource
      */
     public function toArray($request)
     {
-        $completed = count($this->tasks_completed);
-        $tasks = count($this->tasks);
-        if($tasks > 0) $progress = ($completed/$tasks)*100; else  $progress = 0;
-
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'client' => $this->client->name,
-            'leader' => $this->leader,
-            'members' => $this->members,
-            'progress' => $progress,
-            'hours' => $this->hours,
+            'project' => $this->project->title,
+            'assigned' => $this->assigned,
+            'due' => $this->due_date,
             'status' => $this->status
         ];
     }

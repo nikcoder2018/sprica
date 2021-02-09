@@ -25,6 +25,8 @@ Route::get('/users/all', 'UsersController@all');
 Route::get('/permissions/all', 'PermissionsController@all');
 Route::get('/roles/all', 'RolesController@all');
 Route::get('/projects/all', 'ProjectsController@all');
+Route::get('/tasks/all', 'TasksController@all');
+Route::get('/tickets/all', 'TicketsController@all');
 
 Route::get('/finance/estimates/generate', 'EstimateController@generate');
 Route::get('/finance/invoices/generate', 'InvoiceController@generate');

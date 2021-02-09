@@ -55,29 +55,46 @@ $(function () {
                     className: "control",
                     responsivePriority: 2,
                     targets: 0,
+                    render: function () {
+                        return "";
+                    },
                 },
                 {
                     targets: 1,
                     render: function (data, type, row) {
-                        return dayjs(data).format("MMMM DD, YYYY HH:mm A");
+                        return moment(row.start_date).format("MMMM D, Y");
                     },
                 },
                 {
                     targets: 2,
                     render: function (data, type, row) {
-                        return data !== null
-                            ? dayjs(data).format("MMMM DD, YYYY HH:mm A")
-                            : "N\\A";
+                        return moment(
+                            row.start_date + " " + row.start_time
+                        ).format(moment.HTML5_FMT.TIME);
+                    },
+                },
+                {
+                    targets: 4,
+                    render: function (data, type, row) {
+                        return moment(row.end_date + " " + row.end_time).format(
+                            moment.HTML5_FMT.TIME
+                        );
                     },
                 },
                 {
                     targets: 3,
                     render: function (data, type, row) {
+                        return moment(row.end_date).format("MMMM D, Y");
+                    },
+                },
+                {
+                    targets: 5,
+                    render: function (data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     },
                 },
                 {
-                    targets: 4,
+                    targets: 6,
                     render: function (data, type, row) {
                         if (row.break != null)
                             return `<span>${row.break} Hours</span>`;
@@ -95,12 +112,12 @@ $(function () {
                                     "more-vertical"
                                 ].toSvg({ class: "font-small-4" })}</a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="mr-1 dropdown-item btn-edit" href="javascript:void(0);" data-id="${
+                                    <a class="mr-1 dropdown-item btn-edit btn-responsive-edit" href="javascript:void(0);" data-id="${
                                         full.id
                                     }" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons[
                             "edit-2"
                         ].toSvg({ class: "font-medium-2" })} Edit</a>
-                                    <a class="mr-1 dropdown-item btn-delete" href="javascript:void(0);" data-id="${
+                                    <a class="mr-1 dropdown-item btn-delete btn-responsive-delete" href="javascript:void(0);" data-id="${
                                         full.id
                                     }" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons[
                             "trash"
@@ -190,6 +207,43 @@ $(function () {
 
         form.find("input[name=id]").val(timelog.id);
         form.find("input[name=start_date]").val(timelog.start_date);
+        form.find("input[name=start_time]").val(start_time);
+        form.find("input[name=end_date]").val(timelog.end_date);
+        form.find("input[name=end_time]").val(end_time);
+        form.find("input[name=duration]").val(timelog.duration);
+        form.find("input[name=break]").val(timelog.break);
+        form.find("select[name=project_id]").val(timelog.project_id);
+        form.find("select[name=expenses_id]").val(timelog.expenses_id);
+
+        var tags = [];
+        $.each(timelog.tags, function (index, tag) {
+            tags.push(tag.id);
+        });
+        if (tags.length != 0) {
+            form.find(".tags-input").select2("val", tags);
+        } else {
+            form.find(".tags-input").val("");
+        }
+
+        $(".select2").trigger("change");
+    });
+
+    $(document).on("click", ".btn-responsive-edit", async function () {
+        var id = $(this).data("id");
+        let form = $(edit_timelog_modal).find("form");
+        $(".dtr-bs-modal").modal("hide");
+        $(edit_timelog_modal).modal("show");
+
+        const timelog = await $.get("/timesheet/edit/" + id);
+        const end_time = moment(
+            timelog.end_date + " " + timelog.end_time
+        ).format(moment.HTML5_FMT.TIME);
+        const start_time = moment(
+            timelog.start_date + " " + timelog.start_time
+        ).format(moment.HTML5_FMT.TIME);
+
+        form.find("input[name=id]").val(timelog.id);
+        form.find("input[name=start_date]").val(timelog.start_date);
         // form.find("input[name=start_time]").val(start_time);
         form.find("input[name=end_date]").val(timelog.end_date);
         // form.find("input[name=end_time]").val(end_time);
@@ -209,6 +263,34 @@ $(function () {
         }
 
         $(".select2").trigger("change");
+    });
+    $(document).on("click", ".btn-responsive-delete", async function () {
+        let id = $(this).data("id");
+        $(".dtr-bs-modal").modal("hide");
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-outline-danger ml-1",
+            },
+            buttonsStyling: false,
+        }).then(async function (result) {
+            if (result.isConfirmed) {
+                const deleteData = await $.get(`/timesheet/${id}/delete`);
+                if (deleteData.success) {
+                    toastr["success"](deleteData.msg, "Deleted!", {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl,
+                    });
+                    dtTimelog.ajax.reload();
+                }
+            }
+        });
     });
 
     $(dtTimelogTable).on("click", ".btn-delete", async function () {

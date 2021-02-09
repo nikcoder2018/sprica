@@ -97,9 +97,8 @@
 <body class="vertical-layout vertical-menu-modern dark-layout  navbar-floating footer-static" data-open="click"
     data-menu="vertical-menu-modern" data-col="" data-layout="dark-layout">
     <div id="main-content-wrapper" class="d-none">
-        @include('admin.partials.header')
-
-        @include('admin.partials.menu')
+        @include('partials.header')
+        @include('partials.menu')
 
         <!-- BEGIN: Content-->
         <div class="app-content content">
@@ -121,7 +120,7 @@
         <div class="sidenav-overlay"></div>
         <div class="drag-target"></div>
 
-        @include('admin.partials.footer')
+        @include('partials.footer')
 
         @yield('modals')
     </div>
@@ -130,7 +129,6 @@
         <img src="{{ asset(env('APP_THEME', 'default') . '/app-assets/images/logo.jpg') }}" alt=""
             style="max-height: 60px;">
     </div>
-
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/vendors.min.js') }}"></script>

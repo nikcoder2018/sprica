@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\Ticket as TicketResource;
 use App\Ticket;
 use App\TicketType;
 use App\User;
 use App\Project;
 use App\ProjectMember;
+use Gate;
+use DataTables;
 class TicketsController extends Controller
 {
     /**
@@ -19,22 +21,20 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->myrole->name != 'admin'){
-            $data['tickets'] = Ticket::where('requester_user_id', auth()->user()->id)->get();
-            $data['projects'] = ProjectMember::where('user_id', auth()->user()->id)->with('project')->get();
-        }else{
-            $data['tickets'] = Ticket::all();
-            $data['projects'] = Project::all();
-        }
-            
+        //abort_unless(Gate::any(['full_access','tickets_show']), 404);
+
+        $data['title'] = 'Tickets';
+        $data['projects'] = Project::all();
         $data['types'] = TicketType::orderBy('id', 'ASC')->get();
-        
         $data['users'] = User::all();
 
-        #return response()->json($data);
-        return view('admin.contents.tickets', $data);
+        return view('contents.tickets', $data);
     }
 
+    public function all(){
+        $tickets = Ticket::with('requester')->get();
+        return DataTables::of(TicketResource::collection($tickets))->toJson();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -84,10 +84,9 @@ class TicketsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(Ticket $ticket)
     {
-        $ticketData = Ticket::find($request->id);
-        return response()->json($ticketData);
+        return response()->json($ticket);
     }
 
     /**
@@ -119,9 +118,9 @@ class TicketsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $ticket = Ticket::find($request->id);
+        $ticket = Ticket::find($id);
         $ticket->delete();
 
         if($ticket){

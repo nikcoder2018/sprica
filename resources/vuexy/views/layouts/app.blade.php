@@ -61,9 +61,9 @@
 <body class="vertical-layout vertical-menu-modern dark-layout  navbar-floating footer-static " data-open="click"
     data-menu="vertical-menu-modern" data-col="" data-layout="dark-layout">
     <div id="main-content-wrapper" class="d-none">
-        @include('admin.partials.header')
 
-        @include('admin.partials.menu')
+        @include('partials.header')
+        @include('partials.menu')
 
         <div class="app-content content todo-application">
             <div class="content-overlay"></div>
@@ -78,7 +78,7 @@
         <div class="sidenav-overlay"></div>
         <div class="drag-target"></div>
 
-        @include('admin.partials.footer')
+        @include('partials.footer')
 
         @yield('modals')
     </div>
