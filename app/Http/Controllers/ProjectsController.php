@@ -30,11 +30,11 @@ class ProjectsController extends Controller
     }
 
     public function show($id){
-        $data['project'] = Project::with(['tasks','hours', 'members', 'activities'])->where('ProjeID', $id)->orderBy('ProjeID', 'DESC')->first();
+        $data['project'] = Project::with(['tasks','timelogs', 'members', 'activities'])->where('id', $id)->orderBy('id', 'DESC')->first();
         
         $data['users'] = User::where('status', 1)->get();
-        #return response()->json($data); exit;
-        return view('admin.contents.projects_details', $data);
+        //return response()->json($data); exit;
+        return view('contents.projects.details', $data);
     }
 
     public function create(){

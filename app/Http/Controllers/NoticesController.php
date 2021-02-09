@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\Notice as ResourceNotice;
 use App\Notice;
 use App\NoticeRead;
+
+use DataTables;
 class NoticesController extends Controller
 {
     /**
@@ -14,12 +17,19 @@ class NoticesController extends Controller
      */
     public function index()
     {
-        $data['notices'] = Notice::all();
-        $data['notices_reads'] = NoticeRead::with(['notice', 'user'])->get();
-
-        return view('admin.contents.notices', $data);
+        $data['title'] = 'News';
+        return view('contents.notices', $data);
     }
 
+    public function all(){
+        $notices = Notice::all();
+        return DataTables::of(ResourceNotice::collection($notices))->toJson();
+    }
+
+    public function reads(){
+        $readers = NoticeRead::with(['notice', 'user'])->get();
+        return DataTables::of($readers)->toJson();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -73,9 +83,9 @@ class NoticesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit($id)
     {
-        $notice = Notice::find($request->id);
+        $notice = Notice::find($id);
         return response()->json($notice);
     }
 
@@ -104,10 +114,10 @@ class NoticesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $delete = Notice::find($request->id)->delete();
+        $delete = Notice::find($id)->delete();
         if($delete)
-            return response()->json(array('success' => true, 'msg' => 'Notice deleted.', 'id' => $request->id));
+            return response()->json(array('success' => true, 'msg' => 'Notice deleted.', 'id' => $id));
     }
 }

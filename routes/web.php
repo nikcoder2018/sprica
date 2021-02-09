@@ -78,7 +78,7 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
 
     Route::resource('projects','ProjectsController', ['except' => ['show', 'update']]);
     Route::post('projects/update', 'ProjectsController@update')->name('projects.update');
-    Route::get('projects/{id}/details', 'Admin\ProjectsController@show')->name('admin.projects.details');
+    Route::get('projects/{id}/details', 'ProjectsController@show')->name('projects.details');
 
     Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
     Route::post('/projects/remove-member', 'Admin\ProjectsController@remove_member')->name('admin.projects.remove-member');
@@ -172,11 +172,9 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('fuels/update', 'Admin\FuelsController@update')->name('fuels.update');
     Route::post('fuels/destroy', 'Admin\FuelsController@destroy')->name('fuels.destroy');
 
-    Route::resource('notices', 'NoticesController', ['except' => ['show', 'edit', 'update', 'destroy']]);
-    Route::post('notices/edit', 'NoticesController@edit')->name('notices.edit');
+    Route::resource('notices', 'NoticesController', ['except' => ['show', 'update']]);
     Route::post('notices/update', 'NoticesController@update')->name('notices.update');
-    Route::post('notices/destroy', 'NoticesController@destroy')->name('notices.destroy');
-
+ 
     Route::get('/user/settings', 'GeneralSettingController@index')->name('user.settings.index');
     Route::post('/user/settings', 'GeneralSettingController@store')->name('user.settings.store');
 
