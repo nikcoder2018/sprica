@@ -20,8 +20,8 @@ $lang = new Language;
 </style> 
 @endsection
 @section('content')
-<div style="height:51px" class="card card-default color-palette-bo">
-    <div style="height:51px" class="card-header">
+<div class="card card-default color-palette-bo">
+    <div class="card-header pb-1">
         <div class="d-inline-block">
           <h3 class="card-title"><i class="fa fa-car"></i> Vehicle Groups</h3>
         </div>
@@ -31,7 +31,7 @@ $lang = new Language;
     </div>
 </div>
 
-<section class="content">
+<section class="content m-md-0">
     <div class="card">
         <div class="card-body p-0">
             <table id="example1" class="table table-striped">

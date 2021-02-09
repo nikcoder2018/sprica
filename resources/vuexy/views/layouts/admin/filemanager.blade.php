@@ -48,26 +48,30 @@
 
 <body class="vertical-layout vertical-menu-modern dark-layout  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="" data-layout="dark-layout">
 
-    @include('admin.partials.header')
+    <div id="main-content-wrapper" class="d-none">
+        @include('admin.partials.header')
 
-    @include('admin.partials.menu')
+        @include('admin.partials.menu')
 
-    <!-- BEGIN: Content-->
-    <div class="app-content content file-manager-application">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-area-wrapper">
-            @yield('content')
+        <!-- BEGIN: Content-->
+        <div class="app-content content file-manager-application">
+            <div class="content-overlay"></div>
+            <div class="header-navbar-shadow"></div>
+            <div class="content-area-wrapper">
+                @yield('content')
+            </div>
         </div>
+        <!-- END: Content-->
+
+        <div class="sidenav-overlay"></div>
+        <div class="drag-target"></div>
+
+        @include('admin.partials.footer')
+
+        @include('partials.customizer')
+
+        @yield('modals')
     </div>
-    <!-- END: Content-->
-
-    <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
-
-    @include('admin.partials.footer')
-
-    @yield('modals')
     
     <!-- BEGIN: Vendor JS-->
     <script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/vendors.min.js')}}"></script>
@@ -81,6 +85,7 @@
     <!-- BEGIN: Theme JS-->
     <script src="{{asset(env('APP_THEME','default').'/app-assets/js/core/app-menu.js')}}"></script>
     <script src="{{asset(env('APP_THEME','default').'/app-assets/js/core/app.js')}}"></script>
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/customizer.js') }}"></script>
     <!-- END: Theme JS-->
 
     @yield('external_js')
