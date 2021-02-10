@@ -65,15 +65,11 @@ class TasksController extends Controller
             'priority' => $request->priority
         ]);
 
-        foreach($request->assign_to as $employee){
-            TaskAssignment::create([
-                'task_id' => $task->id,
-                'user_id' => auth()->user()->id,
-                'assign_to' => $employee
-            ]);
+        $task->assigned()->sync($request->input('assign_to', []));
 
-            EmailTrigger::Execute('NEW_TASK_CREATED', array('user_id' => $employee));   
-        }
+        // foreach($request->assign_to as $employee){
+        //     EmailTrigger::Execute('NEW_TASK_CREATED', array('user_id' => $employee));   
+        // }
         
         ProjectActivity::create([
             'project_id' => $request->project_id,
@@ -81,9 +77,7 @@ class TasksController extends Controller
             'details' => 'New Task Added.'
         ]);
 
-        $renderRow = view('render.row-new-project-task', ['task' => $task])->render();
-
-        return response()->json(array('success' => true, 'msg' => 'Task Successfully Created', 'row' => $renderRow));
+        return response()->json(array('success' => true, 'msg' => 'Task Successfully Created'));
     }
 
     /**
@@ -128,18 +122,7 @@ class TasksController extends Controller
         $task->priority = $request->priority;
         $task->save();
 
-        $assigned_employee = array();
-
-        foreach($request->assign_to as $employee){
-            if(!TaskAssignment::where('task_id',$task->id)->where('assign_to',$employee)->exists()){
-                TaskAssignment::create([
-                    'task_id' => $task->id,
-                    'assign_to' => $employee
-                ]);
-            }
-
-            array_push($assigned_employee, $employee);
-        }
+        $task->assigned()->sync($request->input('assign_to', []));
 
         if($task->status == 'completed'){
             ProjectActivity::create([
@@ -148,6 +131,7 @@ class TasksController extends Controller
                 'details' => 'Project Task Marked as Completed'
             ]);
         }
+
         if($task->status == 'incomplete'){
             ProjectActivity::create([
                 'project_id' => $request->project_id,
@@ -162,11 +146,7 @@ class TasksController extends Controller
             'details' => 'Project Task Updated'
         ]);
 
-        TaskAssignment::where('task_id', $task->id)->whereNotIn('assign_to', $assigned_employee)->delete();
-
-        $renderRow = view('render.row-new-project-task', ['task' => $task])->render();
-
-        return response()->json(array('success' => true, 'msg' => 'Task Updated Successfully.','renderRow' => $renderRow, 'id' => $task->id));
+        return response()->json(array('success' => true, 'msg' => 'Task Updated Successfully.', 'id' => $task->id));
     }
 
     /**
@@ -175,11 +155,10 @@ class TasksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $task = Task::find($request->id);
+        $task = Task::find($id);
         
-
         ProjectActivity::create([
             'project_id' => $task->project_id,
             'user_id' => auth()->user()->id,

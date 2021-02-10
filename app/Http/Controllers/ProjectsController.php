@@ -13,6 +13,7 @@ use App\TaskAssignment;
 use App\User;
 use App\ProjectMember;
 use App\Role;
+use App\Timelog;
 use DataTables;
 class ProjectsController extends Controller
 {
@@ -29,6 +30,18 @@ class ProjectsController extends Controller
         return DataTables::of(ResourceProject::collection($projects))->toJson();
     }
 
+    public function details($id, Request $request){
+        switch($request->category){
+            case 'tasks': 
+                $tasks = Task::where('project_id', $id)->with('assigned')->get();
+                return DataTables::of($tasks)->toJson();
+            break;
+            case 'timelogs': 
+                $timelogs = Timelog::where('project_id', $id)->with('user')->get();
+                return DataTables::of($timelogs)->toJson();
+            break;
+        }
+    }
     public function show($id){
         $data['project'] = Project::with(['tasks','timelogs', 'members', 'activities'])->where('id', $id)->orderBy('id', 'DESC')->first();
         

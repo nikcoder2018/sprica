@@ -148,8 +148,6 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/customizer.js') }}"></script>
     <!-- END: Theme JS-->
 
-
-
     @yield('scripts')
 
     <script>

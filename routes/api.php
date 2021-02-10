@@ -36,3 +36,5 @@ Route::apiResource('/finance/expenses/categories', 'ExpenseCategoryController');
 Route::apiResource('/finance/expenses', 'ExpenseController');
 Route::apiResource('/finance/invoices', 'InvoiceController');
 Route::apiResource('/finance/estimates', 'EstimateController');
+
+Route::post('projects/{id}/details', 'ProjectsController@details');

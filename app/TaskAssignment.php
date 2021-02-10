@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class TaskAssignment extends Model
 {
-    protected $table = 'tasks_assignment';
     protected $fillable = ['task_id', 'assign_to'];
 
     function user(){
-        return $this->belongsToMany(User::class, 'assign_to', 'id');
+        return $this->belongsToMany(User::class);
     }
 
     function task(){

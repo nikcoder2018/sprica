@@ -10,7 +10,7 @@ class Task extends Model
     protected $fillable = ['project_id','title', 'description', 'start_date', 'due_date', 'status', 'priority'];
 
     function assigned(){
-        return $this->hasMany(TaskAssignment::class, 'task_id', 'id');
+        return $this->belongsToMany(User::class);
     }
 
     function project(){

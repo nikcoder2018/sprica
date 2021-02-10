@@ -4,8 +4,17 @@ use App\Helpers\System;
 $lang = new Language;
 $system = new System;
 ?>
-@extends('layouts.admin.main')
-
+@extends('layouts.main')
+@section('vendors_css')
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/datatables.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/forms/select/select2.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css')}}">
+@endsection
+@section('external_css')
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/css/plugins/forms/pickers/form-flat-pickr.css')}}">
+@endsection
 @section('header')
 <div class="content-header-left col-md-9 col-12 mb-2">
     @include('partials.breadcrumbs', ['title' => $project->title])
@@ -142,125 +151,36 @@ $system = new System;
                 </div>
             </div>
             <div class="tab-pane fade" id="project-tasks" role="tabpanel" aria-labelledby="#project-tabs-tasks">
-              <div style="height:51px" class="card card-default color-palette-bo">
-                <div style="height:51px" class="card-header">
-                    <div class="d-inline-block">
-                      <h3 class="card-title"><i class="fa fa-list"></i> Tasks</h3>
-                    </div>
-                    <div class="d-inline-block float-right">
-                        <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#add_task_modal"><i class="fa fa-plus"></i></button>
-                    </div>
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="task-list-table table" data-id="{{$project->id}}">
+                        <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                <th>Task</th>
+                                <th>Assigned To</th>
+                                <td>Due Date</td>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
-              </div>
-              <div class="card card-default color-palette-bo">
-                <div class="card-body">
-                  <table id="example1" class="table table-striped projects table-tasks">
-                      <thead>
-                          <tr>
-                              <th style="width: 20%">
-                                  Task
-                              </th>
-                              <th style="width: 25%">
-                                  Assigned To
-                              </th>
-                              <th>
-                                  Due Date
-                              </th>
-                              <th style="width: 8%" class="text-center">
-                                  Status
-                              </th>
-                              <th style="width: 10%">
-                              </th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          @if(count($project->tasks) > 0)
-                              @foreach($project->tasks as $task)
-                                  <tr>
-                                      <td>
-                                          <a>
-                                              {{$task->title}}
-                                          </a>
-                                      </td>
-                                      <td>
-                                          @if(count($task->assigned) > 0)
-                                          <ul class="list-inline">
-                                              @foreach($task->assigned as $user)
-                                              <li class="list-inline-item">
-                                                  <a href="#" title="{{$user->name}}">
-                                                      @if($user->avatar != '')
-                                                          <img alt="Avatar" class="table-avatar" src="{{asset($user->avatar)}}">
-                                                      @else 
-                                                          <img alt="Avatar" class="table-avatar" src="{{asset('dist/img/avatar.png')}}">
-                                                      @endif
-                                                  </a> 
-                                              </li>
-                                              @endforeach
-                                          </ul>
-                                          @endif
-                                      </td>
-                                      <td>
-                                          {{date('d-m-Y', strtotime($task->due_date))}}  
-                                      </td>
-                                      <td class="project-state">
-                                          @if($task->status == 'incomplete')
-                                              <span class="badge badge-warning">{{$task->status}}</span>
-                                          @elseif($task->status == 'completed')
-                                              <span class="badge badge-success">{{$task->status}}</span>
-                                          @endif
-                                      </td>
-                                      <td class="project-actions text-right">
-                                          <button class="btn btn-info btn-sm btn-edit" data-id="{{$task->id}}">
-                                              <i class="fas fa-pencil-alt">
-                                              </i>
-                                          </button>
-                                          <button type="button" class="btn btn-danger btn-sm btn-delete-task" data-id="{{$task->id}}">
-                                              <i class="fas fa-trash">
-                                              </i>
-                                          </button>
-                                      </td>
-                                  </tr>
-                              @endforeach
-                          @endif
-                      </tbody>
-                  </table>
-                </div>
-              </div>
             </div>
             <div class="tab-pane fade" id="project-timelogs" role="tabpanel" aria-labelledby="#project-tabs-timelogs">
-                <table class="table table-timelogs">
-                    <thead>
-                    <tr>
-                    <th></th>
-                      <th style="width:29%">{{$lang::settings('Isci_Paneli_Tarih')}}</th>
-                      <th style="width:19%">{{$lang::settings('Isci_Paneli_Saat')}}</th>
-                      <th class="text-center" colspan="1">{{$lang::settings('Isci_Paneli_Proje')}}</th>
-                      <th style="width:20%"></th>  
-                    </tr>
-                    </thead>
-                    <tbody>
-                      @if(count($project->timelogs) > 0)
-                        @foreach($project->timelogs as $log)
-                        <tr>
-                            <td>{{isset($log->user->name) ? $log->user->name : ''}}</td>
-                            <td>{{$system->cevir($log->Tarih)}} {{$system->gun_bas_kisa($log->Tarih)}}</td>
-                            <td>{{$log->Saat}}</td>
-                            <td class="text-center" >
-                                @if($log->ProjeBASLIK != '')
-                                {{$log->ProjeBASLIK}}
-                                @else 
-                                {{\App\Project::where('ProjeID', $log->ProjeID)->first()->ProjeBASLIK}}
-                                @endif
-                            </td>
-                            <td>
-                                @if($log->Onay != 1)
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="{{$log->SaatID}}"><i class="nav-icon fas fa-trash"></i></button>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                      @endif
-                  </table>
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="timelog-list-table table" data-id="{{$project->id}}">
+                        <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                <th>User</th>
+                                <td>Start</td>
+                                <th>End</th>
+                                <th>Hours</th>
+                                <th>Break</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
             <div class="tab-pane fade" id="project-activity" role="tabpanel" aria-labelledby="#project-tabs-activity">
                 <ul class="timeline ml-50 mb-0">
@@ -331,7 +251,7 @@ $system = new System;
   <div class="modal-dialog modal-lg">
       <form class="form-add-task" method="POST" action="{{route('tasks.store')}}">
           @csrf
-          <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
+          <input type="hidden" name="project_id" value="{{$project->id}}">
           <div class="modal-content">
               <div class="modal-header">
                   Add Task
@@ -360,7 +280,7 @@ $system = new System;
                       <div class="col-md-6">
                           <div class="form-group">
                               <label>Assign to:</label>
-                              <select class="form-control select2bs4" name="assign_to[]" multiple="multiple" data-placeholder="Select an employee" required>
+                              <select class="form-control select2" name="assign_to[]" multiple data-placeholder="Select an employee" required>
                                   @foreach($project->members as $member)
                                       <option value="{{$member->id}}">{{$member->name}}</option>
                                   @endforeach
@@ -398,7 +318,7 @@ $system = new System;
                       </div>
                   </div>
               </div>
-              <div class="modal-footer justify-content-between">
+              <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</a>
                   <button type="submit" class="btn btn-primary">Save</button>
               </div>
@@ -407,13 +327,12 @@ $system = new System;
   </div>
   <!-- /.modal-content -->
 </div>
-
 <div class="modal fade" id="edit_task_modal">
   <div class="modal-dialog modal-lg">
       <form class="form-edit-task" method="POST" action="{{route('tasks.update')}}">
           @csrf
           <input type="hidden" name="task_id">
-          <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
+          <input type="hidden" name="project_id" value="{{$project->id}}">
           <div class="modal-content">
               <div class="modal-header">
                   Edit Task
@@ -442,7 +361,7 @@ $system = new System;
                       <div class="col-md-6">
                           <div class="form-group">
                               <label>Assign to:</label>
-                              <select class="form-control select2bs4" name="assign_to[]" multiple="multiple" data-placeholder="Select an employee" required>
+                              <select class="form-control select2" name="assign_to[]" multiple data-placeholder="Select an employee" required>
                                   @foreach($project->members as $member)
                                       <option value="{{$member->id}}">{{$member->name}}</option>
                                   @endforeach
@@ -480,7 +399,7 @@ $system = new System;
                       </div>
                   </div>
               </div>
-              <div class="modal-footer justify-content-between">
+              <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</a>
                   <button type="submit" class="btn btn-primary">Save</button>
               </div>
@@ -489,7 +408,6 @@ $system = new System;
   </div>
   <!-- /.modal-content -->
 </div>
-
 <div class="modal fade" id="delete_task_modal">
   <div class="modal-dialog">
       <div class="modal-content bg-danger">
@@ -512,16 +430,23 @@ $system = new System;
   <!-- /.modal-dialog -->
 </div>
 @endsection
+@section('external_js')
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/moment.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/polyfill.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
+@endsection
 @section('scripts')
-<script src="{{asset('plugins/datatables/jquery.dataTables.js')}}"></script>
-<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
-<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
-
+<script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/forms/form-select2.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/pages/app-project-details.js')}}"></script>
 <script>
   //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
     $(".table-activity").DataTable({
         "paging": true,
         "ordering": true,
@@ -581,62 +506,6 @@ $system = new System;
             }
         })
     }); 
-
-    $('.table-tasks').on('click','.btn-edit', async function(e){
-        e.preventDefault();
-        $('#edit_task_modal').modal('show');
-        var task = await $.ajax({
-            url: "{{route('tasks.edit')}}",
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                id: $(this).data('id'),
-            }
-        });
-
-        let form = $('.form-edit-task');
-        form.find('input[name=task_id]').val(task.id);
-        form.find('input[name=title]').val(task.title);
-        form.find('textarea[name=description]').val(task.description);
-        form.find('input[name=start_date]').val(task.start_date);
-        form.find('input[name=due_date]').val(task.due_date);
-        form.find('select[name=status]').val(task.status);
-        form.find('select[name=priority]').val(task.priority);
-
-        let assignMembers = new Array();
-        $.each(task.assigned, function(index, member){
-            assignMembers.push(member.assign_to);
-        });
-        form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
-    });
-
-    $('.form-edit-task').on('submit', function(e){
-        e.preventDefault();
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function(resp){
-                if(resp.success){
-                    Toast.fire({
-                        icon: 'success',
-                        title: resp.msg,
-                        showConfirmButton: false,
-                    });
-
-                    $('#edit_task_modal').modal('hide');
-                    
-                    setTimeout(function() {
-                      
-                      let table = $('.table-tasks tbody');
-                      table.find('[data-id='+resp.id+']').parent().parent().replaceWith(resp.renderRow).hide().fadeIn(600);
-                    }, 1000)
-                }
-            }
-        })
-    }); 
-
     $('.btn-delete-member').on('click', async function() {
         let id = $(this).data().id;
 
@@ -668,41 +537,6 @@ $system = new System;
                     }).then(()=>{
                       let table = $('.table-members tbody');
                       table.find('[data-id='+id+']').parent().parent().fadeOut(600);
-                    });
-                }
-            }
-        });
-    });
-    $('.btn-delete-task').on('click', async function() {
-        let id = $(this).data().id;
-
-        Swal.fire({
-            text: 'Are you sure you want to remove this task?',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-            confirmButtonClass: "btn btn-primary",
-            cancelButtonClass: "btn btn-danger ml-1"
-        }).then(async result => {
-            if(result.value){
-                const delete_task = await $.ajax({
-                    url: "{{ route('tasks.destroy') }}",
-                    type: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        id: id
-                    }
-                });
-
-                if(delete_task.success){
-                    Swal.fire({
-                        text: delete_task.msg,
-                        type: 'success',
-                    }).then(()=>{
-                      let table = $('.table-tasks tbody');
-                      table.find('[data-id='+delete_task.id+']').parent().parent().fadeOut(600);
                     });
                 }
             }

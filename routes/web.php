@@ -74,12 +74,11 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
         Route::resource('holidays', 'HolidaysController', ['except' => ['show']]);
         Route::get('holidays/events', 'HolidaysController@events');
     });
-    
 
     Route::resource('projects','ProjectsController', ['except' => ['show', 'update']]);
     Route::post('projects/update', 'ProjectsController@update')->name('projects.update');
     Route::get('projects/{id}/details', 'ProjectsController@show')->name('projects.details');
-
+  
     Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
     Route::post('/projects/remove-member', 'Admin\ProjectsController@remove_member')->name('admin.projects.remove-member');
 
@@ -129,7 +128,7 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::resource('tasks', 'TasksController', ['except' => ['edit', 'update', 'destroy']]);
     Route::post('task/edit', 'TasksController@edit')->name('tasks.edit');
     Route::post('task/update', 'TasksController@update')->name('tasks.update');
-    Route::post('task/destroy', 'TasksController@destroy')->name('tasks.destroy');
+    Route::get('task/{id}/destroy', 'TasksController@destroy')->name('tasks.destroy');
 
     Route::resource('emailtemplates', 'Admin\EmailTemplatesController', ['except' => ['edit', 'update', 'destroy']]);
     Route::post('emailtemplates/edit', 'Admin\EmailTemplatesController@edit')->name('emailtemplates.edit');
