@@ -111,6 +111,12 @@ class User extends Authenticatable
         return $this->hasMany(GeneralSetting::class);
     }
 
+    public function completedTask(){
+        return $this->belongsToMany(Task::class)->where('status', 'completed');
+    }
+    public function incompleteTask(){
+        return $this->belongsToMany(Task::class)->where('status', 'incomplete');
+    }
     /**
      * @return \App\GeneralSetting|null
      */

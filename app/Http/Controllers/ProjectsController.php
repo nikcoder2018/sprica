@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Helpers\Language;
 
 use App\Http\Resources\Project as ResourceProject;
+use App\Http\Resources\ProjectMember as ResourceProjectMember;
 use App\Project;
 use App\Task;
 use App\TaskAssignment;
@@ -39,6 +40,10 @@ class ProjectsController extends Controller
             case 'timelogs': 
                 $timelogs = Timelog::where('project_id', $id)->with('user')->get();
                 return DataTables::of($timelogs)->toJson();
+            break;
+            case 'members': 
+                $project = Project::where('id', $id)->with('members')->first();
+                return DataTables::of($project->members)->toJson();
             break;
         }
     }
@@ -78,17 +83,32 @@ class ProjectsController extends Controller
     }
 
     public function add_member(Request $request){
-        $newmember = new ProjectMember;
-        $newmember->project_id = $request->project_id;
-        $newmember->user_id = $request->user_id;
-        $newmember->save();
+        $project = Project::find($request->project_id);
+        $project->members()->attach($request->user_id);
 
-        $renderRow = view('render.row-new-project-member', ['member' => $newmember])->render();
-
-        if($newmember){
-            return response()->json(array('success' => true, 'msg' => 'New member added successfully.', 'row' => $renderRow));
+        if($project){
+            return response()->json(array('success' => true, 'msg' => 'New member added successfully.'));
         }
     }
+
+    public function remove_member(Request $request){
+        $project = Project::find($request->id);
+        $remove = $project->members()->detach($request->member_id);
+
+        if($remove){
+            return response()->json(array('success' => true, 'msg' => 'Member Removed!'));
+        }
+    }
+
+    public function set_leader(Request $request){
+        $project = Project::find($request->project_id);
+        $project->leader_id = $request->user_id;
+        $project->save();
+        if($project){
+            return response()->json(array('success' => true, 'msg' => 'New member added successfully.','leader_id' => $request->user_id));
+        }
+    }
+
     public function edit(Project $project){
         $members = User::all();
         $project->load('members');
@@ -123,14 +143,7 @@ class ProjectsController extends Controller
             return response()->json(array('success' => true, 'msg' => 'Project Deleted!'));
         }
     }
-    public function remove_member(Request $request){
-        $member = ProjectMember::where('project_id',$request->project_id)->where('user_id',$request->user_id);
-        $member->delete();
 
-        if($member){
-            return response()->json(array('success' => true, 'msg' => 'Member Removed!','id' => $request->user_id));
-        }
-    }
     public function calendar(){
         $data['projects'] = Project::all();
         $data['employees'] = User::where('status', 1)->get();

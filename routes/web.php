@@ -79,8 +79,9 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::post('projects/update', 'ProjectsController@update')->name('projects.update');
     Route::get('projects/{id}/details', 'ProjectsController@show')->name('projects.details');
   
-    Route::post('/projects/add-member', 'Admin\ProjectsController@add_member')->name('admin.projects.add-member');
-    Route::post('/projects/remove-member', 'Admin\ProjectsController@remove_member')->name('admin.projects.remove-member');
+    Route::post('/projects/add-member', 'ProjectsController@add_member')->name('projects.add-member');
+    Route::post('/projects/remove-member', 'ProjectsController@remove_member')->name('projects.remove-member');
+    Route::post('/projects/set-leader', 'ProjectsController@set_leader')->name('projects.set-leader');
 
     Route::get('/projects/calendar', 'Admin\ProjectsController@calendar')->name('admin.projects.calendar');
 

@@ -101,51 +101,20 @@ $system = new System;
                 </div>
             </div>
             <div class="tab-pane fade" id="project-members" role="tabpanel" aria-labelledby="#project-tabs-members">
-                <div class="table-responsive">
-                    <table class="table table-hover">
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="member-list-table table" data-id="{{$project->id}}" data-leader="{{$project->leader_id}}">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Hourly Rate</th>
                                 <th>Task Pending</th>
                                 <th>Task Completed</th>
-                                <th>Leader</th>
                                 <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($project->members as $member)
-                            <tr>
-                                <td>
-                                    <div data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" class="avatar pull-up my-0" data-original-title="{{$member->name}}">
-                                        @if($member->avatar != '')
-                                            <img alt="Avatar" height="26" width="26" src="{{asset($member->avatar)}}">
-                                        @else
-                                            <img alt="Avatar" height="26" width="26" src="{{asset('dist/img/avatar.png')}}">
-                                        @endif
-                                    </div>
-                                    <span class="font-weight-bold">{{$member->name}}</span>
-                                </td>
-                                <td>{{$member->hour_fee}}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                                            <i data-feather="more-vertical"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:void(0);">
-                                                <i data-feather="trash" class="mr-50"></i>
-                                                <span>Delete</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty 
-                            @endforelse
+
                         </tbody>
                     </table>
                 </div>
@@ -183,7 +152,7 @@ $system = new System;
                 </div>
             </div>
             <div class="tab-pane fade" id="project-activity" role="tabpanel" aria-labelledby="#project-tabs-activity">
-                <ul class="timeline ml-50 mb-0">
+                <ul class="timeline ml-50 mb-0" style="height: 600px; overflow-y: scroll; padding-left: 10px;">
                     @forelse($project->activities as $activity)
                     <li class="timeline-item">
                         <span class="timeline-point timeline-point-indicator"></span>
@@ -219,9 +188,9 @@ $system = new System;
 @section('modals')
 <div class="modal fade" id="add_member_modal">
   <div class="modal-dialog">
-      <form class="form-add-member" method="POST" action="{{route('admin.projects.add-member')}}">
+      <form class="form-add-member" method="POST" action="{{route('projects.add-member')}}">
           @csrf
-          <input type="hidden" name="project_id" value="{{$project->ProjeID}}">
+          <input type="hidden" name="project_id" value="{{$project->id}}">
           <div class="modal-content">
               <div class="modal-header">
                   <h4 class="modal-title">Add project member</h4>
@@ -231,15 +200,17 @@ $system = new System;
               </div>
               <div class="modal-body">
                   <div class="row">
-                    <select class="select2bs4" name="user_id" style="width: 100%;">
-                      @foreach($users as $user)
-                        <option value="{{$user->id}}">{{$user->name}}</option>
-                      @endforeach
-                    </select>
+                    <div class="col-md-12">
+                        <select class="form-control select2" name="user_id" style="width: 100%;">
+                            @foreach($users as $user)
+                              <option value="{{$user->id}}">{{$user->name}}</option>
+                            @endforeach
+                          </select>
+                    </div>
                   </div>
               </div>
-              <div class="modal-footer justify-content-between">
-                  <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+              <div class="modal-footer">
+                  <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
                   <button type="submit" class="btn btn-primary">Save</button>
               </div>
           </div>
@@ -247,6 +218,38 @@ $system = new System;
   </div>
   <!-- /.modal-content -->
 </div>
+<div class="modal fade" id="choose_leader_modal">
+    <div class="modal-dialog">
+        <form class="form-add-member" method="POST" action="{{route('projects.set-leader')}}">
+            @csrf
+            <input type="hidden" name="project_id" value="{{$project->id}}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Choose a Project Leader</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <select class="form-control select2" name="user_id" style="width: 100%;">
+                            @foreach($users as $user)
+                              <option value="{{$user->id}}">{{$user->name}}</option>
+                            @endforeach
+                          </select>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
 <div class="modal fade" id="add_task_modal">
   <div class="modal-dialog modal-lg">
       <form class="form-add-task" method="POST" action="{{route('tasks.store')}}">
@@ -445,103 +448,4 @@ $system = new System;
 @section('scripts')
 <script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/forms/form-select2.js')}}"></script>
 <script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/pages/app-project-details.js')}}"></script>
-<script>
-  //Initialize Select2 Elements
-    $(".table-activity").DataTable({
-        "paging": true,
-        "ordering": true,
-        "info": true,
-        "order": [[0, "desc"]]
-    });
-    $(".table-timelogs").DataTable({
-        "paging": true,
-        "ordering": true,
-        "info": true,
-        "order": [[0, "desc"]]
-    });
-
-    $('.form-add-member').on('submit', function(e){
-      e.preventDefault();
-      $.ajax({
-        url: "{{route('admin.projects.add-member')}}",
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function(resp){
-          if(resp.success){
-              Swal.fire({
-                title: 'Success!',
-                text: resp.msg,
-                icon: 'success'
-              }).then(()=>{
-                $('#add_member_modal').modal('hide');
-                let table = $('.table-members tbody');
-                table.append(resp.row).fadeIn(300);
-              });
-          }
-        }
-      })
-    });
-
-    $('.form-add-task').on('submit', function(e){
-        e.preventDefault();
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function(resp){
-                if(resp.success){
-                    Toast.fire({
-                        icon: 'success',
-                        title: resp.msg,
-                        showConfirmButton: false,
-                    });
-
-                    setTimeout(function() {
-                      $('#add_task_modal').modal('hide');
-                      let table = $('.table-tasks tbody');
-                      table.append(resp.row).fadeIn(300);
-                    }, 1000)
-                }
-            }
-        })
-    }); 
-    $('.btn-delete-member').on('click', async function() {
-        let id = $(this).data().id;
-
-        Swal.fire({
-            text: 'Are you sure you want to remove this member?',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-            confirmButtonClass: "btn btn-primary",
-            cancelButtonClass: "btn btn-danger ml-1"
-        }).then(async result => {
-            if(result.value){
-                const delete_member = await $.ajax({
-                    url: "{{ route('admin.projects.remove-member') }}",
-                    type: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        project_id: "{{$project->ProjeID}}",
-                        user_id: id
-                    }
-                });
-
-                if(delete_member.success){
-                    Swal.fire({
-                        text: delete_member.msg,
-                        type: 'success',
-                    }).then(()=>{
-                      let table = $('.table-members tbody');
-                      table.find('[data-id='+id+']').parent().parent().fadeOut(600);
-                    });
-                }
-            }
-        });
-    });
-</script>
-    
 @endsection

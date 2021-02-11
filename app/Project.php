@@ -12,7 +12,7 @@ class Project extends Model
     protected $appends = ['hours'];
 
     function members(){
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withCount(['completedTask','incompleteTask']);
     }
     function leader(){
         return $this->hasOne(User::class, 'id', 'leader_id');
