@@ -48,9 +48,7 @@ $(function() {
                         if (row.avatar != '') {
                             avatar = row.avatar;
                         }
-
-                        console.log(dtMemberTable.data('leader'));
-                        if (row.id == dtMemberTable.data('leader')) {
+                        if (row.is_leader) {
                             leader = '<span class="badge badge-info">Leader</span>';
                         }
                         return `<div data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" class="avatar pull-up my-0" data-original-title="${row.name}">

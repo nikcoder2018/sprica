@@ -42,8 +42,16 @@ class ProjectsController extends Controller
                 return DataTables::of($timelogs)->toJson();
             break;
             case 'members': 
-                $project = Project::where('id', $id)->with('members')->first();
-                return DataTables::of($project->members)->toJson();
+                $project = Project::where('id', $id)->with('members')->first()->toArray();
+                $members = array_map(function($member) use ($project){
+                    if($project['leader_id'] == $member['id']){
+                        $member['is_leader'] = true;
+                        return $member;
+                    }else{
+                        return $member;
+                    }
+                }, $project['members']);
+                return DataTables::of($members)->toJson();
             break;
         }
     }
