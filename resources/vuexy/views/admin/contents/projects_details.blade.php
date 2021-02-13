@@ -54,7 +54,7 @@ $system = new System;
                                       <div class="info-box bg-light">
                                         <div class="info-box-content">
                                           <span class="info-box-text text-center text-muted">Budget</span>
-                                          <span class="info-box-number text-center text-muted mb-0">0</span>
+                                          <span class="info-box-number text-center text-muted mb-0">{{$project->budget}}</span>
                                         </div>
                                       </div>
                                     </div>
@@ -62,7 +62,7 @@ $system = new System;
                                       <div class="info-box bg-light">
                                         <div class="info-box-content">
                                           <span class="info-box-text text-center text-muted">Expenses</span>
-                                          <span class="info-box-number text-center text-muted mb-0">0</span>
+                                          <span class="info-box-number text-center text-muted mb-0">{{$project->spent}}</span>
                                         </div>
                                       </div>
                                     </div>
@@ -79,7 +79,7 @@ $system = new System;
                                         <div class="info-box-content">
                                             <span class="info-box-text text-center text-muted">Hours Logged</span>
                                             <span class="info-box-number text-center text-muted mb-0">
-                                                {{\App\Watches::where('Tarih', '>=', Carbon\Carbon::create(date('Y'), 1,1)->toDateString())->where('Tarih', '<=', Carbon\Carbon::create(date('Y'),12,31)->toDateString())->where('ProjeID', $project->ProjeID)->sum('Saat')}}
+                                                {{$hours_logged}}
                                             <span>
                                         </span></span></div>
                                       </div>

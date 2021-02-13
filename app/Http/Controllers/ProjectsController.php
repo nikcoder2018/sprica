@@ -57,9 +57,9 @@ class ProjectsController extends Controller
     }
     public function show($id){
         $data['project'] = Project::with(['tasks','timelogs', 'members', 'activities'])->where('id', $id)->orderBy('id', 'DESC')->first();
-        
         $data['users'] = User::where('status', 1)->get();
-        //return response()->json($data); exit;
+        $data['hours_logged'] = Timelog::where('project_id', $id)->sum('duration');
+
         return view('contents.projects.details', $data);
     }
 
