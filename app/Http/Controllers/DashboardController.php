@@ -12,6 +12,9 @@ use App\Watches;
 use App\RemainingPayment;
 use App\Members;
 use App\Timelog;
+use App\Invoice;
+use App\Ticket;
+
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -25,20 +28,26 @@ class DashboardController extends Controller
     public function data(Request $request)
     {
         switch ($request->type) {
-            case 'mytimelogs':
-                $data['timelog_month'] = Timelog::where('user_id', auth()->user()->id)
-                    ->whereBetween('start_date', [Carbon::today()->firstOfMonth()->toDateString(), Carbon::today()->endOfMonth()->toDateString()])
-                    ->sum('duration');
-                $data['timelog_total'] = Timelog::where('user_id', auth()->user()->id)->sum('duration');
-                $data['timelog_today'] = Timelog::where('start_date', '>=', Carbon::today()->toDateString())->sum('duration');
+            case 'timelogs':
+                $user_id = auth()->user()->id;
+                $firstDayOfWeek = Carbon::today()->startOfWeek()->toDateString();
+                $lastDayOfWeek = Carbon::today()->endOfWeek()->toDateString();
+                $firstDayOfMonth = Carbon::today()->firstOfMonth()->toDateString();
+                $lastDayOfMonth = Carbon::today()->endOfMonth()->toDateString();
+                $today = Carbon::today()->toDateString();
+                
+                $data['month'] = Timelog::where('user_id', $user_id)->whereBetween('start_date', [$firstDayOfMonth, $lastDayOfMonth])->sum('duration');
+                $data['week'] = Timelog::where('user_id', $user_id)->whereBetween('start_date', [$firstDayOfWeek, $lastDayOfWeek])->sum('duration');
+                $data['today'] = Timelog::where('start_date', '>=', $today)->sum('duration');
 
                 return response()->json($data);
                 break;
 
             case 'statistics':
-                $data['timelog_month'] = Timelog::whereBetween('start_date', [Carbon::today()->firstOfMonth()->toDateString(), Carbon::today()->endOfMonth()->toDateString()])
-                    ->sum('duration');
-                $data['timelog_year']  = Timelog::whereYear('start_date', Carbon::now()->year)->sum('duration');
+                $data['worked_hours'] = Timelog::sum('duration');
+                $data['employees'] = Members::count();
+                $data['unpaid_invoices'] = Invoice::where('status', 'unpaid')->count();
+                $data['unresolved_tickets'] = Ticket::where('status', 'open')->count();
 
                 return response()->json($data);
                 break;
