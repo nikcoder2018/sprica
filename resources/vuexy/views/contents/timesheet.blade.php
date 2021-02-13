@@ -36,9 +36,7 @@
                         <tr>
                             <th></th>
                             <th>Start Date</th>
-                            <th>Start Time</th>
                             <th>End Date</th>
-                            <th>End Time</th>
                             <th>Duration</th>
                             <th>Break</th>
                             <th>Project</th>
@@ -67,33 +65,23 @@
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
+                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-3 @else col-md-6 @endif">
                                     <label>Start Date</label>
                                     <input type="text" name="start_date" id="start_date" class="form-control"
                                         placeholder="YYYY-MM-DD" />
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label>Start Time</label>
-                                    <input type="text" name="start_time" id="start_time" class="form-control"
-                                        placeholder="YYYY-MM-DD" />
-                                </div>
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-3">
                                         <label>End Date</label>
                                         <input type="text" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
                                 @endif
-                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
-                                    <label>End Time</label>
-                                    <input type="text" id="end_time" name="end_time" class="form-control"
-                                        placeholder="HH:MM" />
-                                </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label>Hours</label>
                                     <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label>Break</label>
                                     <input type="number" id="break" name="break" class="form-control" step="0.01" />
                                 </div>
@@ -157,33 +145,23 @@
                         <input type="hidden" name="id">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
+                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-3 @else col-md-6 @endif">
                                     <label>Start Date</label>
                                     <input type="text" name="start_date" id="start_date" class="form-control"
                                         placeholder="YYYY-MM-DD" />
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label>Start Time</label>
-                                    <input type="date" name="start_time" id="start_time" class="form-control"
-                                        placeholder="YYYY-MM-DD" />
-                                </div>
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-3">
                                         <label>End Date</label>
                                         <input type="date" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
                                 @endif
-                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-2 @else col-md-3 @endif">
-                                    <label>End Time</label>
-                                    <input type="text" id="end_time" name="end_time" class="form-control"
-                                        placeholder="HH:MM" />
-                                </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label>Hours</label>
                                     <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label>Break</label>
                                     <input type="number" id="break" name="break" class="form-control" step="0.01" />
                                 </div>
