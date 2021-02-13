@@ -37,6 +37,7 @@
                             <th></th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th>End Time</th>
                             <th>Duration</th>
                             <th>Break</th>
                             <th>Project</th>
@@ -65,20 +66,26 @@
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-3 @else col-md-6 @endif">
+                                <div class="form-group col-md-3">
                                     <label>Start Date</label>
                                     <input type="text" name="start_date" id="start_date" class="form-control"
                                         placeholder="YYYY-MM-DD" />
                                 </div>
-                                @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
+                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-3">
                                         <label>End Date</label>
-                                        <input type="text" id="end_date" name="end_date" class="form-control"
+                                        <input type="date" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
+                                    </div>
+                                @else 
+                                    <div class="form-group col-md-3">
+                                        <label>End Time</label>
+                                        <input type="text" id="end_time" name="end_time" class="form-control"
+                                            placeholder="HH:MM" />
                                     </div>
                                 @endif
                                 <div class="form-group col-md-3">
-                                    <label>Hours</label>
+                                    <label>Duration</label>
                                     <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
                                 </div>
                                 <div class="form-group col-md-3">
@@ -145,7 +152,7 @@
                         <input type="hidden" name="id">
                         <div class="modal-body">
                             <div class="row">
-                                <div class="form-group @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') col-md-3 @else col-md-6 @endif">
+                                <div class="form-group col-md-3">
                                     <label>Start Date</label>
                                     <input type="text" name="start_date" id="start_date" class="form-control"
                                         placeholder="YYYY-MM-DD" />
@@ -156,9 +163,15 @@
                                         <input type="date" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
+                                @else 
+                                    <div class="form-group col-md-3">
+                                        <label>End Time</label>
+                                        <input type="text" id="end_time" name="end_time" class="form-control"
+                                            placeholder="HH:MM" />
+                                    </div>
                                 @endif
                                 <div class="form-group col-md-3">
-                                    <label>Hours</label>
+                                    <label>Duration</label>
                                     <input type="number" id="hours" name="duration" class="form-control" step="0.01" />
                                 </div>
                                 <div class="form-group col-md-3">
@@ -259,44 +272,52 @@
                 disableMobile: true,
             });
 
-            $('#hours').on('change', function() {
-                const hours = $(this)[0].value;
-                axios.get(`{{ route('times.search') }}?query=${hours}`, {
-                    headers: {
-                        Accept: 'application/json'
-                    }
-                }).then(response => {
-                    const times = response.data;
-                    if (times.length > 0) {
-                        const instance = times[0];
-                        // ex '02:00 PM' - string needs to be split
-                        // const time = instance.endtime.split(':').map((item, index, array) =>
-                        //     index !== 1 ?
-                        //     ((item) => {
-                        //         // IIFE is used to check if 2nd element
-                        //         // of array contains pm
-                        //         // then we convert standard time
-                        //         // to military time 
-                        //         if (array[1].split(' ')[1] === 'PM') {
-                        //             return Number(item) + 12;
-                        //         }
-                        //         // else we just return it as is
-                        //         return Number(item);
+            const hoursInput = $('input[name=duration]');
 
-                        //     })(item) :
-                        //     Number(item.split(' ')[0]));
-                        document.querySelector('#break').value = instance.break;
-                        // const date = new Date(Date.now());
-                        // date.setHours(time[0], time[1], 0);
-                        // $('#end-time').flatpickr({
-                        //     defaultDate: date,
-                        //     enableTime: true,
-                        //     enableSeconds: true,
-                        //     disableMobile: true,
-                        // });
-                    }
-                });
+            hoursInput.on('change', () => {
+                fetchHours();
             });
+
+            window.fetchHours = () => {
+                hoursInput.each(function() {
+                    const hours = $(this)[0].value;
+                    axios.get(`{{ route('times.search') }}?query=${hours}`, {
+                        headers: {
+                            Accept: 'application/json'
+                        }
+                    }).then(response => {
+                        const times = response.data;
+                        if (times.length > 0) {
+                            const instance = times[0];
+                            // ex '02:00 PM' - string needs to be split
+                            // const time = instance.endtime.split(':').map((item, index, array) =>
+                            //     index !== 1 ?
+                            //     ((item) => {
+                            //         // IIFE is used to check if 2nd element
+                            //         // of array contains pm
+                            //         // then we convert standard time
+                            //         // to military time 
+                            //         if (array[1].split(' ')[1] === 'PM') {
+                            //             return Number(item) + 12;
+                            //         }
+                            //         // else we just return it as is
+                            //         return Number(item);
+
+                            //     })(item) :
+                            //     Number(item.split(' ')[0]));
+                            $(this).parents('form').find('input[name=break]').val(instance.break);
+                            // const date = new Date(Date.now());
+                            // date.setHours(time[0], time[1], 0);
+                            // $('#end-time').flatpickr({
+                            //     defaultDate: date,
+                            //     enableTime: true,
+                            //     enableSeconds: true,
+                            //     disableMobile: true,
+                            // });
+                        }
+                    });
+                });
+            }
         });
 
     </script>

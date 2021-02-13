@@ -77,7 +77,8 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
     <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"></script>
-    <script>dayjs.extend(dayjs_plugin_relativeTime)</script>
+    <script src="https://unpkg.com/dayjs@1.8.21/plugin/customParseFormat.js"></script>
+    <script>dayjs.extend(dayjs_plugin_relativeTime); dayjs.extend(dayjs_plugin_customParseFormat);</script>
     <style>
         @media(min-width: 576px) {
             th.control {
