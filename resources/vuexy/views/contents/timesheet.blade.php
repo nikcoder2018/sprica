@@ -5,16 +5,14 @@
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/forms/select/select2.min.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
 @endsection
 @section('external_css')
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
 @endsection
 
 @section('stylesheets')
@@ -246,26 +244,17 @@
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}">
     </script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/polyfill.min.js') }}"></script>
-    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/forms/select/select2.full.min.js') }}">
-    </script>
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> --}}
 @endsection
 
 @section('scripts')
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/forms/form-select2.js') }}"></script>
+    <script>window.userDefaultStartTime = '{{ $default_start_time }}'.split(':').map((item) => Number(item));</script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/js/scripts/pages/app-timelog.js') }}"></script>
     <script defer>
         $(document).ready(() => {
-            const time = '{{ $default_start_time }}'.split(':').map((item) => Number(item));
-            $('#date').flatpickr({
-                defaultHour: time[0],
-                defaultMinute: time[1],
-                enableTime: true,
-                enableSeconds: true,
-                disableMobile: true,
-            });
-
             $('#end-date').flatpickr({
                 enableTime: true,
                 enableSeconds: true,
