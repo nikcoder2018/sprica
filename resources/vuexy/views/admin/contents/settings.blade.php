@@ -504,8 +504,8 @@ $lang = new Language();
                                                 <div class="form-group">
                                                     <label for="timetrack-mode">Timetracking Mode</label>
                                                     <select name="value" id="timetrack-mode" class="form-control">
-                                                        <option value="Mode 1" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 1') selected @endif>Mode 1 (Worker can set date, starting hour and work hours)</option>
-                                                        <option value="Mode 2" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') selected @endif>Mode 2 (Worker can set starting date, hour, end date and work hours)</option>
+                                                        <option value="Mode 1" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 1') selected @endif>Mode 1 (Worker can set starting datetime, duration and break)</option>
+                                                        <option value="Mode 2" @if(\App\GlobalSetting::get('timetracking-mode') === 'Mode 2') selected @endif>Mode 2 (Worker can set starting datetime, ending datetime, duration, and break)</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
