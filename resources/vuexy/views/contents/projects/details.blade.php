@@ -54,7 +54,7 @@ $system = new System;
                                 </div>
                             </div>
                             <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">0</h4>
+                                <h4 class="font-weight-bolder mb-0">{{$project->budget}}</h4>
                                 <p class="card-text font-small-3 mb-0">Budget</p>
                             </div>
                         </div>
@@ -67,7 +67,7 @@ $system = new System;
                                 </div>
                             </div>
                             <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">0</h4>
+                                <h4 class="font-weight-bolder mb-0">{{$project->spent}}</h4>
                                 <p class="card-text font-small-3 mb-0">Expenses</p>
                             </div>
                         </div>
@@ -93,7 +93,7 @@ $system = new System;
                                 </div>
                             </div>
                             <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">{{\App\Watches::where('Tarih', '>=', Carbon\Carbon::create(date('Y'), 1,1)->toDateString())->where('Tarih', '<=', Carbon\Carbon::create(date('Y'),12,31)->toDateString())->where('ProjeID', $project->id)->sum('Saat')}}</h4>
+                                <h4 class="font-weight-bolder mb-0">{{$hours_logged}}</h4>
                                 <p class="card-text font-small-3 mb-0">Hours Logged</p>
                             </div>
                         </div>

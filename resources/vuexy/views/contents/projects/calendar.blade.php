@@ -125,9 +125,10 @@
 <script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/moment.min.js')}}"></script>
 <script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
 <script src="{{asset('js/main.min.js')}}"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
     {{-- <script src="{{asset('js/main.min.js')}}"></script>
-    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+
     <script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script> --}}
 @endsection
 
