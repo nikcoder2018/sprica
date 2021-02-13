@@ -44,13 +44,10 @@ class TimeTrackingController extends Controller
 
     public function store(Request $request)
     {
-        $end_date = $request->end_date != null ? $request->end_date : $request->start_date;
         $timelog = Timelog::create([
             'user_id' => auth()->user()->id,
             'start_date' => $request->start_date,
-            'start_time' => $request->start_time,
-            'end_date' => $end_date,
-            'end_time' => $request->end_time,
+            'end_date' => $request->end_date,
             'duration' => $request->duration,
             'break' => $request->break,
             'project_id' => $request->project_id,
@@ -68,9 +65,7 @@ class TimeTrackingController extends Controller
         $end_date = $request->end_date != null ? $request->end_date : $request->start_date;
         $timelog = Timelog::find($request->id);
         $timelog->start_date = $request->start_date;
-        $timelog->start_time = $request->start_time;
         $timelog->end_date = $end_date;
-        $timelog->end_time = $request->end_time;
         $timelog->duration = $request->duration;
         $timelog->break = $request->break;
         $timelog->project_id = $request->project_id;
