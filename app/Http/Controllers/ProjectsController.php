@@ -173,21 +173,18 @@ class ProjectsController extends Controller
     }
 
     public function calendar_events(){
-        $users = User::orderBy('name', 'ASC')->get();
+        $users = User::with('tasks')->orderBy('name', 'ASC')->get();
 
         $results = array();
         foreach($users as $user){
-            $resourceId = $user->id;
             $title = '';
-            $tasks = TaskAssignment::with('task')->where('assign_to', $resourceId)->get();
-
-            foreach($tasks as $task){
-                $project = Project::where('ProjeID', $task->task->project_id)->first();
+            foreach($user->tasks as $task){
+                $project = Project::find($task->project_id);
                 array_push($results, (object) array(
                     'resourceId' => $user->id,
-                    'title' => $project->ProjeBASLIK.'-'.$task->task->title,
-                    'start' => $task->task->start_date,
-                    'end' => $task->task->due_date
+                    'title' => $project->title.'-'.$task->title,
+                    'start' => $task->start_date,
+                    'end' => $task->due_date
                 ));
             }
         }

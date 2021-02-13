@@ -110,7 +110,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GeneralSetting::class);
     }
-
+    public function tasks(){
+        return $this->belongsToMany(Task::class);
+    }
     public function completedTask(){
         return $this->belongsToMany(Task::class)->where('status', 'completed');
     }

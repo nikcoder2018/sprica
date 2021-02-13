@@ -160,28 +160,33 @@ $(function() {
     });
 
     $(dtTable).on('click', '.btn-edit', async function() {
-        let id = $(this).data().id;
-        let form = $(edit_modal).find('form');
-        let members = [];
-        $(edit_modal).modal('show');
+        let form = edit_modal.find('form');
+        $(form)[0].reset();
+        edit_modal.modal('show');
 
-        const project = await $.get(`${URL}/${id}/edit`);
-
-        $.each(project.members, function(index, member) {
-            members.push(member.id);
+        var task = await $.ajax({
+            url: '/task/edit',
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id: $(this).data('id'),
+            }
         });
-        form.find('input[name=id]').val(project.id);
-        form.find('input[name=name]').val(project.title);
-        form.find('textarea[name=description]').val(project.description);
-        form.find('input[name=start_date]').val(project.start_date);
-        form.find('input[name=deadline]').val(project.deadline);
-        form.find('input[name=budget]').val(project.budget);
-        form.find('input[name=spent]').val(project.spent);
-        form.find('select[name=leader]').val(project.leader_id);
-        //form.find('select[name=currency]').val(project.currency);
-        form.find('select[name=status]').val(project.status);
-        form.find('.members_edit').val(members);
-        form.find('.members_edit').trigger('change');
+
+        form.find('input[name=task_id]').val(task.id);
+        form.find('input[name=title]').val(task.title);
+        form.find('textarea[name=description]').val(task.description);
+        form.find('input[name=start_date]').val(task.start_date);
+        form.find('input[name=due_date]').val(task.due_date);
+        form.find('select[name=status]').val(task.status);
+        form.find('select[name=priority]').val(task.priority);
+        form.find('select[name=project_id]').val(task.project_id);
+
+        let assignMembers = new Array();
+        $.each(task.assigned, function(index, member) {
+            assignMembers.push(member.id);
+        });
+        form.find('select[name="assign_to[]"]').select2().val(assignMembers).trigger('change');
     });
     $(edit_modal).on('submit', 'form', function(e) {
         e.preventDefault();
@@ -222,7 +227,7 @@ $(function() {
             buttonsStyling: false
         }).then(async function(result) {
             if (result.isConfirmed) {
-                const deleteData = await $.ajax({ url: `${URL}/${id}`, type: 'DELETE', data: { _token: $('meta[name=csrf-token]').attr('content') } });
+                const deleteData = await $.ajax({ url: `/task/${id}/destroy`, type: 'GET', data: { _token: $('meta[name=csrf-token]').attr('content') } });
                 if (deleteData.success) {
                     toastr['success'](deleteData.msg, 'Deleted!', {
                         closeButton: true,

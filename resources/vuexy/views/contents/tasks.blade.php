@@ -146,7 +146,7 @@
                 </div>
                 <form action="{{route('tasks.update')}}">
                     @csrf
-                    <input type="hidden" name="id" value="">
+                    <input type="hidden" name="task_id" value="">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-5">
@@ -160,7 +160,7 @@
                                     <label>Project:</label>
                                     <select class="form-control select2bs4" name="project_id" style="width: 100%;">
                                         @foreach($projects as $project)
-                                            <option value="{{$project->ProjeID}}">{{$project->ProjeBASLIK}}</option>
+                                            <option value="{{$project->id}}">{{$project->title}}</option>
                                         @endforeach
                                     </select>
                                 </div>
