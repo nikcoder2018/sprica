@@ -368,7 +368,12 @@ $(function () {
         startDatePickr.flatpickr({
             disableMobile: true,
             enableTime: true,
-            defaultDate: new Date(),
+            defaultDate: ((dayjs) => {
+                dayjs = dayjs.hour(userDefaultStartTime[0]);
+                dayjs = dayjs.minute(userDefaultStartTime[1]);
+
+                return dayjs.toDate();
+            })(dayjs(new Date())),
             onChange: (selectedDates, dateStr, instanc) => {
                 if ($(new_timelog_modal).hasClass("show")) {
                     var end_date = $(new_timelog_modal)

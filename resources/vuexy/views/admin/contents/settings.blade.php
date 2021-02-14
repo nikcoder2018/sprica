@@ -10,6 +10,8 @@ $lang = new Language();
     <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
     <link href="{{ asset('dist/css/validation_master.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
 
     <style>
         .dataTables_length,
@@ -514,6 +516,19 @@ $lang = new Language();
                                                     </button>
                                                 </div>
                                             </form>
+                                            <form action="{{ route('user.settings.store') }}" id="default-start-time-form">
+                                                @csrf 
+                                                <input type="hidden" name="key" value="default_start_time">
+                                                <div class="form-group">
+                                                    <label for="value">Default Start Time</label>
+                                                    <input type="date" name="value" id="value" placeholder="HH:MM" class="form-control flatpickr">
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-info btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                         <div class="card-body p-0 table-responsive">
                                             <table class="table table-striped table-time-management">
@@ -611,11 +626,6 @@ $lang = new Language();
                                                             for="inputBasicLastName">{{ $lang::settings('Bir_Gun_Proje') }}</label>
                                                         <input type="text" value="{{ $genset->KacSAAT }}" name="KacSAAT"
                                                             id="form-field-16" class="form-control " required>
-                                                    </div>
-
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-control-label">Default Start Time</label>
-                                                        <input type="text" name="default_start_time" class="form-control flatpickr-date-time" placeholder="HH:MM" value="{{ $default_start_time }}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1349,8 +1359,39 @@ $lang = new Language();
     <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
     <script src="{{ asset('js/quill/quill.js') }}"></script>
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
     <script>
         $(document).ready(() => {
+            const defaultStartTime = '{{ auth()->user()->getSetting("default_start_time") ? auth()->user()->getSetting("default_start_time")->value : "07:00" }}';
+            $('#default-start-time-form').find('#value').flatpickr({
+                noCalendar: true,
+                defaultHour: defaultStartTime.split(':')[0],
+                defaultMinute: defaultStartTime.split(':')[1],
+                enableTime: true,
+            });
+
+            $('#default-start-time-form').on('submit', async function(e) {
+                e.preventDefault();
+
+                const button = $(this).find('button[type=submit]');
+
+                button.attr('disabled', true);
+                button.text('Saving');
+
+                try {
+                    const data = $(this).serialize();
+
+                    await axios.post($(this).attr('action'), data);
+                    toastr.info('Default start time has been set.', 'Notice');
+                } catch(error) {
+                    console.log(error);
+                    toastr.error('Unable to set default start time.');
+                } finally {
+                    button.attr('disabled', false);
+                    button.text('Save');
+                }
+            });
+
             $(`#account-upload`).on('change', e => {
                 if(e.target.files.length > 0) {
                     const reader = new FileReader();
