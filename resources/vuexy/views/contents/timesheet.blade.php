@@ -67,7 +67,7 @@
                                 <div class="form-group col-md-3">
                                     <label>Start Date</label>
                                     <input type="text" name="start_date" id="start_date" class="form-control"
-                                        placeholder="YYYY-MM-DD" />
+                                        placeholder="YYYY-MM-DD HH:MM" />
                                 </div>
                                  @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-3">
@@ -153,7 +153,7 @@
                                 <div class="form-group col-md-3">
                                     <label>Start Date</label>
                                     <input type="text" name="start_date" id="start_date" class="form-control"
-                                        placeholder="YYYY-MM-DD" />
+                                        placeholder="YYYY-MM-DD HH:MM" />
                                 </div>
                                 @if (\App\GlobalSetting::get('timetracking-mode') === 'Mode 2')
                                     <div class="form-group col-md-3">
