@@ -521,7 +521,7 @@ $lang = new Language();
                                                 <input type="hidden" name="key" value="default_start_time">
                                                 <div class="form-group">
                                                     <label for="value">Default Start Time</label>
-                                                    <input type="date" name="value" id="value" placeholder="HH:MM" class="form-control flatpickr">
+                                                    <input type="date" name="value" id="value" placeholder="HH:MM" class="form-control flatpickr" value="{{ auth()->user()->getSetting("default_start_time") ? auth()->user()->getSetting("default_start_time")->value : "07:00" }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-info btn-sm">
