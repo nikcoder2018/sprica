@@ -146,9 +146,9 @@ class User extends Authenticatable
         return $this->getSetting($key) !== null;
     }
 
-    function loans()
+    function debts()
     {
-        return $this->hasMany(AdvancePayment::class, 'UyeID', 'id')->selectRaw('UyeID, sum(Tutar) as total')->groupBy('UyeID');
+        return $this->hasMany(Advance::class, 'user_id', 'id');
     }
 
     function advances()

@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Carbon\Carbon;
 class Controlling extends JsonResource
 {
     /**
@@ -16,7 +16,7 @@ class Controlling extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->start_date->format('d.m.Y D'),
+            'date' => Carbon::parse($this->start_date)->format('d.m.Y D'),
             'duration' => $this->duration,
             'project' => $this->project->title,
             'expenses' => $this->expenses->title,

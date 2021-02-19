@@ -16,6 +16,7 @@ use App\EmailTrigger;
 use App\EmailAction;
 use App\EmailCommand;
 use App\Time;
+use App\Permission;
 use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
@@ -35,6 +36,7 @@ class SettingsController extends Controller
         $stime = $request->user()->settings()->where('key', 'default_start_time')->first();
         $data['default_start_time'] = $stime ? $stime->value : '07:00';
         $data['times'] = Time::all();
+        $data['permissions'] = Permission::all();
         return view('admin.contents.settings', $data);
     }
 

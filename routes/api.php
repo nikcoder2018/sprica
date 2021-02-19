@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('dashboard/data', 'DashboardController@data');
 Route::get('projects/calendar/resource', 'ProjectsController@calendar_resources');
 Route::get('projects/calendar/events', 'ProjectsController@calendar_events');
-
+Route::get('employees', 'EmployeesController@data');
 Route::get('users/all', 'UsersController@all');
 Route::get('permissions/all', 'PermissionsController@all');
 Route::get('roles/all', 'RolesController@all');

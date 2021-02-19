@@ -79,13 +79,7 @@ $(function() {
                 }
             },
             // Buttons with Dropdown
-            buttons: [{
-                text: 'Add Permission',
-                className: 'btn btn-primary btn-add-record ml-2',
-                action: function(e, dt, button, config) {
-                    $(new_permission_modal).modal('show');
-                }
-            }],
+            buttons: [],
             // For responsive popup
             responsive: {
                 details: {

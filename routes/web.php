@@ -85,14 +85,11 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
 
     Route::get('/projects/calendar', 'Admin\ProjectsController@calendar')->name('admin.projects.calendar');
 
-    Route::get('/employees', 'Admin\EmployeesController@list')->name('admin.employees');
-    Route::get('/employees/details/{id}', 'Admin\EmployeesController@details')->name('admin.employees.details');
-    Route::post('/employees/store', 'Admin\EmployeesController@store')->name('admin.employees.store');
-    Route::post('/employees/edit', 'Admin\EmployeesController@edit')->name('admin.employees.edit');
-    Route::post('/employees/update', 'Admin\EmployeesController@update')->name('admin.employees.update');
-    Route::post('/employees/filters', 'Admin\EmployeesController@filters')->name('admin.employees.filter');
-    Route::post('/employees/delete', 'Admin\EmployeesController@destroy')->name('admin.employees.destroy');
-
+    Route::get('employees', 'EmployeesController@list')->name('employees.list');
+    Route::get('employees/details/{id}', 'EmployeesController@details')->name('employees.details');
+    Route::post('employees/filters', 'EmployeesController@filters')->name('employees.filter');
+    Route::resource('employees', 'EmployeesController');
+  
     Route::resource('holidays', 'HolidaysController');
     Route::resource('leave', 'LeavesController');
     Route::resource('leavetype', 'LeaveTypesController');

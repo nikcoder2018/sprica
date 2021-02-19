@@ -33,10 +33,10 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>End Time</th>
+                            <th>Date</th>
                             <th>Duration</th>
+                            <th>Start</th>
+                            <th>End</th>
                             <th>Break</th>
                             <th>Project</th>
                             <th class="cell-fit">Actions</th>

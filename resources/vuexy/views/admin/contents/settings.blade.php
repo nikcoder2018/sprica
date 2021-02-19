@@ -5,6 +5,15 @@ $lang = new Language();
 
 @extends('layouts.admin.main')
 
+@section('vendors_css')
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/datatables.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/extensions/sweetalert2.min.css')}}">
+@endsection
+@section('external_css')
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css')}}">
+@endsection
+
 @section('stylesheets')
     <link href="{{ asset('css/quill/quill.snow.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
@@ -126,6 +135,16 @@ $lang = new Language();
                                 <span class="font-weight-bold">Time Management</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="#settings-roles" data-toggle="pill" aria-controls="settings-roles" aria-selected="false" class="nav-link" id="settings-roles-button">
+                                <span class="font-weight-bold">Roles</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#settings-permissions" data-toggle="pill" aria-controls="settings-permissions" aria-selected="false" class="nav-link" id="settings-permissions-button">
+                                <span class="font-weight-bold">Permissions</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-12 col-md-9">
@@ -210,6 +229,55 @@ $lang = new Language();
                                                         <th>{{ $lang::settings('Kodlar_Para_Iki') }}</th>
                                                     </tr>
                                                 </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="settings-roles" role="tabpanel" aria-labelledby="settings-roles">
+                                    <div class="card card-default color-palette-bo">
+                                        <div style="height:51px" class="card-header">
+                                            <div class="d-inline-block">
+                                                <h3 class="card-title"><i class="fas fa-compass"></i> Roles</h3>
+                                            </div>
+                                            <div class="d-inline-block float-right">
+                                                <button class="btn btn-sm btn-outline-primary" data-toggle="modal"
+                                                    data-target="#new-roles-modal"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body table-responsive">
+                                            <table class="roles-list-table table">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Title</th>
+                                                        <th>Permissions</th>
+                                                        <th class="cell-fit">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="settings-permissions" role="tabpanel" aria-labelledby="settings-roles">
+                                    <div class="card card-default color-palette-bo">
+                                        <div style="height:51px" class="card-header">
+                                            <div class="d-inline-block">
+                                                <h3 class="card-title"><i class="fas fa-compass"></i> Permissions</h3>
+                                            </div>
+                                            <div class="d-inline-block float-right">
+                                                <button class="btn btn-sm btn-outline-primary" data-toggle="modal"
+                                                    data-target="#new-permission-modal"><i class="fas fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body table-responsive">
+                                            <table class="permissions-list-table table">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Title</th>
+                                                        <th class="cell-fit">Actions</th>
+                                                    </tr>
+                                                </thead>
                                             </table>
                                         </div>
                                     </div>
@@ -561,7 +629,6 @@ $lang = new Language();
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="tab-pane fade active show" id="settings-tabs-general" role="tabpanel" aria-labelledby="settings-tabs-general">
                                     <form class="form-update-gensettings" action="{{ route('admin.settings.general-update') }}" method="POST">
                                         @csrf
@@ -643,156 +710,6 @@ $lang = new Language();
             </div>
         </div>
     </div>
-@endsection
-
-@section('js')
-    <script>
-        $(document).ready(() => {
-
-            const registerTimeButtons = () => {
-                $('.edit-time-button').click(async function(e) {
-                    e.preventDefault();
-                    const id = $(this).attr('data-id');
-                    try {
-                        const { data } = await axios.get(`{{ route('times.show') }}?time_id=${id}`);
-                        const form = $('.edit-time-form');
-                        form.attr('data-id', id);
-                        form.find('input#hours-edit').val(data.hours);
-                        form.find('input#break-edit').val(data.break);
-                        $('#time-edit-input').val(data.id);
-                        $('#editTimeModal').modal('show');
-                    } catch(error) {
-                        toastr.error('Time record does not exist.');
-                    }
-                });
-
-                $('.delete-time-button').click(function(e) {
-                    e.preventDefault();
-                    const id = $(this).attr('data-id');
-                    const form = $('.delete-time-form');
-                    form.attr('data-id', id);
-                    $('#time-delete-input').val(id);
-                    $('#deleteTimeModal').modal('show');
-                });
-            };
-
-            axios.defaults.headers.common['Accept'] = 'application/json';
-
-            (() => {
-                let running = false;
-                $('#timetrack-mode-form').submit(async function(e) {
-                    if(!running) {
-                        running = true;
-                    } else {
-                        return;
-                    }
-                    const form = $(this);
-                    form.find('button[type="submit"]').addClass('disabled');
-                    form.find('button[type="submit"]').attr('disabled', true);
-                    form.find('button[type="submit"]').html(`<i class="fas fa-circle-notch fa-spin"></i>`);
-                    try {
-                        e.preventDefault();
-
-                        const url = form.attr('action');
-                        const data = form.serialize();
-                        await axios.post(url, data);
-                        toastr.success('Timetracking mode set successfully!');
-                    } catch(_) {
-                        toastr.error('Unable to save timetracking mode. Please try again later.');
-                    } finally {
-                        form.find('button[type="submit"]').removeClass('disabled');
-                        form.find('button[type="submit"]').attr('disabled', false);
-                        form.find('button[type="submit"]').html('Save');
-                        running = false;
-                    }
-                });
-            })();
-
-            $('#add-time-form').submit(function(e) {
-                e.preventDefault();
-
-                const url = $(this).attr('action');
-                const data = $(this).serialize();
-                axios.post(url, data).then(({ data }) => {
-                    $('#addTimeModal').on('hidden.bs.modal', () => {
-                        toastr.success('Time added successfully.');
-                        $('.table-time-management tbody').append(`
-                            <tr data-id="${data.id}">
-                                <td class="text-center">${data.id}</td>
-                                <td class="text-center">${data.hours}</td>
-                                <td class="text-center">${data.break}</td>
-                                
-                                <td class="text-center">
-                                    <a href="#" class="edit-time-button" data-id="${data.id}">
-                                        <i class="fa fa-fw fa-edit text-primary"></i>
-                                    </a>
-                                    <a href="#" class="delete-time-button" data-id="${data.id}">
-                                        <i class="fa fa-fw fa-trash text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>`).hide().fadeIn(1000);
-                        registerTimeButtons();
-                    });
-                    $('#addTimeModal').modal('hide');
-                });
-            });
-
-            $('.edit-time-form').submit(function(e) {
-                e.preventDefault();
-                const form = $(this);
-                const id = form.attr('data-id');
-                const modal = $(`#editTimeModal`);
-                const url = form.attr('action');
-                const data = form.serialize();
-
-                axios.post(url, data).then(({ data }) => {
-                    modal.on('hidden.bs.modal', () => {
-                        toastr.success('Time updated successfully.');
-                        $(`.table-time-management tbody tr[data-id="${data.id}"]`).hide()
-                            .replaceWith(
-                                `
-                            <tr data-id="${data.id}">
-                                <td class="text-center">${data.id}</td>
-                                <td class="text-center">${data.hours}</td>
-                                <td class="text-center">${data.break}</td>
-                                
-                                <td class="text-center">
-                                    <a href="#" class="edit-time-button" data-id="${data.id}">
-                                        <i class="fa fa-fw fa-edit text-primary"></i>
-                                    </a>
-                                    <a href="#" class="delete-time-button" data-id="${data.id}">
-                                        <i class="fa fa-fw fa-trash text-danger"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            `
-                            ).fadeIn(1000);
-                        registerTimeButtons();
-                    });
-                    modal.modal('hide');
-                });
-            });
-
-            $('.delete-time-form').submit(function(e) {
-                e.preventDefault();
-                const form = $(this);
-                const id = form.attr('data-id');
-                const modal = $(`#deleteTimeModal`);
-                const url = form.attr('action');
-                modal.on('hidden.bs.modal', () => {
-                    axios.post(url, form.serialize()).then(() => {
-                        toastr.success('Time deleted successfully.');
-                        console.log($(`.table-time-management tbody tr[data-id="${id}"]`));
-                        $(`.table-time-management tbody tr[data-id="${id}"]`).fadeOut(1000).remove();
-                    });
-                });
-                modal.modal('hide');
-            });
-
-            registerTimeButtons();
-        });
-
-    </script>
 @endsection
 
 @section('modals')  
@@ -1348,16 +1265,295 @@ $lang = new Language();
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="new-permission-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">New Permission</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('permissions.store')}}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit-permission-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit Permission</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('permissions.update')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="new-roles-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">New Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('roles.store')}}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Permissions</label>
+                            <select class="select2 form-control form-control-lg" name="permissions[]" multiple>
+                                @foreach($permissions as $permission)
+                                    <option value="{{$permission->id}}">{{$permission->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edit-roles-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" class="form-control" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Permissions</label>
+                            <select class="select2 form-control form-control-lg select2-edit" name="permissions[]" multiple>
+                                @foreach($permissions as $permission)
+                                    <option value="{{$permission->id}}">{{$permission->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('name')
     
 @endsection
 
+@section('js')
+    <script>
+        $(document).ready(() => {
+
+            const registerTimeButtons = () => {
+                $('.edit-time-button').click(async function(e) {
+                    e.preventDefault();
+                    const id = $(this).attr('data-id');
+                    try {
+                        const { data } = await axios.get(`{{ route('times.show') }}?time_id=${id}`);
+                        const form = $('.edit-time-form');
+                        form.attr('data-id', id);
+                        form.find('input#hours-edit').val(data.hours);
+                        form.find('input#break-edit').val(data.break);
+                        $('#time-edit-input').val(data.id);
+                        $('#editTimeModal').modal('show');
+                    } catch(error) {
+                        toastr.error('Time record does not exist.');
+                    }
+                });
+
+                $('.delete-time-button').click(function(e) {
+                    e.preventDefault();
+                    const id = $(this).attr('data-id');
+                    const form = $('.delete-time-form');
+                    form.attr('data-id', id);
+                    $('#time-delete-input').val(id);
+                    $('#deleteTimeModal').modal('show');
+                });
+            };
+
+            axios.defaults.headers.common['Accept'] = 'application/json';
+
+            (() => {
+                let running = false;
+                $('#timetrack-mode-form').submit(async function(e) {
+                    if(!running) {
+                        running = true;
+                    } else {
+                        return;
+                    }
+                    const form = $(this);
+                    form.find('button[type="submit"]').addClass('disabled');
+                    form.find('button[type="submit"]').attr('disabled', true);
+                    form.find('button[type="submit"]').html(`<i class="fas fa-circle-notch fa-spin"></i>`);
+                    try {
+                        e.preventDefault();
+
+                        const url = form.attr('action');
+                        const data = form.serialize();
+                        await axios.post(url, data);
+                        toastr.success('Timetracking mode set successfully!');
+                    } catch(_) {
+                        toastr.error('Unable to save timetracking mode. Please try again later.');
+                    } finally {
+                        form.find('button[type="submit"]').removeClass('disabled');
+                        form.find('button[type="submit"]').attr('disabled', false);
+                        form.find('button[type="submit"]').html('Save');
+                        running = false;
+                    }
+                });
+            })();
+
+            $('#add-time-form').submit(function(e) {
+                e.preventDefault();
+
+                const url = $(this).attr('action');
+                const data = $(this).serialize();
+                axios.post(url, data).then(({ data }) => {
+                    $('#addTimeModal').on('hidden.bs.modal', () => {
+                        toastr.success('Time added successfully.');
+                        $('.table-time-management tbody').append(`
+                            <tr data-id="${data.id}">
+                                <td class="text-center">${data.id}</td>
+                                <td class="text-center">${data.hours}</td>
+                                <td class="text-center">${data.break}</td>
+                                
+                                <td class="text-center">
+                                    <a href="#" class="edit-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-edit text-primary"></i>
+                                    </a>
+                                    <a href="#" class="delete-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>`).hide().fadeIn(1000);
+                        registerTimeButtons();
+                    });
+                    $('#addTimeModal').modal('hide');
+                });
+            });
+
+            $('.edit-time-form').submit(function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const id = form.attr('data-id');
+                const modal = $(`#editTimeModal`);
+                const url = form.attr('action');
+                const data = form.serialize();
+
+                axios.post(url, data).then(({ data }) => {
+                    modal.on('hidden.bs.modal', () => {
+                        toastr.success('Time updated successfully.');
+                        $(`.table-time-management tbody tr[data-id="${data.id}"]`).hide()
+                            .replaceWith(
+                                `
+                            <tr data-id="${data.id}">
+                                <td class="text-center">${data.id}</td>
+                                <td class="text-center">${data.hours}</td>
+                                <td class="text-center">${data.break}</td>
+                                
+                                <td class="text-center">
+                                    <a href="#" class="edit-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-edit text-primary"></i>
+                                    </a>
+                                    <a href="#" class="delete-time-button" data-id="${data.id}">
+                                        <i class="fa fa-fw fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+                            ).fadeIn(1000);
+                        registerTimeButtons();
+                    });
+                    modal.modal('hide');
+                });
+            });
+
+            $('.delete-time-form').submit(function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const id = form.attr('data-id');
+                const modal = $(`#deleteTimeModal`);
+                const url = form.attr('action');
+                modal.on('hidden.bs.modal', () => {
+                    axios.post(url, form.serialize()).then(() => {
+                        toastr.success('Time deleted successfully.');
+                        console.log($(`.table-time-management tbody tr[data-id="${id}"]`));
+                        $(`.table-time-management tbody tr[data-id="${id}"]`).fadeOut(1000).remove();
+                    });
+                });
+                modal.modal('hide');
+            });
+
+            registerTimeButtons();
+        });
+
+    </script>
+@endsection
+
+@section('external_js')
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/moment.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/sweetalert2.all.min.js')}}"></script>
+<script src="{{asset(env('APP_THEME','default').'/app-assets/vendors/js/extensions/polyfill.min.js')}}"></script>
+@endsection
+
 @section('scripts')
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/pages/app-permission.js')}}"></script>
+    <script src="{{asset(env('APP_THEME','default').'/app-assets/js/scripts/pages/app-role.js')}}"></script>
+
     <script src="{{ asset('js/quill/quill.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
     <script>

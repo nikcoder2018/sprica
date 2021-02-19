@@ -91,13 +91,7 @@ $(function() {
                 }
             },
             // Buttons with Dropdown
-            buttons: [{
-                text: 'Add Role',
-                className: 'btn btn-primary btn-add-record ml-2',
-                action: function(e, dt, button, config) {
-                    $(new_role_modal).modal('show');
-                }
-            }],
+            buttons: [],
             // For responsive popup
             responsive: {
                 details: {

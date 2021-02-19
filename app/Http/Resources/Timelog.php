@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Carbon\Carbon;
 class Timelog extends JsonResource
 {
     /**
@@ -16,11 +16,10 @@ class Timelog extends JsonResource
     {
         return [
             'id' => $this->id,
-            'start_date' => $this->start_date,
-            'start_time' => $this->start_time,
-            'end_date' => $this->end_date,
-            'end_time' => $this->end_time,
+            'date' => $this->start_date,
             'duration' => $this->duration,
+            'start' => $this->start_time,
+            'end' => $this->end_time,
             'break' => $this->break,
             'project' => $this->project->title
         ];

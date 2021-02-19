@@ -40,10 +40,10 @@ $(function() {
             columns: [
                 // columns according to JSON
                 { data: "id" },
-                { data: "start_date" },
-                { data: "end_date" },
-                { data: "end_time" },
+                { data: "date" },
                 { data: "duration" },
+                { data: "start" },
+                { data: "end" },
                 { data: "break" },
                 { data: "project" },
                 { data: "" },
@@ -57,32 +57,23 @@ $(function() {
                         return "";
                     },
                 },
-                {
-                    targets: 1,
-                    render: function(data, type, row) {
-                        return dayjs(data).format("MMMM DD, YYYY hh:mm A");
-                    },
-                },
+                // {
+                //     targets: 1,
+                //     render: function(data, type, row) {
+                //         return dayjs(data).format("MMMM DD, YYYY HH:mm");
+                //     },
+                // },
+                // {
+                //     targets: 2,
+                //     render: function(data, type, row) {
+                //         if (!data) {
+                //             return "N\\A";
+                //         }
+                //         return dayjs(data).format("MMMM DD, YYYY HH:mm");
+                //     },
+                // },
                 {
                     targets: 2,
-                    render: function(data, type, row) {
-                        if (!data) {
-                            return "N\\A";
-                        }
-                        return dayjs(data).format("MMMM DD, YYYY hh:mm A");
-                    },
-                },
-                {
-                    targets: 3,
-                    render: function(data, type, row) {
-                        if (!data) {
-                            return "N\\A";
-                        }
-                        return dayjs(data, "HH:mm:ss").format("HH:mm");
-                    },
-                },
-                {
-                    targets: 4,
                     render: function(data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     },

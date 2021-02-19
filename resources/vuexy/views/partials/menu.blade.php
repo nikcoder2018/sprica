@@ -116,7 +116,7 @@
                         </a>
                     </li>
                     <li class="{{ Request::segment(1) === 'employees' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('admin.employees') }}">
+                        <a class="d-flex align-items-center" href="{{ route('employees.index') }}">
                             <i data-feather="circle"></i><span class="menu-item">Employees</span>
                         </a>
                     </li>

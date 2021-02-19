@@ -2,7 +2,7 @@
 use App\Helpers\Language;
 $lang = new Language;
 ?>
-@extends('layouts.admin.main')
+@extends('layouts.main')
 
 @section('stylesheets')
     <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
@@ -53,7 +53,7 @@ $lang = new Language;
                                                 <span class="caret"></span>
                                               </button>
                                               <ul class="dropdown-menu" role="menu">
-                                                    <a href="{{route('admin.employees.list')}}" class="dropdown-item">
+                                                    <a href="" class="dropdown-item">
                                                         <i class="fas fa-users"></i> Alle Mitarbeiter
                                                         <span class="float-right text-muted text-sm"></span>
                                                     </a> 
@@ -239,7 +239,7 @@ $lang = new Language;
 @section('modals')
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
-        <form class="form-update-user" method="POST" action="{{route('admin.employees.update')}}">
+        <form class="form-update-user" method="POST" action="">
             @csrf 
             <input type="hidden" name="id">
             <div class="modal-content">
@@ -412,7 +412,7 @@ $lang = new Language;
             e.preventDefault();
             $('#modal-lg').modal('show');
             $.ajax({
-                url: "{{route('admin.employees.edit')}}",
+                url: "",
                 type: 'POST',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
