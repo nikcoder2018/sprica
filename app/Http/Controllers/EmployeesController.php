@@ -20,8 +20,20 @@ class EmployeesController extends Controller
         return view('contents.employees.index', $data);
     }
 
-    public function data(){
-        $employees = User::with('debts')->get();
+    public function data(Request $request){
+        $employees = User::orderBy('created_at', 'desc');
+
+        if($request->role != ''){
+            $employees = $employees->whereHas('roles', function($q) use($request){
+                $q->where('id', $request->role);
+            });
+        }
+
+        if($request->status != ''){
+            $employees = $employees->where('status', $request->status);
+        }
+
+        $employees = $employees->get();
         return DataTables::of(ResourceEmployee::collection($employees))->toJson();
     }
     public function list(){
@@ -34,8 +46,8 @@ class EmployeesController extends Controller
 
     public function details($id){
         $data['roles'] = Role::all();
-        $data['user_details'] = User::where('id', $id)->first();
-        return view('admin.contents.employees-details', $data);
+        $data['user'] = User::find($id);
+        return view('contents.employees.profile', $data);
     }
 
     public function filters(Request $request){

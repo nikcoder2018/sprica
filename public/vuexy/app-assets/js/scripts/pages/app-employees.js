@@ -42,7 +42,10 @@ $(function() {
                 className: 'control',
                 orderable: false,
                 responsivePriority: 2,
-                targets: 0
+                targets: 0,
+                render: function() {
+                    return '';
+                }
             },
             {
                 targets: 4,
@@ -71,16 +74,15 @@ $(function() {
                 orderable: false,
                 render: function(data, type, full, meta) {
                     return (
-                        '<div class="btn-group">' +
-                        '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
-                        feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
-                        '</a>' +
-                        '<div class="dropdown-menu dropdown-menu-right">' +
-                        '<a href="javascript:;" class="dropdown-item delete-record">' +
-                        feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-                        'Delete</a></div>' +
-                        '</div>' +
-                        '</div>'
+                        `
+                        <div class="btn-group">
+                            <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}</a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="/employees/details/${full.id}" class="dropdown-item">${feather.icons['user'].toSvg({ class: 'font-small-4 mr-50' })} Details</a>
+                                <a href="javascript:;" class="dropdown-item delete-record">${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Delete</a>
+                            </div>
+                        </div>
+                        `
                     );
                 }
             }
@@ -151,7 +153,7 @@ $(function() {
 
 
     filters.on('change', function() {
-        dtControlling.ajax.reload();
+        dt.ajax.reload();
     });
 
     $(new_user_modal).on("submit", "form", function(e) {
@@ -175,6 +177,34 @@ $(function() {
                     dt.ajax.reload();
                 }
             },
+        });
+    });
+
+    $(document).on("click", ".delete-record", function() {
+        let id = $(this).data("id");
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-outline-danger ml-1",
+            },
+            buttonsStyling: false,
+        }).then(async function(result) {
+            if (result.isConfirmed) {
+                const deleteData = await $.get(`${URL}/${id}/delete`);
+                if (deleteData.success) {
+                    toastr["success"](deleteData.msg, "Deleted!", {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl,
+                    });
+                    dtUser.ajax.reload();
+                }
+            }
         });
     });
 

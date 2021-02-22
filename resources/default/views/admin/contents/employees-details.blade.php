@@ -61,8 +61,12 @@ $lang = new Language;
                                     <div style="min-height:75vh"class="card card-primary card-outline">
                                         <div class="card-body box-profile">
                                           <div class="text-center">
-                                            <img class="profile-user-img img-fluid img-circle img-bordered-sm" src="{{ asset('/storage/'.config('chatify.user_avatar.folder').'/'.$user_details->avatar) }}" alt="Bild">
-                                          </div>
+                                                @if($user->avatar != '')
+                                                    <img class="profile-user-img img-fluid img-circle img-bordered-sm" src="{{ asset('/storage/'.config('chatify.user_avatar.folder').'/'.$user_details->avatar) }}">
+                                                @else 
+                                                    <img class="profile-user-img img-fluid img-circle img-bordered-sm" src="{{ asset('/storage/'.config('chatify.user_avatar.folder').'/avatar.png') }}">
+                                                @endif
+                                            </div>
                           
                                           <h3 class="profile-username text-center">{{$user_details->name}}</h3>
                           
@@ -138,7 +142,7 @@ $lang = new Language;
                                                         </label>   
                                                     <li class="col-md-12 row">
                                                         <label class="col-md-3 control-label">
-                                                                    Steuerklasse
+                                                                    Tax
                                                         </label>
                                                         <div class="col-md-3">
                                                             <p class="form-control-static linkify">

@@ -78,29 +78,6 @@
             </li>
             <li class="nav-item">
                 <a class="d-flex align-items-center" href="#">
-                    <i data-feather="users"></i>
-                    <span class="menu-title text-truncate">Users Management</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="{{ Request::segment(1) === 'users' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('users.index') }}">
-                            <i data-feather="circle"></i><span class="menu-item">Users</span>
-                        </a>
-                    </li>
-                    <li class="{{ Request::segment(1) === 'roles' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
-                            <i data-feather="circle"></i><span class="menu-item">Roles</span>
-                        </a>
-                    </li>
-                    <li class="{{ Request::segment(1) === 'permissions' ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
-                            <i data-feather="circle"></i><span class="menu-item">Permissions</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="d-flex align-items-center" href="#">
                     <i data-feather="book"></i>
                     <span class="menu-title text-truncate">Human Resource</span>
                 </a>
