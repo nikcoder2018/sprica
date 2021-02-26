@@ -13,7 +13,7 @@ use App\Timelog;
 
 use App\Http\Resources\Timelog as TimelogResource;
 use DataTables;
-
+use Carbon\Carbon;
 class TimeTrackingController extends Controller
 {
     public function index(Request $request)
@@ -45,11 +45,13 @@ class TimeTrackingController extends Controller
     public function store(Request $request)
     {
         $end_date = $request->end_date !== null ? $request->end_date : $request->start_date;
+        $end_time = $request->end_time !== null ? $request->end_time : Carbon::parse($request->start_date)->addHours($request->duration)->toTimeString();
         $timelog = Timelog::create([
             'user_id' => auth()->user()->id,
             'start_date' => $request->start_date,
+            'start_time' => Carbon::parse($request->start_date)->toTimeString(),
             'end_date' => $end_date,
-            'end_time' => $request->input('end_time'),
+            'end_time' => $end_time,
             'duration' => $request->duration,
             'break' => $request->break,
             'project_id' => $request->project_id,
@@ -65,10 +67,12 @@ class TimeTrackingController extends Controller
     public function update(Request $request)
     {
         $end_date = $request->end_date !== null ? $request->end_date : $request->start_date;
+        $end_time = $request->end_time !== null ? $request->end_time : Carbon::parse($request->start_date)->addHours($request->duration)->toTimeString();
         $timelog = Timelog::find($request->id);
         $timelog->start_date = $request->start_date;
+        $timelog->start_time = Carbon::parse($request->start_date)->toTimeString();
         $timelog->end_date = $end_date;
-        $timelog->end_time = $request->input('end_time');
+        $timelog->end_time = $end_time;
         $timelog->duration = $request->duration;
         $timelog->break = $request->break;
         $timelog->project_id = $request->project_id;

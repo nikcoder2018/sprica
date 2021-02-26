@@ -231,7 +231,7 @@ $(function() {
             disableMobile: true,
             enableTime: true,
             time_24hr: true,
-            defaultDate: dayjs(timelog.start_date).toDate(),
+            defaultDate: dayjs(timelog.start_date + ' ' + timelog.start_time).toDate(),
             onChange: (selectedDates, dateStr, instanc) => {
                 if ($(new_timelog_modal).hasClass("show")) {
                     var end_date = $(new_timelog_modal)

@@ -167,6 +167,12 @@
                                         <input type="date" id="end_date" name="end_date" class="form-control"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
+                                @elseif(\App\GlobalSetting::get('timetracking-mode') === 'Mode 3')
+                                <div class="form-group col-md-3">
+                                    <label>End Time</label>
+                                    <input type="text" id="end_time" name="end_time" class="form-control"
+                                        placeholder="HH:MM" disabled/>
+                                </div>
                                 @else 
                                     <div class="form-group col-md-3">
                                         <label>End Time</label>
