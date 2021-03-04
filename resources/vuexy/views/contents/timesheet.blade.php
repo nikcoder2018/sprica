@@ -28,7 +28,7 @@
 @section('content')
     <section class="timelog-list-wrapper">
         <div class="card">
-            <div class="card-datatable table-responsive">
+            <div class="card-datatable">
                 <table class="timelog-list-table table">
                     <thead>
                         <tr>
