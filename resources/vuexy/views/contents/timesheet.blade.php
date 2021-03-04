@@ -2,16 +2,17 @@
 
 @section('vendors_css')
     <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
+        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css"') }}">
+
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/forms/select/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
 @endsection
 @section('external_css')
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
 @endsection
 
@@ -236,22 +237,22 @@
 @endsection
 @section('external_js')
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.min.js') }}">
-    </script>
-    <script
-        src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}">
+    <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}">
     </script>
     <script
         src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}">
     </script>
     <script
-        src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}">
-    </script>
-    <script
         src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}">
     </script>
     <script
-        src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/responsive.bootstrap.min.js') }}">
+        src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/responsive.bootstrap4.js') }}">
+    </script>
+    <script
+        src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}">
+    </script>
+    <script
+        src="{{ asset(env('APP_THEME', 'default') . 'app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}">
     </script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}">
     </script>
