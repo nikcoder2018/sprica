@@ -3739,7 +3739,7 @@ tr.group {
         padding-left: 0.75rem;
     }
     div.dataTables_wrapper {
-        /* overflow : scroll; */
+        overflow: hidden;
     }
 }
 
