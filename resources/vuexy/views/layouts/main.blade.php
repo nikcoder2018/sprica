@@ -23,6 +23,9 @@
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/vendors.min.css') }}">
+
+    @yield('vendors_css')
+
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/charts/apexcharts.css') }}">
     <link rel="stylesheet" type="text/css"
@@ -30,12 +33,12 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
     <!-- END: Vendor CSS-->
-    @yield('vendors_css')
+    
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/bootstrap.css') }}">
     <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/bootstrap-extended.css') }}">
+        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/bootstrap-extended.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/colors.css') }}">
     <link rel="stylesheet" type="text/css"

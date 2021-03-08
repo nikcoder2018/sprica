@@ -16,11 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
 @endsection
 
-@section('stylesheets')
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/pages/app-permissions-list.css') }}">
-@endsection
-
 @section('header')
     <div class="content-header-left col-md-9 col-12 mb-2">
         @include('partials.breadcrumbs', ['title' => $title])
@@ -235,7 +230,7 @@
         </div>
     </div>
 @endsection
-@section('external_js')
+@section('vendors_js')
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}">
     </script>
