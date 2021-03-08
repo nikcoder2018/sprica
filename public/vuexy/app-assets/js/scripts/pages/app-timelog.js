@@ -46,7 +46,7 @@ $(function() {
                 { data: "end" },
                 { data: "break" },
                 { data: "project" },
-                { data: "" },
+                { data: "id" },
             ],
             columnDefs: [{
                     // For Responsive
@@ -142,29 +142,30 @@ $(function() {
                 },
             }, ],
             // For responsive popup
-            responsive: {
-                details: {
-                    display: $.fn.dataTable.Responsive.display.modal({
-                        header: function(row) {
-                            var data = row.data();
-                            return "Details of " + data.project;
-                        },
-                    }),
-                    type: "column",
-                    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-                        tableClass: "table",
-                        columnDefs: [{
-                                targets: 1,
-                                visible: false,
-                            },
-                            {
-                                targets: 2,
-                                visible: false,
-                            },
-                        ],
-                    }),
-                },
-            },
+            responsive: true,
+            // responsive: {
+            //     details: {
+            //         display: $.fn.dataTable.Responsive.display.modal({
+            //             header: function(row) {
+            //                 var data = row.data();
+            //                 return "Details of " + data.project;
+            //             },
+            //         }),
+            //         type: "column",
+            //         renderer: $.fn.dataTable.Responsive.renderer.tableAll({
+            //             tableClass: "table",
+            //             columnDefs: [{
+            //                     targets: 1,
+            //                     visible: false,
+            //                 },
+            //                 {
+            //                     targets: 2,
+            //                     visible: false,
+            //                 },
+            //             ],
+            //         }),
+            //     },
+            // },
             initComplete: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();
                 // Adding role filter once table initialized
