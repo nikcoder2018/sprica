@@ -15,6 +15,7 @@ $(function() {
         isRtl = $("html").attr("data-textdirection") === "rtl",
         API_URL = "/timesheet/logs",
         URL = "/timesheet",
+        assetPath = '../vuexy/app-assets/',
         API_TOKEN = $("[name=api-token]").attr("content"),
         startDatePickr = $("input[name=start_date]"),
         startTimePickr = $("input[name=start_time]"),
@@ -38,7 +39,10 @@ $(function() {
             autoWidth: false,
             columns: [
                 // columns according to JSON
+                { data: "responsive_id" },
                 { data: "id" },
+                { data: "id" },
+                { data: "employee" },
                 { data: "date" },
                 { data: "duration" },
                 { data: "start" },
@@ -51,95 +55,171 @@ $(function() {
                     // For Responsive
                     className: "control",
                     responsivePriority: 2,
-                    targets: 0,
-                    render: function() {
-                        return "";
-                    },
+                    targets: 0
                 },
-                // {
-                //     targets: 1,
-                //     render: function(data, type, row) {
-                //         return dayjs(data).format("MMMM DD, YYYY HH:mm");
-                //     },
-                // },
-                // {
-                //     targets: 2,
-                //     render: function(data, type, row) {
-                //         if (!data) {
-                //             return "N\\A";
-                //         }
-                //         return dayjs(data).format("MMMM DD, YYYY HH:mm");
-                //     },
-                // },
+                {
+                    // For Checkboxes
+                    targets: 1,
+                    orderable: false,
+                    responsivePriority: 3,
+                    render: function(data, type, full, meta) {
+                        return (
+                            '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="" id="checkbox' +
+                            data +
+                            '" /><label class="custom-control-label" for="checkbox' +
+                            data +
+                            '"></label></div>'
+                        );
+                    },
+                    checkboxes: {
+                        selectAllRender: '<div class="custom-control custom-checkbox"> <input class="custom-control-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="custom-control-label" for="checkboxSelectAll"></label></div>'
+                    }
+                },
                 {
                     targets: 2,
+                    visible: false
+                },
+                {
+                    // Avatar image/badge, Name and post
+                    targets: 3,
+                    responsivePriority: 4,
+                    render: function(data, type, row, meta) {
+                        var $user_img = row.employee.avatar,
+                            $name = row.employee.name,
+                            $role = row.employee.role;
+                        if ($user_img) {
+                            // For Avatar image
+                            var $output =
+                                '<img src="' + $user_img + '" alt="Avatar" width="32" height="32">';
+                        } else {
+                            // For Avatar badge
+                            var stateNum = row.employee.status;
+                            var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                            var $state = states[stateNum],
+                                $name = row.employee.name,
+                                $initials = $name.match(/\b\w/g) || [];
+                            $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+                            $output = '<span class="avatar-content">' + $initials + '</span>';
+                        }
+
+                        var colorClass = $user_img === '' ? ' bg-light-' + $state + ' ' : '';
+                        // Creates full output for row
+                        var $row_output =
+                            '<div class="d-flex justify-content-left align-items-center">' +
+                            '<div class="avatar ' +
+                            colorClass +
+                            ' mr-1">' +
+                            $output +
+                            '</div>' +
+                            '<div class="d-flex flex-column">' +
+                            '<span class="emp_name text-truncate font-weight-bold">' +
+                            $name +
+                            '</span>' +
+                            '<small class="emp_post text-truncate text-muted">' +
+                            $role +
+                            '</small>' +
+                            '</div>' +
+                            '</div>';
+                        return $row_output;
+                    }
+                },
+                {
+                    targets: 5,
                     render: function(data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     },
                 },
                 {
-                    targets: 5,
+                    targets: 8,
                     render: function(data, type, row) {
                         if (row.break != null)
                             return `<span>${row.break} Hours</span>`;
                         else return "";
                     },
                 },
+                // {
+                //     // Actions
+                //     targets: -1,
+                //     width: "80px",
+                //     orderable: false,
+                //     render: function(data, type, full, meta) {
+                //         return `<div class="btn-group">
+                //                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons[
+                //                     "more-vertical"
+                //                 ].toSvg({ class: "font-small-4" })}</a>
+                //                 <div class="dropdown-menu dropdown-menu-right">
+                //                     <a class="mr-1 dropdown-item btn-edit btn-responsive-edit" href="javascript:void(0);" data-id="${
+                //                         full.id
+                //                     }" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons[
+                //             "edit-2"
+                //         ].toSvg({ class: "font-medium-2" })} Edit</a>
+                //                     <a class="mr-1 dropdown-item btn-delete btn-responsive-delete" href="javascript:void(0);" data-id="${
+                //                         full.id
+                //                     }" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons[
+                //             "trash"
+                //         ].toSvg({ class: "font-medium-2" })} Delete</a>
+                //                 </div>
+                //             </div>`;
+                //     },
+                // },
                 {
                     // Actions
                     targets: -1,
-                    width: "80px",
+                    title: 'Actions',
                     orderable: false,
                     render: function(data, type, full, meta) {
-                        return `<div class="btn-group">
-                                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons[
-                                    "more-vertical"
-                                ].toSvg({ class: "font-small-4" })}</a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="mr-1 dropdown-item btn-edit btn-responsive-edit" href="javascript:void(0);" data-id="${
-                                        full.id
-                                    }" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons[
-                            "edit-2"
-                        ].toSvg({ class: "font-medium-2" })} Edit</a>
-                                    <a class="mr-1 dropdown-item btn-delete btn-responsive-delete" href="javascript:void(0);" data-id="${
-                                        full.id
-                                    }" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons[
-                            "trash"
-                        ].toSvg({ class: "font-medium-2" })} Delete</a>
-                                </div>
-                            </div>`;
-                    },
-                },
+                        return (
+                            '<div class="d-inline-flex">' +
+                            '<a class="pr-1 dropdown-toggle hide-arrow text-primary" data-toggle="dropdown">' +
+                            feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                            '</a>' +
+                            '<div class="dropdown-menu dropdown-menu-right">' +
+                            '<a href="javascript:;" class="dropdown-item">' +
+                            feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
+                            'Details</a>' +
+                            '<a href="javascript:;" class="dropdown-item">' +
+                            feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) +
+                            'Archive</a>' +
+                            '<a href="javascript:;" class="dropdown-item delete-record">' +
+                            feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
+                            'Delete</a>' +
+                            '</div>' +
+                            '</div>' +
+                            '<a href="javascript:;" class="item-edit">' +
+                            feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
+                            '</a>'
+                        );
+                    }
+                }
             ],
             order: [
-                [1, "desc"]
+                [2, "desc"]
             ],
-            dom: '<"row d-flex justify-content-between align-items-center m-1"' +
-                '<"col-lg-6 d-flex align-items-center"l<"dt-action-buttons text-xl-right text-lg-left text-lg-right text-left "B>>' +
-                '<"col-lg-6 d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap pr-lg-1 p-0"f<"invoice_status ml-sm-2">>' +
-                ">t" +
-                '<"d-flex justify-content-between mx-2 row"' +
-                '<"col-sm-12 col-md-6"i>' +
-                '<"col-sm-12 col-md-6"p>' +
-                ">",
+            dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            displayLength: 7,
+            lengthMenu: [7, 10, 25, 50, 75, 100],
             language: {
-                sLengthMenu: "Show _MENU_",
-                search: "Search",
-                searchPlaceholder: "Search",
                 paginate: {
                     // remove previous & next text from pagination
-                    previous: "&nbsp;",
-                    next: "&nbsp;",
-                },
+                    previous: '&nbsp;',
+                    next: '&nbsp;'
+                }
             },
             // Buttons with Dropdown
             buttons: [{
-                text: "Add Time",
-                className: "btn btn-primary btn-add-record ml-2",
+                text: feather.icons['plus'].toSvg({ class: 'mr-50 font-small-4' }) + 'Add Time',
+                className: 'create-new btn btn-primary',
+                attr: {
+                    'data-toggle': 'modal',
+                    'data-target': '#modals-slide-in'
+                },
+                init: function(api, node, config) {
+                    $(node).removeClass('btn-secondary');
+                },
                 action: function(e, dt, button, config) {
                     $(new_timelog_modal).modal("show");
                 },
-            }, ],
+            }],
             // For responsive popup
             //responsive: true,
             responsive: {
@@ -147,18 +227,34 @@ $(function() {
                     display: $.fn.dataTable.Responsive.display.modal({
                         header: function(row) {
                             var data = row.data();
-                            return "Details of " + data.project;
-                        },
+                            return 'Details of ' + data.project;
+                        }
                     }),
-                    type: "column",
-                    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-                        tableClass: "table",
-                        columnDefs: [{
-                            targets: 1,
-                            visible: false,
-                        }, ],
-                    }),
-                },
+                    type: 'column',
+                    renderer: function(api, rowIdx, columns) {
+                        var data = $.map(columns, function(col, i) {
+                            if (col.columnIndex != 1 && col.columnIndex != 2)
+                                return col.project !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
+                                    col.rowIndex +
+                                    '" data-dt-column="' +
+                                    col.columnIndex +
+                                    '">' +
+                                    '<td>' +
+                                    col.title +
+                                    ':' +
+                                    '</td> ' +
+                                    '<td>' +
+                                    col.data +
+                                    '</td>' +
+                                    '</tr>' :
+                                    '';
+                        }).join('');
+
+                        return data ? $('<table class="table"/>').append(data) : false;
+                    }
+                }
             },
             initComplete: function() {
                 $(document).find('[data-toggle="tooltip"]').tooltip();

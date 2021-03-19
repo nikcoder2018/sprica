@@ -13,7 +13,7 @@ use Carbon\Carbon;
 class User extends Authenticatable
 {
     use Notifiable;
-
+    protected $appends = ['role'];
     /**
      * The attributes that are mass assignable.
      *
@@ -93,7 +93,7 @@ class User extends Authenticatable
     public function getRoleAttribute()
     {
         $role = $this->roles()->first();
-        return $role ? $role->id : null;
+        return $role ? $role->title : null;
     }
 
     public function roles()

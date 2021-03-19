@@ -15,7 +15,9 @@ class Timelog extends JsonResource
     public function toArray($request)
     {
         return [
+            'responsive_id' => '',
             'id' => $this->id,
+            'employee' => $this->user,
             'date' => $this->start_date,
             'duration' => $this->duration,
             'start' => $this->start_time,

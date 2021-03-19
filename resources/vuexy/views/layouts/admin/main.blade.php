@@ -114,7 +114,7 @@
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/vendors.min.js') }}"></script>
     <!-- BEGIN Vendor JS-->
-
+    @yield('vendor_js')
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/charts/apexcharts.min.js') }}"></script>
     <script src="{{ asset(env('APP_THEME', 'default') . '/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>

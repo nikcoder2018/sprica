@@ -142,7 +142,7 @@ $lang = new Language;
                                                         </label>   
                                                     <li class="col-md-12 row">
                                                         <label class="col-md-3 control-label">
-                                                                    Tax
+                                                                    Steuerklasse
                                                         </label>
                                                         <div class="col-md-3">
                                                             <p class="form-control-static linkify">

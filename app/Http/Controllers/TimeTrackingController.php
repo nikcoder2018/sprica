@@ -32,7 +32,7 @@ class TimeTrackingController extends Controller
     }
     public function logs()
     {
-        $timelogs = Timelog::with('project')->where('user_id', auth()->user()->id)->orderBy('start_date', 'DESC')->get();
+        $timelogs = Timelog::with(['project','user'])->orderBy('start_date', 'DESC')->get();
         return DataTables::of(TimelogResource::collection($timelogs))->toJson();
     }
 
