@@ -29,7 +29,6 @@
                                 <th></th>
                                 <th></th>
                                 <th>id</th>
-                                <th>Employee</th>
                                 <th>Date</th>
                                 <th>Duration</th>
                                 <th>Start</th>

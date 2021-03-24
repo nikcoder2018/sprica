@@ -42,7 +42,6 @@ $(function() {
                 { data: "responsive_id" },
                 { data: "id" },
                 { data: "id" },
-                { data: "employee" },
                 { data: "date" },
                 { data: "duration" },
                 { data: "start" },
@@ -61,7 +60,6 @@ $(function() {
                     // For Checkboxes
                     targets: 1,
                     orderable: false,
-                    responsivePriority: 2,
                     render: function(data, type, full, meta) {
                         return (
                             '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="" id="checkbox' +
@@ -80,53 +78,57 @@ $(function() {
                     visible: false
                 },
                 {
-                    targets: 4,
-                    responsivePriority: 3,
+                    targets: 3,
+                    responsivePriority: 2,
                 },
                 {
-                    // Avatar image/badge, Name and post
-                    targets: 3,
+                    targets: 8,
                     responsivePriority: 3,
-                    render: function(data, type, row, meta) {
-                        var $user_img = row.employee.avatar,
-                            $name = row.employee.name,
-                            $role = row.employee.role;
-                        if ($user_img) {
-                            // For Avatar image
-                            var $output =
-                                '<img src="' + $user_img + '" alt="Avatar" width="32" height="32">';
-                        } else {
-                            // For Avatar badge
-                            var stateNum = row.employee.status;
-                            var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-                            var $state = states[stateNum],
-                                $name = row.employee.name,
-                                $initials = $name.match(/\b\w/g) || [];
-                            $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
-                            $output = '<span class="avatar-content">' + $initials + '</span>';
-                        }
-
-                        var colorClass = $user_img === '' ? ' bg-light-' + $state + ' ' : '';
-                        // Creates full output for row
-                        var $row_output =
-                            '<div class="d-flex justify-content-left align-items-center">' +
-                            '<div class="avatar ' +
-                            colorClass +
-                            ' mr-1">' +
-                            $output +
-                            '</div>' +
-                            '<div class="d-flex flex-column">' +
-                            '<span class="emp_name text-truncate font-weight-bold">' +
-                            $name +
-                            '</span>' +
-                            '<small class="emp_post text-truncate text-muted">' +
-                            $role +
-                            '</small>' +
-                            '</div>' +
-                            '</div>';
-                        return $row_output;
-                    }
                 },
+                // {
+                //     // Avatar image/badge, Name and post
+                //     targets: 3,
+                //     responsivePriority: 3,
+                //     render: function(data, type, row, meta) {
+                //         var $user_img = row.employee.avatar,
+                //             $name = row.employee.name,
+                //             $role = row.employee.role;
+                //         if ($user_img) {
+                //             // For Avatar image
+                //             var $output =
+                //                 '<img src="' + $user_img + '" alt="Avatar" width="32" height="32">';
+                //         } else {
+                //             // For Avatar badge
+                //             var stateNum = row.employee.status;
+                //             var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                //             var $state = states[stateNum],
+                //                 $name = row.employee.name,
+                //                 $initials = $name.match(/\b\w/g) || [];
+                //             $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+                //             $output = '<span class="avatar-content">' + $initials + '</span>';
+                //         }
+
+                //         var colorClass = $user_img === '' ? ' bg-light-' + $state + ' ' : '';
+                //         // Creates full output for row
+                //         var $row_output =
+                //             '<div class="d-flex justify-content-left align-items-center">' +
+                //             '<div class="avatar ' +
+                //             colorClass +
+                //             ' mr-1">' +
+                //             $output +
+                //             '</div>' +
+                //             '<div class="d-flex flex-column">' +
+                //             '<span class="emp_name text-truncate font-weight-bold">' +
+                //             $name +
+                //             '</span>' +
+                //             '<small class="emp_post text-truncate text-muted">' +
+                //             $role +
+                //             '</small>' +
+                //             '</div>' +
+                //             '</div>';
+                //         return $row_output;
+                //     }
+                // },
                 {
                     targets: 5,
                     render: function(data, type, row) {
@@ -141,31 +143,6 @@ $(function() {
                         else return "";
                     },
                 },
-                // {
-                //     // Actions
-                //     targets: -1,
-                //     width: "80px",
-                //     orderable: false,
-                //     render: function(data, type, full, meta) {
-                //         return `<div class="btn-group">
-                //                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">${feather.icons[
-                //                     "more-vertical"
-                //                 ].toSvg({ class: "font-small-4" })}</a>
-                //                 <div class="dropdown-menu dropdown-menu-right">
-                //                     <a class="mr-1 dropdown-item btn-edit btn-responsive-edit" href="javascript:void(0);" data-id="${
-                //                         full.id
-                //                     }" data-toggle="tooltip" data-placement="top" title="Edit">${feather.icons[
-                //             "edit-2"
-                //         ].toSvg({ class: "font-medium-2" })} Edit</a>
-                //                     <a class="mr-1 dropdown-item btn-delete btn-responsive-delete" href="javascript:void(0);" data-id="${
-                //                         full.id
-                //                     }" data-toggle="tooltip" data-placement="top" title="Delete">${feather.icons[
-                //             "trash"
-                //         ].toSvg({ class: "font-medium-2" })} Delete</a>
-                //                 </div>
-                //             </div>`;
-                //     },
-                // },
                 {
                     // Actions
                     targets: -1,
@@ -230,7 +207,7 @@ $(function() {
                     renderer: function(api, rowIdx, columns) {
                         console.log(columns);
                         var data = $.map(columns, function(col, i) {
-                            if (col.columnIndex != 1 && col.columnIndex != 2 && col.columnIndex != 10)
+                            if (col.columnIndex != 1 && col.columnIndex != 2)
                                 return col.project !== '' // ? Do not show row in modal popup if title is blank (for check box)
                                     ?
                                     '<tr data-dt-row="' +
