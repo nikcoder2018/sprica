@@ -54,14 +54,14 @@ $(function() {
             columnDefs: [{
                     // For Responsive
                     className: "control",
-                    responsivePriority: 2,
+                    responsivePriority: 1,
                     targets: 0
                 },
                 {
                     // For Checkboxes
                     targets: 1,
                     orderable: false,
-                    responsivePriority: 3,
+                    responsivePriority: 2,
                     render: function(data, type, full, meta) {
                         return (
                             '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="" id="checkbox' +
@@ -80,9 +80,13 @@ $(function() {
                     visible: false
                 },
                 {
+                    targets: 4,
+                    responsivePriority: 3,
+                },
+                {
                     // Avatar image/badge, Name and post
                     targets: 3,
-                    responsivePriority: 4,
+                    responsivePriority: 3,
                     render: function(data, type, row, meta) {
                         var $user_img = row.employee.avatar,
                             $name = row.employee.name,
@@ -166,28 +170,20 @@ $(function() {
                     // Actions
                     targets: -1,
                     title: 'Actions',
+                    responsivePriority: 4,
                     orderable: false,
                     render: function(data, type, full, meta) {
                         return (
-                            '<div class="d-inline-flex">' +
-                            '<a class="pr-1 dropdown-toggle hide-arrow text-primary" data-toggle="dropdown">' +
-                            feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
-                            '</a>' +
-                            '<div class="dropdown-menu dropdown-menu-right">' +
-                            '<a href="javascript:;" class="dropdown-item">' +
-                            feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
-                            'Details</a>' +
-                            '<a href="javascript:;" class="dropdown-item">' +
-                            feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) +
-                            'Archive</a>' +
-                            '<a href="javascript:;" class="dropdown-item delete-record">' +
-                            feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-                            'Delete</a>' +
-                            '</div>' +
-                            '</div>' +
-                            '<a href="javascript:;" class="item-edit">' +
-                            feather.icons['edit'].toSvg({ class: 'font-small-4' }) +
-                            '</a>'
+                            `<div class="d-inline-flex">
+                                <a class="pr-1 dropdown-toggle hide-arrow text-primary" data-toggle="dropdown">
+                                    ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a href="javascript:;" class="dropdown-item">${feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' })}Details</a>
+                                    <a href="javascript:;" class="dropdown-item btn-delete btn-responsive-delete" data-id="${full.id}">${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })}Delete</a>
+                                </div>
+                            </div>
+                            <a href="javascript:;" class="item-edit btn-edit btn-responsive-edit" data-id="${full.id}">${feather.icons['edit'].toSvg({ class: 'font-small-4' })}</a>`
                         );
                     }
                 }
@@ -232,8 +228,9 @@ $(function() {
                     }),
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {
+                        console.log(columns);
                         var data = $.map(columns, function(col, i) {
-                            if (col.columnIndex != 1 && col.columnIndex != 2)
+                            if (col.columnIndex != 1 && col.columnIndex != 2 && col.columnIndex != 10)
                                 return col.project !== '' // ? Do not show row in modal popup if title is blank (for check box)
                                     ?
                                     '<tr data-dt-row="' +
