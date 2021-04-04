@@ -41,7 +41,6 @@ $(function() {
                 // columns according to JSON
                 { data: "responsive_id" },
                 { data: "id" },
-                { data: "id" },
                 { data: "date" },
                 { data: "duration" },
                 { data: "start" },
@@ -57,33 +56,12 @@ $(function() {
                     targets: 0
                 },
                 {
-                    // For Checkboxes
                     targets: 1,
-                    orderable: false,
-                    render: function(data, type, full, meta) {
-                        return (
-                            '<div class="custom-control custom-checkbox"> <input class="custom-control-input dt-checkboxes" type="checkbox" value="" id="checkbox' +
-                            data +
-                            '" /><label class="custom-control-label" for="checkbox' +
-                            data +
-                            '"></label></div>'
-                        );
-                    },
-                    checkboxes: {
-                        selectAllRender: '<div class="custom-control custom-checkbox"> <input class="custom-control-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="custom-control-label" for="checkboxSelectAll"></label></div>'
-                    }
-                },
-                {
-                    targets: 2,
                     visible: false
                 },
                 {
-                    targets: 3,
+                    targets: 2,
                     responsivePriority: 2,
-                },
-                {
-                    targets: 8,
-                    responsivePriority: 3,
                 },
                 // {
                 //     // Avatar image/badge, Name and post
@@ -130,13 +108,13 @@ $(function() {
                 //     }
                 // },
                 {
-                    targets: 5,
+                    targets: 4,
                     render: function(data, type, row) {
                         return `<span>${row.duration} Hours</span>`;
                     },
                 },
                 {
-                    targets: 8,
+                    targets: 7,
                     render: function(data, type, row) {
                         if (row.break != null)
                             return `<span>${row.break} Hours</span>`;

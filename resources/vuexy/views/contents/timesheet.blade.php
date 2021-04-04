@@ -12,7 +12,13 @@
 @section('external_css')
     <link rel="stylesheet" type="text/css" href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
 @endsection
-
+@section('stylesheets')
+    <style>
+        div.dataTables_wrapper{
+            overflow: unset !important;
+        }
+    </style>
+@endsection
 @section('header')
     <div class="content-header-left col-md-9 col-12 mb-2">
         @include('partials.breadcrumbs', ['title' => $title])
@@ -26,7 +32,6 @@
                     <table class="timelog-list-table table">
                         <thead>
                             <tr>
-                                <th></th>
                                 <th></th>
                                 <th>id</th>
                                 <th>Date</th>
