@@ -12,10 +12,13 @@ $(function() {
     // datatable
     if (dtTable.length) {
         var dt = dtTable.DataTable({
+            processing: true,
+            serverSide: true,
             ajax: API_URL, // JSON file to add data
             autoWidth: false,
             columns: [
                 // columns according to JSON
+                { data: "responsive_id" },
                 { data: 'id' },
                 { data: 'title' },
                 { data: 'client' },
@@ -29,59 +32,91 @@ $(function() {
             columnDefs: [{
                     // For Responsive
                     className: 'control',
-                    responsivePriority: 2,
+                    responsivePriority: 1,
                     targets: 0
                 },
                 {
-                    targets: 3,
+                    targets: 1,
+                    visible: false
+                },
+                {
+                    targets: 2,
+                    responsivePriority: 2,
+                },
+                {
+                    targets: 4,
                     render: function(data, type, row) {
                         var avatarGroup = '';
                         var avatar = '/vuexy/app-assets/images/avatars/noface.png';
                         if (row.leader != null) {
                             if (row.leader.avatar != '') {
-                                avatar = row.leader.avatar;
+                                // For Avatar image
+                                var $output = `<img src="${row.leader.avatar}" alt="Avatar" width="32" height="32">`;
+                            } else {
+                                // For Avatar badge
+                                var stateNum = row.leader.status;
+                                var states = ['danger', 'success', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                                var $state = states[stateNum],
+                                    $name = row.leader.name,
+                                    $initials = $name.match(/\b\w/g) || [];
+                                $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+                                $output = '<span class="avatar-content">' + $initials + '</span>';
                             }
 
-                            avatarGroup += `
-                            <div data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" class="avatar pull-up my-0" data-original-title="${row.leader.name}">
-                                <img src="${avatar}" alt="Avatar" height="26" width="26">
-                            </div>
-                            `;
-                            return `
-                            <div class="avatar-group">
-                                ${avatarGroup}
-                            </div>
-                            `;
+                            var colorClass = row.leader.avatar === '' ? ' bg-light-' + $state + ' ' : '';
+                            // Creates full output for row
+                            var $row_output =
+                                `<div class="d-flex justify-content-left align-items-center">
+                                    <div class="avatar ${colorClass} mr-1" data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" data-original-title="${row.leader.name}">
+                                        ${$output}
+                                    </div>
+                                    <span class="emp_name text-truncate font-weight-bold">
+                                        ${$name}
+                                    </span>
+                                </div>`;
+                            return $row_output;
+
                         } else {
                             return '';
                         }
                     }
                 },
                 {
-                    targets: 4,
+                    targets: 5,
                     render: function(data, type, row) {
                         var avatarGroup = '';
                         $.each(row.members, function(index, member) {
-                            //default avatar if user avatar is not set
-                            var avatar = '/vuexy/app-assets/images/avatars/noface.png';
                             if (member.avatar != '') {
-                                avatar = member.avatar;
+                                // For Avatar image
+                                var $output = `<img src="${member.avatar}" alt="Avatar" width="32" height="32">`;
+                            } else {
+                                // For Avatar badge
+                                var stateNum = member.status;
+                                var states = ['danger', 'success', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                                var $state = states[stateNum],
+                                    $name = member.name,
+                                    $initials = $name.match(/\b\w/g) || [];
+                                $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+                                $output = '<span class="avatar-content">' + $initials + '</span>';
                             }
+
+                            var colorClass = member.avatar === '' ? ' bg-light-' + $state + ' ' : '';
+
                             avatarGroup += `
-                            <div data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" class="avatar pull-up my-0" data-original-title="${member.name}">
-                                <img src="${avatar}" alt="Avatar" height="26" width="26">
+                            <div class="avatar ${colorClass}" data-toggle="tooltip" data-popup="tooltip-custom" data-placement="top" title="" data-original-title="${member.name}">
+                                ${$output}
                             </div>
                             `;
                         });
                         return `
-                        <div class="avatar-group">
+                        <div class="d-flex justify-content-start align-items-center">
                             ${avatarGroup}
                         </div>
                         `;
                     }
                 },
                 {
-                    targets: 5,
+                    targets: 6,
                     render: function(data, type, row) {
                         return `
                         <div class="progress-wrapper">
@@ -94,13 +129,13 @@ $(function() {
                     }
                 },
                 {
-                    targets: 6,
+                    targets: 7,
                     render: function(data, type, row) {
                         return `<span>${row.hours} Hours</span>`;
                     }
                 },
                 {
-                    targets: 7,
+                    targets: 8,
                     render: function(data, type, row) {
                         switch (row.status) {
                             case 'notstarted':
@@ -139,20 +174,12 @@ $(function() {
                 }
             ],
             order: [
-                [1, 'desc']
+                [2, 'desc']
             ],
-            dom: '<"row d-flex justify-content-between align-items-center m-1"' +
-                '<"col-lg-6 d-flex align-items-center"l<"dt-action-buttons text-xl-right text-lg-left text-lg-right text-left "B>>' +
-                '<"col-lg-6 d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap pr-lg-1 p-0"f<"invoice_status ml-sm-2">>' +
-                '>t' +
-                '<"d-flex justify-content-between mx-2 row"' +
-                '<"col-sm-12 col-md-6"i>' +
-                '<"col-sm-12 col-md-6"p>' +
-                '>',
+            dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            displayLength: 7,
+            lengthMenu: [7, 10, 25, 50, 75, 100],
             language: {
-                sLengthMenu: 'Show _MENU_',
-                search: 'Search',
-                searchPlaceholder: 'Search Projects',
                 paginate: {
                     // remove previous & next text from pagination
                     previous: '&nbsp;',
@@ -173,20 +200,34 @@ $(function() {
                     display: $.fn.dataTable.Responsive.display.modal({
                         header: function(row) {
                             var data = row.data();
-                            return 'Details of ' + data.title;
+                            return 'Details of ' + data.project;
                         }
                     }),
                     type: 'column',
-                    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
-                        tableClass: 'table',
-                        columnDefs: [{
-                            targets: 1,
-                            visible: false
-                        }, {
-                            targets: 2,
-                            visible: false
-                        }]
-                    })
+                    renderer: function(api, rowIdx, columns) {
+                        console.log(columns);
+                        var data = $.map(columns, function(col, i) {
+                            if (col.columnIndex != 1 && col.columnIndex != 2)
+                                return col.project !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
+                                    col.rowIndex +
+                                    '" data-dt-column="' +
+                                    col.columnIndex +
+                                    '">' +
+                                    '<td>' +
+                                    col.title +
+                                    ':' +
+                                    '</td> ' +
+                                    '<td>' +
+                                    col.data +
+                                    '</td>' +
+                                    '</tr>' :
+                                    '';
+                        }).join('');
+
+                        return data ? $('<table class="table"/>').append(data) : false;
+                    }
                 }
             },
             initComplete: function() {

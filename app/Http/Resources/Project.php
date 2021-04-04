@@ -19,6 +19,7 @@ class Project extends JsonResource
         if($tasks > 0) $progress = ($completed/$tasks)*100; else  $progress = 0;
 
         return [
+            'responsive_id' => '',
             'id' => $this->id,
             'title' => $this->title,
             'client' => $this->client->name,

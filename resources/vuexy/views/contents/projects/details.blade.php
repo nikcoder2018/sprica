@@ -169,7 +169,7 @@ $system = new System;
                                 </div>
                                 <div class="media-body">
                                     <h6 class="mb-0">{{$activity->user->name}}</h6>
-                                    <p class="mb-0">{{App\Role::find($activity->user->role)->title}}</p>
+                                    <p class="mb-0">{{@App\Role::find($activity->user->role)->title}}</p>
                                 </div>
                             </div>
                         </div>

@@ -46,10 +46,24 @@ class EmployeesController extends Controller
 
     public function details($id){
         $data['roles'] = Role::all();
-        $data['user'] = User::find($id);
+        $data['user'] = User::where('id',$id)->withCount(['projects','tasks'])->first();
+
+        //return $data;
         return view('contents.employees.profile', $data);
     }
 
+    public function changephoto(Request $request){
+        $user = User::find($request->id);
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+            $upload = $request->file('image')->storeAs('/photos',$fileName,'public');
+            $user->avatar = 'public/photos/'.$fileName;;
+            $user->save();
+        }
+
+        return response()->json(['success' => true, 'msg' => 'Profile Photo Updated']);
+    }
     public function filters(Request $request){
         $employees = User::with('myrole')->orderBy('name', 'ASC');
         if($request->type != 'all'){

@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
 
     Route::get('employees', 'EmployeesController@list')->name('employees.list');
     Route::get('employees/details/{id}', 'EmployeesController@details')->name('employees.details');
+    Route::post('employees/changephoto', 'EmployeesController@changephoto')->name('employees.changephoto');
     Route::post('employees/filters', 'EmployeesController@filters')->name('employees.filter');
     Route::resource('employees', 'EmployeesController');
   
