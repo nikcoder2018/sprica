@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\Leave as ResourceLeave;
 use App\Leave;
+use App\LeaveType;
+use App\User;
+
+use DataTables;
 class LeavesController extends Controller
 {
     /**
@@ -13,9 +18,22 @@ class LeavesController extends Controller
      */
     public function index()
     {
-        
+        $data['title'] = 'Leaves';
+        return view('contents.leaves.index', $data);
     }
 
+    public function all(){
+        $leaves = Leave::with(['user', 'type'])->get();
+        
+        return DataTables::of(ResourceLeave::collection($leaves))->toJson();
+    }
+
+    public function pendings(){
+        $data['title'] = 'Pendings';
+        $data['leaves'] = Leave::with(['user', 'type'])->where('status', 'pending')->get();
+
+        return view('contents.leaves.pending', $data);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -23,7 +41,10 @@ class LeavesController extends Controller
      */
     public function create()
     {
-        //
+        $data['title'] = 'Assign leave';
+        $data['employees'] = User::where('status', 1)->get();
+        $data['leaveTypes'] = LeaveType::all();
+        return view('contents.leaves.create', $data);
     }
 
     /**
@@ -35,18 +56,26 @@ class LeavesController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id' => 'required',
-            'type_id' => 'required',
+            'employee' => 'required',
+            'leave_type' => 'required',
             'status' => 'required|string',
-            'duration_type' => 'required|string',
-            'reason' => 'nullable|string'
+            'dates' => 'required',
+            'reason' => 'required|string'
         ]);
 
-        $leave = Leave::create($data);
-        $leave->sync_dates($leave->id, $request->input('dates', []));
+        $dates = explode(',',$data['dates']);
 
-        if($leave)
-            return response()->json(array('success' => true, 'msg' => 'New leave created'));
+        foreach($dates as $date){
+            Leave::create([
+                'user_id' => $data['employee'],
+                'type_id' => $data['leave_type'],
+                'status' => $data['status'],
+                'date' => $date,
+                'reason' => $data['reason']
+            ]);
+        }
+
+        return response()->json(array('success' => true, 'msg' => 'New leave created'));
     }
 
     /**
@@ -86,12 +115,11 @@ class LeavesController extends Controller
         $data = $request->validate([
             'type_id' => 'required',
             'status' => 'required|string',
-            'duration_type' => 'required|string',
+            'date' => 'required|date',
             'reason' => 'nullable|string'
         ]);
 
         $leave->update($data);
-        $leave->sync_dates($leave->id,$request->input('dates', []));
 
         if($leave)
             return response()->json(['success' => true, 'msg' => 'Update Successful', 'details' => $leave]);
@@ -107,5 +135,24 @@ class LeavesController extends Controller
     {
         if($leave->delete())
             return response()->json(['success' => true, 'msg' => 'Delete Successful']);
+    }
+
+    public function request_action(Request $request){
+        $leave = Leave::find($request->id);
+        $messageText = '';
+        switch($request->action){
+            case 'approved':
+                $leave->status = 'approved';
+                $messageText = 'Request Approved';
+            break;
+            case 'rejected': 
+                $leave->status = 'rejected';
+                $messageText = 'Request Rejected';
+            break;
+        }
+
+        $leave->save();
+
+        return response()->json(['success' => true, 'msg' => $messageText, 'leave_id' => $leave->id]);
     }
 }

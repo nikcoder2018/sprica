@@ -30,7 +30,7 @@ Route::get('tasks/all', 'TasksController@all');
 Route::get('tickets/all', 'TicketsController@all');
 Route::get('notices/all', 'NoticesController@all');
 Route::get('notices/reads', 'NoticesController@reads');
-
+Route::get('leaves/all', 'LeavesController@all');
 Route::get('finance/estimates/generate', 'EstimateController@generate');
 Route::get('finance/invoices/generate', 'InvoiceController@generate');
 Route::apiResource('finance/expenses/categories', 'ExpenseCategoryController');

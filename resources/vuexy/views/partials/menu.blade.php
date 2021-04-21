@@ -102,6 +102,11 @@
                             <i data-feather="circle"></i><span class="menu-item">Holidays</span>
                         </a>
                     </li>
+                    <li class="{{ Request::segment(1) === 'leaves' ? 'active' : null }}">
+                        <a class="d-flex align-items-center" href="{{ route('leaves.pendings') }}">
+                            <i data-feather="circle"></i><span class="menu-item">Leaves</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item">

@@ -92,8 +92,14 @@ Route::group(['middleware' => ['auth', 'checkstatus']], function () {
     Route::resource('employees', 'EmployeesController');
   
     Route::resource('holidays', 'HolidaysController');
-    Route::resource('leave', 'LeavesController');
-    Route::resource('leavetype', 'LeaveTypesController');
+
+    Route::get('leaves/pendings', 'LeavesController@pendings')->name('leaves.pendings');
+    Route::post('leaves/request-action', 'LeavesController@request_action')->name('leaves.request-action');
+    Route::resource('leaves', 'LeavesController');
+    
+    Route::get('leavetype/{id}/destroy', 'LeaveTypesController@destroy')->name('leavetype.delete');
+    Route::post('leavetype/update', 'LeaveTypesController@update')->name('leavetype.update');
+    Route::resource('leavetype', 'LeaveTypesController', ['except' => ['update']]);
 
     Route::get('/profile', 'Admin\ProfileController@index')->name('admin.profile');
     Route::post('/profile/update', 'Admin\ProfileController@update')->name('admin.profile.update');

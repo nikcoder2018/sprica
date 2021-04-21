@@ -37,11 +37,13 @@ class LeaveTypesController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
+            'number_of_leaves' => 'required',
+            'paid_status' => 'required'
         ]);
         $leavetype = LeaveType::create($data);
 
         if($leavetype)
-            return response()->json(array('success' => true, 'msg' => 'New leave type created'));
+            return response()->json(array('success' => true, 'msg' => 'New leave type created', 'type' => $leavetype));
     }
 
     /**
@@ -77,6 +79,8 @@ class LeaveTypesController extends Controller
     {
         $data = $request->validate([
             'name' => 'required',
+            'number_of_leaves' => 'required',
+            'paid_status' => 'required'
         ]);
 
         $leavetype->update($data);
@@ -91,9 +95,12 @@ class LeaveTypesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(LeaveType $leavetype)
+    public function destroy($id)
     {
-        if($leavetype->delete())
-            return response()->json(['success' => true, 'msg' => 'Delete Successful']);
+        $leavetype = LeaveType::find($id);
+        $leavetype->delete();
+        
+        if($leavetype)
+        return response()->json(['success' => true, 'msg' => 'Delete Successful']);
     }
 }

@@ -101,11 +101,19 @@
                                 
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label>Project</label>
                                     <select name="project_id" class="select2 form-control">
                                         @foreach ($projects as $project)
                                             <option value="{{ $project->id }}">{{ $project->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tasks</label>
+                                    <select name="task_id" class="select2 form-control">
+                                        @foreach ($tasks as $task)
+                                            <option value="{{ $task->id }}">{{ $task->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>

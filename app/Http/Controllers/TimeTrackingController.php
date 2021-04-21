@@ -20,9 +20,11 @@ class TimeTrackingController extends Controller
     {
         $data['title'] = 'My Times';
         $data['projects'] = Project::where('default', 0)->orderBy('created_at', 'ASC')->get();
+        $data['tasks'] = auth()->user()->tasks;
         $data['expenses'] = OtherExpenses::all();
         $data['tags'] = Tag::where('for', 'timelog')->get();
         $default = $request->user()->settings()->where('key', 'default_start_time')->first();
+        
         if ($default) {
             $data['default_start_time'] = $default->value;
         } else {
@@ -55,6 +57,7 @@ class TimeTrackingController extends Controller
             'duration' => $request->duration,
             'break' => $request->break,
             'project_id' => $request->project_id,
+            'task_id' => $request->task_id,
             'expenses_id' => $request->expenses_id,
             'note' => $request->note
         ]);
@@ -77,6 +80,7 @@ class TimeTrackingController extends Controller
         $timelog->break = $request->break;
         $timelog->project_id = $request->project_id;
         $timelog->expenses_id = $request->expenses_id;
+        $timelog->task_id = $request->task_id;
         $timelog->note = $request->note;
         $timelog->save();
 

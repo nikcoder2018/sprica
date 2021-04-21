@@ -9,15 +9,13 @@ class Leave extends Model
     //
     protected $table = 'leaves';
     
-    protected $fillable = ['user_id', 'type_id', 'status', 'duration_type', 'reason'];
+    protected $fillable = ['user_id', 'type_id', 'status', 'date', 'reason'];
     
-    public function dates(){
-        return $this->hasMany(LeaveDate::class, 'leave_id', 'id');
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function sync_dates($id, $dates){
-        LeaveDate::where('leave_id', $id)->delete();
-        foreach($dates as $date){
-            LeaveDate::create(['leave_id' => $id, 'date' => $date]);
-        }
+
+    public function type(){
+        return $this->hasOne(LeaveType::class, 'id', 'type_id');
     }
 }
