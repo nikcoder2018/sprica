@@ -15,6 +15,53 @@ $system = new System;
 <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/css/plugins/forms/pickers/form-flat-pickr.css')}}">
 @endsection
+@section('css')
+    <style>
+        .timeline{
+            height: 360px; 
+            overflow-y: scroll; 
+            padding-left: 10px;
+        }
+
+        .timeline::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background: #161d31;
+        }
+
+        .timeline::-webkit-scrollbar
+        {
+            width: 8px;
+        }
+
+        .timeline::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background: #7367f0;
+        }
+
+        .nav-tabs .nav-link:after{
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+        }
+
+        .nav-tabs .nav-link:not(.active):after{
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #9e9ea0 !important;
+            -webkit-transition: -webkit-transform .3s;
+            transition: -webkit-transform .3s;
+            transition: transform .3s;
+            transition: transform .3s,-webkit-transform .3s;
+        }
+    </style>
+@endsection
 @section('header')
 <div class="content-header-left col-md-9 col-12 mb-2">
     @include('partials.breadcrumbs', ['title' => $project->title])
@@ -22,165 +69,234 @@ $system = new System;
 @endsection
 @section('content')
 <section class="app-project-details">
-    <div class="card card-info card-outline card-tabs">
-        <div class="card-header p-0 pt-1 border-bottom-0">
-          <ul class="nav nav-tabs" id="project-tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="project-overview-tabs" data-toggle="pill" href="#project-overview" role="tab" aria-controls="project-tabs-overview" aria-selected="true">Overview</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="project-members-tabs" data-toggle="pill" href="#project-members" role="tab" aria-controls="project-tabs-members" aria-selected="true">Members</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="project-tasks-tabs" data-toggle="pill" href="#project-tasks" role="tab" aria-controls="project-tabs-tasks" aria-selected="true">Tasks</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="project-activity-tabs" data-toggle="pill" href="#project-activity" role="tab" aria-controls="project-tabs-activity" aria-selected="true">Activity</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="project-timelogs-tabs" data-toggle="pill" href="#project-timelogs" role="tab" aria-controls="project-tabs-timelogs" aria-selected="true">Timelogs</a>
-            </li>
-          </ul>
-        </div>
-        <div class="card-body">
-          <div class="tab-content" id="project-tabs-content">
-            <div class="tab-pane fade active show" id="project-overview" role="tabpanel" aria-labelledby="#project-tabs-overview">
-                <div class="row mt-2">
-                    <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                        <div class="media">
-                            <div class="avatar bg-light-primary mr-2">
-                                <div class="avatar-content">
-                                    <i data-feather="dollar-sign" class="avatar-icon"></i>
+    <ul class="nav nav-tabs" id="project-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="project-overview-tabs" data-toggle="pill" href="#project-overview" role="tab" aria-controls="project-tabs-overview" aria-selected="true"><i data-feather='grid'></i> Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="project-members-tabs" data-toggle="pill" href="#project-members" role="tab" aria-controls="project-tabs-members" aria-selected="true"><i data-feather='users'></i> Members</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="project-tasks-tabs" data-toggle="pill" href="#project-tasks" role="tab" aria-controls="project-tabs-tasks" aria-selected="true"><i data-feather='check-square'></i> Tasks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="project-timelogs-tabs" data-toggle="pill" href="#project-timelogs" role="tab" aria-controls="project-tabs-timelogs" aria-selected="true"><i data-feather='clock'></i> Timelogs</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="project-tabs-content">
+        <div class="tab-pane fade active show" id="project-overview" role="tabpanel" aria-labelledby="#project-tabs-overview">
+            <div class="row match-height">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="avatar bg-light-primary p-50 mb-1">
+                                        <div class="avatar-content">
+                                            <i data-feather="dollar-sign" class="font-medium-5"></i>
+                                        </div>
+                                    </div>
+                                    <h2 class="font-weight-bolder">{{System::simplifyNumbers($project->budget)}}</h2>
+                                    <p class="card-text">Budget</p>
                                 </div>
                             </div>
-                            <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">{{$project->budget}}</h4>
-                                <p class="card-text font-small-3 mb-0">Budget</p>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="avatar bg-light-danger p-50 mb-1">
+                                        <div class="avatar-content">
+                                            <i data-feather="dollar-sign" class="font-medium-5"></i>
+                                        </div>
+                                    </div>
+                                    <h2 class="font-weight-bolder">{{System::simplifyNumbers($project->spent)}}</h2>
+                                    <p class="card-text">Expenses</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="avatar bg-light-info p-50 mb-1">
+                                        <div class="avatar-content">
+                                            <i data-feather="dollar-sign" class="font-medium-5"></i>
+                                        </div>
+                                    </div>
+                                    <h2 class="font-weight-bolder">0</h2>
+                                    <p class="card-text">Earnings</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="avatar bg-light-success p-50 mb-1">
+                                        <div class="avatar-content">
+                                            <i data-feather="clock" class="font-medium-5"></i>
+                                        </div>
+                                    </div>
+                                    <h2 class="font-weight-bolder">{{$hours_logged}}</h2>
+                                    <p class="card-text">Hours Logged</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                        <div class="media">
-                            <div class="avatar bg-light-info mr-2">
-                                <div class="avatar-content">
-                                    <i data-feather="dollar-sign" class="avatar-icon"></i>
+                    <div class="row match-height">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <i data-feather='info' style="width: 24px; height: 24px;"></i>
+                                        <h4 class="card-title ml-1">Project Details</h4>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">{{$project->spent}}</h4>
-                                <p class="card-text font-small-3 mb-0">Expenses</p>
+                                <div class="card-body">
+                                    {{$project->description}}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
-                        <div class="media">
-                            <div class="avatar bg-light-danger mr-2">
-                                <div class="avatar-content">
-                                    <i data-feather="dollar-sign" class="avatar-icon"></i>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Start Date</label><br>
+                                            <p>
+                                                25-03-2021
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>End Date</label><br>
+                                            <p>
+                                                25-07-2021
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">0</h4>
-                                <p class="card-text font-small-3 mb-0">Earnings</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-6 col-12">
-                        <div class="media">
-                            <div class="avatar bg-light-success mr-2">
-                                <div class="avatar-content">
-                                    <i data-feather="clock" class="avatar-icon"></i>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Company/Client</label><br>
+                                            <p>
+                                                
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Project Leader</label><br>
+                                            <p>
+                                                {{$project->leader->name}}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="media-body my-auto">
-                                <h4 class="font-weight-bolder mb-0">{{$hours_logged}}</h4>
-                                <p class="card-text font-small-3 mb-0">Hours Logged</p>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-user-timeline">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="list" class="user-timeline-title-icon"></i>
+                                <h4 class="card-title">Activity</h4>
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="timeline ml-50">
+                                @forelse($project->activities as $activity)
+                                <li class="timeline-item">
+                                    <span class="timeline-point timeline-point-indicator"></span>
+                                    <div class="timeline-event">
+                                        <h6>{{$activity->details}}</h6>
+                                        <p>{{$activity->created_at->format('M d, Y')}} <span class="text-muted">{{$activity->user->name}}</span></p>
+                                    </div>
+                                </li>
+                                @empty 
+                                @endforelse
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="project-members" role="tabpanel" aria-labelledby="#project-tabs-members">
-                <div class="card-datatable table-responsive pt-0">
-                    <table class="member-list-table table" data-id="{{$project->id}}" data-leader="{{$project->leader_id}}">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Name</th>
-                                <th>Hourly Rate</th>
-                                <th>Task Pending</th>
-                                <th>Task Completed</th>
-                                <th>Option</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-end">
+                            <h4 class="card-title">Tasks</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="customer-chart" class="mt-2 mb-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-end">
+                            <h4 class="card-title">Timelogs</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="customer-chart" class="mt-2 mb-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="project-members" role="tabpanel" aria-labelledby="#project-tabs-members">
+            <div class="card-datatable table-responsive pt-0">
+                <table class="member-list-table table" data-id="{{$project->id}}" data-leader="{{$project->leader_id}}">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Hourly Rate</th>
+                            <th>Task Pending</th>
+                            <th>Task Completed</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
-            <div class="tab-pane fade" id="project-tasks" role="tabpanel" aria-labelledby="#project-tabs-tasks">
-                <div class="card-datatable table-responsive pt-0">
-                    <table class="task-list-table table" data-id="{{$project->id}}">
-                        <thead class="thead-light">
-                            <tr>
-                                <th></th>
-                                <th>Task</th>
-                                <th>Assigned To</th>
-                                <td>Due Date</td>
-                                <th>Status</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="project-timelogs" role="tabpanel" aria-labelledby="#project-tabs-timelogs">
-                <div class="card-datatable table-responsive pt-0">
-                    <table class="timelog-list-table table" data-id="{{$project->id}}">
-                        <thead class="thead-light">
-                            <tr>
-                                <th></th>
-                                <th>User</th>
-                                <td>Start</td>
-                                <th>End</th>
-                                <th>Hours</th>
-                                <th>Break</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="project-activity" role="tabpanel" aria-labelledby="#project-tabs-activity">
-                <ul class="timeline ml-50 mb-0" style="height: 600px; overflow-y: scroll; padding-left: 10px;">
-                    @forelse($project->activities as $activity)
-                    <li class="timeline-item">
-                        <span class="timeline-point timeline-point-indicator"></span>
-                        <div class="timeline-event">
-                            <h6>{{$activity->details}}</h6>
-                            <p>{{$activity->created_at->format('M d, Y')}}</p>
-                            <div class="media align-items-center">
-                                <div class="avatar mr-50">
-                                    @if($activity->user->avatar != '')
-                                        <img width="38" height="38" alt="{{$activity->user->name}}" src="{{asset($activity->user->avatar)}}">
-                                    @else
-                                        <img width="38" height="38" alt="{{$activity->user->name}}" src="{{asset('dist/img/avatar.png')}}">
-                                    @endif
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mb-0">{{$activity->user->name}}</h6>
-                                    <p class="mb-0">{{@App\Role::find($activity->user->role)->title}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    @empty 
-                    @endforelse
-                </ul>
-            </div>
-          </div>
         </div>
-        <!-- /.card -->
+        <div class="tab-pane fade" id="project-tasks" role="tabpanel" aria-labelledby="#project-tabs-tasks">
+            <div class="card-datatable table-responsive pt-0">
+                <table class="task-list-table table" data-id="{{$project->id}}">
+                    <thead class="thead-light">
+                        <tr>
+                            <th></th>
+                            <th>Task</th>
+                            <th>Assigned To</th>
+                            <td>Due Date</td>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="project-timelogs" role="tabpanel" aria-labelledby="#project-tabs-timelogs">
+            <div class="card-datatable table-responsive pt-0">
+                <table class="timelog-list-table table" data-id="{{$project->id}}">
+                    <thead class="thead-light">
+                        <tr>
+                            <th></th>
+                            <th>User</th>
+                            <td>Start</td>
+                            <th>End</th>
+                            <th>Hours</th>
+                            <th>Break</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 @endsection

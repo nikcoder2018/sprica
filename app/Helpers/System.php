@@ -26,7 +26,7 @@ class System
         if($gun_degis=="Pazar" OR $gun_degis=="Cumartesi"){
             return true;
         }else{
-            if(count(Cache::get('tatilmi_bak')->where('Tarih',$girilentarih)) > 0){
+            if($number(Cache::get('tatilmi_bak')->where('Tarih',$girilentarih)) > 0){
                 return true;
             }else{
                 return false;
@@ -138,5 +138,17 @@ class System
         }
         $word = $word . $acronym ;
         return $word;
+    }
+
+    public static function simplifyNumbers($number){
+        if ($number >= 1000 && $number < 1000000) {
+            return round($number/1000, 1) . "K";
+        } elseif($number >= 1000000 && $number < 1000000000) {
+            return round($number/1000000, 1) . "M";
+        } elseif($number >= 1000000000) {
+            return round($number/1000000000, 1) . "B";
+        }else{
+            return $number;
+        }
     }
 }
