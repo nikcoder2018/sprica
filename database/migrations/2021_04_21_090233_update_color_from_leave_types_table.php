@@ -14,8 +14,8 @@ class UpdateColorFromLeaveTypesTable extends Migration
     public function up()
     {
         Schema::table('leave_types', function (Blueprint $table) {
-            $table->string('color')->nullable()->change();
-            $table->set('paid_status', ['paid', 'unpaid'])->change();
+            //$table->string('color')->nullable()->change();
+            //$table->set('paid_status', ['paid', 'unpaid'])->change();
         });
     }
 
