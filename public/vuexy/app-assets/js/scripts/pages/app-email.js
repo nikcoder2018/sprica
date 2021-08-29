@@ -16,14 +16,14 @@ $(function () {
   Quill.register(Font, true);
 
   var compose = $('.compose-email'),
-    composeModal = $('#compose-mail'),
+    composeMailModal = $('#compose-mail'),
     menuToggle = $('.menu-toggle'),
     sidebarToggle = $('.sidebar-toggle'),
     sidebarLeft = $('.sidebar-left'),
     sidebarMenuList = $('.sidebar-menu-list'),
     emailAppList = $('.email-app-list'),
     emailUserList = $('.email-user-list'),
-    emailUserListInput = $('.email-user-list .custom-checkbox'),
+    emailUserListInput = $('.email-user-list .form-check'),
     emailScrollArea = $('.email-scroll-area'),
     emailTo = $('#email-to'),
     emailCC = $('#emailCC'),
@@ -40,8 +40,11 @@ $(function () {
     mailDelete = $('.mail-delete'),
     mailUnread = $('.mail-unread'),
     emailSearch = $('#email-search'),
+    composeModal = $('.modal'),
+    modalDialog = $('.modal-dialog'),
     editorEl = $('#message-editor .editor'),
     overlay = $('.body-content-overlay'),
+    composeMaximize = $('.compose-maximize'),
     isRtl = $('html').attr('data-textdirection') === 'rtl';
 
   var assetPath = '../../../app-assets/';
@@ -98,13 +101,21 @@ $(function () {
     $(emailScrollArea).css('overflow', 'scroll');
   }
 
+  $(document).keyup(function (e) {
+    if (e.key === 'Escape') {
+      if (composeMailModal.find('.modal-dialog').hasClass('modal-fullscreen')) {
+        composeMaximize.click();
+      }
+    }
+  });
+
   // Email to user select
   function renderGuestAvatar(option) {
     if (!option.id) {
       return option.text;
     }
     var avatarImg = feather.icons['user'].toSvg({
-      class: 'mr-0'
+      class: 'me-0'
     });
     if ($(option.element).data('avatar')) {
       avatarImg = "<img src='" + assetPath + 'images/avatars/' + $(option.element).data('avatar') + "' alt='avatar' />";
@@ -112,7 +123,7 @@ $(function () {
 
     var $avatar =
       "<div class='d-flex flex-wrap align-items-center'>" +
-      "<div class='avatar avatar-sm my-0 mr-50'>" +
+      "<div class='avatar avatar-sm my-0 me-50'>" +
       "<span class='avatar-content'>" +
       avatarImg +
       '</span>' +
@@ -124,7 +135,6 @@ $(function () {
   }
   if (emailTo.length) {
     emailTo.wrap('<div class="position-relative"></div>').select2({
-      placeholder: 'Select value',
       dropdownParent: emailTo.parent(),
       closeOnSelect: false,
       templateResult: renderGuestAvatar,
@@ -139,7 +149,6 @@ $(function () {
 
   if (emailCC.length) {
     emailCC.wrap('<div class="position-relative"></div>').select2({
-      placeholder: 'Select value',
       dropdownParent: emailCC.parent(),
       closeOnSelect: false,
       templateResult: renderGuestAvatar,
@@ -154,7 +163,6 @@ $(function () {
 
   if (emailBCC.length) {
     emailBCC.wrap('<div class="position-relative"></div>').select2({
-      placeholder: 'Select value',
       dropdownParent: emailBCC.parent(),
       closeOnSelect: false,
       templateResult: renderGuestAvatar,
@@ -177,6 +185,10 @@ $(function () {
       // all input forms
       $('.compose-form input').val('');
       emailTo.val([]).trigger('change');
+      emailCC.val([]).trigger('change');
+      emailBCC.val([]).trigger('change');
+      wrapperCC.hide();
+      wrapperBCC.hide();
       // quill editor content
       var quill_editor = $('.compose-form .ql-editor');
       quill_editor[0].innerHTML = '';
@@ -199,6 +211,17 @@ $(function () {
       overlay.addClass('show');
     });
   }
+
+  if (composeMaximize)
+    composeMaximize.on('click', function () {
+      composeModal.toggleClass('modal-sticky');
+      modalDialog.toggleClass('modal-fullscreen');
+      if (modalDialog.hasClass('modal-fullscreen')) {
+        $(this).html(feather.icons['minimize-2'].toSvg());
+      } else {
+        $(this).html(feather.icons['maximize-2'].toSvg());
+      }
+    });
 
   // Overlay Click
   if (overlay.length) {
@@ -265,9 +288,9 @@ $(function () {
       e.stopPropagation();
       var $this = $(this);
       if ($this.is(':checked')) {
-        $this.closest('.media').addClass('selected-row-bg');
+        $this.closest('.user-mail').addClass('selected-row-bg');
       } else {
-        $this.closest('.media').removeClass('selected-row-bg');
+        $this.closest('.user-mail').removeClass('selected-row-bg');
       }
     });
   }
@@ -276,27 +299,31 @@ $(function () {
   $(document).on('click', '.email-app-list .selectAll input', function () {
     if ($(this).is(':checked')) {
       userActions
-        .find('.custom-checkbox input')
+        .find('.form-check .form-check-input')
         .prop('checked', this.checked)
-        .closest('.media')
+        .closest('.user-mail')
         .addClass('selected-row-bg');
     } else {
-      userActions.find('.custom-checkbox input').prop('checked', '').closest('.media').removeClass('selected-row-bg');
+      userActions
+        .find('.form-check .form-check-input')
+        .prop('checked', '')
+        .closest('.user-mail')
+        .removeClass('selected-row-bg');
     }
   });
 
   // Delete selected Mail from list
   if (mailDelete.length) {
     mailDelete.on('click', function () {
-      if (userActions.find('.custom-checkbox input:checked').length) {
-        userActions.find('.custom-checkbox input:checked').closest('.media').remove();
+      if (userActions.find('.form-check .form-check-input:checked').length) {
+        userActions.find('.form-check .form-check-input:checked').closest('.user-mail').remove();
         emailAppList.find('.selectAll input').prop('checked', false);
         toastr['error']('You have removed email.', 'Mail Deleted!', {
           closeButton: true,
           tapToDismiss: false,
           rtl: isRtl
         });
-        userActions.find('.custom-checkbox input').prop('checked', '');
+        userActions.find('.form-check .form-check-input').prop('checked', '');
       }
     });
   }
@@ -304,7 +331,7 @@ $(function () {
   // Mark mail unread
   if (mailUnread.length) {
     mailUnread.on('click', function () {
-      userActions.find('.custom-checkbox input:checked').closest('.media').removeClass('mail-read');
+      userActions.find('.form-check .form-check-input:checked').closest('.user-mail').removeClass('mail-read');
     });
   }
 

@@ -22,15 +22,21 @@
   min-height : auto;
   background-color : transparent;
   margin : 0;
+  padding : 0 1.75rem;
   color : #6E6B7B;
   font-size : 1.5rem;
 }
 
+.bs-stepper .bs-stepper-header .step {
+  margin-bottom : 0.25rem;
+  margin-top : 0.25rem;
+}
+
 .bs-stepper .bs-stepper-header .step .step-trigger {
-  padding : 0 1.75rem;
   -webkit-flex-wrap : nowrap;
       -ms-flex-wrap : nowrap;
           flex-wrap : nowrap;
+  padding : 0;
   font-weight : normal;
 }
 
@@ -102,14 +108,6 @@
 
 .bs-stepper .bs-stepper-header .step.crossed + .line {
   color : #7367F0;
-}
-
-.bs-stepper .bs-stepper-header .step:first-child .step-trigger {
-  padding-right : 0;
-}
-
-.bs-stepper .bs-stepper-header .step:last-child .step-trigger {
-  padding-left : 0;
 }
 
 .bs-stepper .bs-stepper-content {
@@ -239,7 +237,7 @@ html[data-textdirection='rtl'] .btn-prev i, html[data-textdirection='rtl'] .btn-
           transform : rotate(180deg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .bs-stepper .bs-stepper-header {
     -webkit-box-orient : vertical;
     -webkit-box-direction : normal;

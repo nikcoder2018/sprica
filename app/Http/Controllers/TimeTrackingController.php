@@ -59,7 +59,8 @@ class TimeTrackingController extends Controller
             'project_id' => $request->project_id,
             'task_id' => $request->task_id,
             'expenses_id' => $request->expenses_id,
-            'note' => $request->note
+            'note' => $request->note,
+            'logged_from' => auth()->user()->id,
         ]);
 
         $timelog->tags()->sync($request->input('tags', []));

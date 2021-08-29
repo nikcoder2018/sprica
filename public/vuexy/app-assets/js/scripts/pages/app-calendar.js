@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var $bullet =
         "<span class='bullet bullet-" +
         $(option.element).data('label') +
-        " bullet-sm mr-50'> " +
+        " bullet-sm me-50'> " +
         '</span>' +
         option.text;
 
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       var $avatar =
         "<div class='d-flex flex-wrap align-items-center'>" +
-        "<div class='avatar avatar-sm my-0 mr-50'>" +
+        "<div class='avatar avatar-sm my-0 me-50'>" +
         "<span class='avatar-content'>" +
         "<img src='" +
         assetPath +
@@ -312,11 +312,13 @@ document.addEventListener('DOMContentLoaded', function () {
       title: {
         required: true
       },
-      'start-date': {
-        required: true
+      rules: {
+        'start-date': { required: true },
+        'end-date': { required: true }
       },
-      'end-date': {
-        required: true
+      messages: {
+        'start-date': { required: 'Start Date is required' },
+        'end-date': { required: 'End Date is required' }
       }
     });
   }

@@ -23,6 +23,10 @@ class Timelog extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    function logged_from(){
+        return $this->hasOne(User::class, 'id', 'logged_from');
+    }
+
     public function project(){
         return $this->belongsTo(Project::class);
     }

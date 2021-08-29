@@ -11,11 +11,15 @@
 
 $(function () {
   // RTL Support
-  var direction = 'ltr';
+  var direction = 'ltr',
+    isRTL = false;
   if ($('html').data('textdirection') == 'rtl') {
     direction = 'rtl';
   }
 
+  if (direction === 'rtl') {
+    isRTL = true;
+  }
   var sidebarShop = $('.sidebar-shop'),
     btnCart = $('.btn-cart'),
     overlay = $('.body-content-overlay'),
@@ -109,7 +113,7 @@ $(function () {
       toastr['success']('', 'Added Item In Your Cart 🛒', {
         closeButton: true,
         tapToDismiss: false,
-        rtl: direction
+        rtl: isRTL
       });
     });
   }
@@ -123,7 +127,7 @@ $(function () {
         toastr['success']('', 'Added to wishlist ❤️', {
           closeButton: true,
           tapToDismiss: false,
-          rtl: direction
+          rtl: isRTL
         });
       }
     });

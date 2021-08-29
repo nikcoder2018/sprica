@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="loading" lang="en" data-textdirection="ltr">
+<html class="loading dark-layout" lang="en" data-layout="dark-layout" data-textdirection="ltr">
 <!-- BEGIN: Head-->
 
 <head>
@@ -48,7 +48,7 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/themes/bordered-layout.css') }}">
     <link rel="stylesheet" type="text/css"
-        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
+        href="{{ asset(env('APP_THEME', 'default') . '/app-assets/css/core/menu/menu-types/horizontal-menu.css') }}">
 
     @yield('external_css')
 
@@ -98,8 +98,8 @@
 
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu-modern dark-layout  navbar-floating footer-static" data-open="click"
-    data-menu="vertical-menu-modern" data-col="" data-layout="dark-layout">
+<body class="horizontal-layout horizontal-menu  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="">
+
     <div id="main-content-wrapper" class="d-none">
         @include('partials.header')
         @include('partials.menu')
@@ -108,7 +108,7 @@
         <div class="app-content content">
             <div class="content-overlay"></div>
             <div class="header-navbar-shadow"></div>
-            <div class="content-wrapper">
+            <div class="content-wrapper p-0">
                 <div class="content-header row">
                     @yield('header')
                 </div>

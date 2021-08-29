@@ -78,7 +78,7 @@
 .vertical-layout.vertical-menu-modern.menu-collapsed .navbar .navbar-header.expanded .modern-nav-toggle {
   display: block; }
 
-.vertical-layout.vertical-menu-modern.menu-collapsed .navbar.fixed-top {
+.vertical-layout.vertical-menu-modern.menu-collapsed .navbar.fixed-top, .vertical-layout.vertical-menu-modern.menu-collapsed .navbar.floating-nav {
   left: 80px; }
 
 .vertical-layout.vertical-menu-modern.menu-collapsed .main-menu {

@@ -8,105 +8,125 @@
 ==========================================================================================*/
 (function (window, document, $) {
   'use strict';
-  $('[data-toggle="popover"]').popover();
+
+  // Basic Initialization
+  var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+
+  var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl);
+  });
 
   /******************/
   // Popover events //
   /******************/
 
   // onShow event
-  $('#show-popover')
-    .popover({
-      title: 'Popover Show Event',
-      content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
-      trigger: 'click',
-      placement: 'right'
-    })
-    .on('show.bs.popover', function () {
-      alert('Show event fired.');
-    });
+  var showPopoverTrigger = document.getElementById('show-popover');
+
+  var showPopover = new bootstrap.Popover(showPopoverTrigger, {
+    title: 'Popover Show Event',
+    content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
+    trigger: 'click',
+    placement: 'right'
+  });
+
+  showPopoverTrigger.addEventListener('show.bs.popover', function () {
+    alert('Show event fired.');
+  });
 
   // onShown event
-  $('#shown-popover')
-    .popover({
-      title: 'Popover Shown Event',
-      content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
-      trigger: 'click',
-      placement: 'bottom'
-    })
-    .on('shown.bs.popover', function () {
-      alert('Shown event fired.');
-    });
+  var shownPopoverTrigger = document.getElementById('shown-popover');
+
+  var shownPopover = new bootstrap.Popover(shownPopoverTrigger, {
+    title: 'Popover Shown Event',
+    content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
+    trigger: 'click',
+    placement: 'bottom'
+  });
+
+  shownPopoverTrigger.addEventListener('shown.bs.popover', function () {
+    alert('Shown event fired.');
+  });
 
   // onHide event
-  $('#hide-popover')
-    .popover({
-      title: 'Popover Hide Event',
-      content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
-      trigger: 'click',
-      placement: 'bottom'
-    })
-    .on('hide.bs.popover', function () {
-      alert('Hide event fired.');
-    });
+  var hidePopoverTrigger = document.getElementById('hide-popover');
+
+  var hidePopover = new bootstrap.Popover(hidePopoverTrigger, {
+    title: 'Popover Hide Event',
+    content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
+    trigger: 'click',
+    placement: 'bottom'
+  });
+
+  hidePopoverTrigger.addEventListener('hide.bs.popover', function () {
+    alert('Hide event fired.');
+  });
 
   // onHidden event
-  $('#hidden-popover')
-    .popover({
-      title: 'Popover Hidden Event',
-      content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
-      trigger: 'click',
-      placement: 'left'
-    })
-    .on('hidden.bs.popover', function () {
-      alert('Hidden event fired.');
-    });
+  var hiddenPopoverTrigger = document.getElementById('hidden-popover');
+
+  var hiddenPopover = new bootstrap.Popover(hiddenPopoverTrigger, {
+    title: 'Popover Hidden Event',
+    content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
+    trigger: 'click',
+    placement: 'left'
+  });
+
+  hiddenPopoverTrigger.addEventListener('hidden.bs.popover', function () {
+    alert('Hidden event fired.');
+  });
+
+  // onInserted event
+  var insertedPopoverTrigger = document.getElementById('inserted-popover');
+
+  var insertedPopover = new bootstrap.Popover(insertedPopoverTrigger, {
+    title: 'Popover Inserted Event',
+    content: 'Bonbon chocolate cake. Pudding halvah pie apple pie topping marzipan pastry marzipan cupcake.',
+    trigger: 'click',
+    placement: 'left'
+  });
+
+  insertedPopoverTrigger.addEventListener('inserted.bs.popover', function () {
+    alert('Inserted event fired.');
+  });
 
   /*******************/
   // Tooltip methods //
   /*******************/
 
   // Show method
-  $('#show-method').on('click', function () {
-    $(this).popover('show');
+  var showMethod = document.getElementById('show-method');
+
+  var showPopoverMethod = new bootstrap.Popover(showMethod);
+  showMethod.addEventListener('click', function () {
+    showPopoverMethod.show();
   });
+
   // Hide method
-  $('#hide-method').on('mouseenter', function () {
-    $(this).popover('show');
+  var hideMethod = document.getElementById('hide-method');
+
+  var hidePopoverMethod = new bootstrap.Popover(hideMethod);
+  hideMethod.addEventListener('mouseenter', function () {
+    hidePopoverMethod.show();
   });
-  $('#hide-method').on('click', function () {
-    $(this).popover('hide');
+
+  hideMethod.addEventListener('click', function () {
+    hidePopoverMethod.hide();
   });
+
   // Toggle method
-  $('#toggle-method').on('click', function () {
-    $(this).popover('toggle');
-  });
-  // Dispose method
-  $('#dispose').on('click', function () {
-    $('#dispose-method').popover('dispose');
+  var toggleMethod = document.getElementById('toggle-method');
+
+  var togglePopoverMethod = new bootstrap.Popover(toggleMethod);
+  toggleMethod.addEventListener('click', function () {
+    togglePopoverMethod.toggle();
   });
 
-  /* Trigger*/
-  $('.manual').on('click', function () {
-    $(this).popover('show');
-  });
-  $('.manual').on('mouseout', function () {
-    $(this).popover('hide');
-  });
+  /* Manual Trigger*/
+  var popoverTriggerListMn = document.getElementById('manual-popover');
 
-  /****************/
-  // Custom color //
-  /****************/
-  $('[data-popup=popover-color]').popover({
-    template:
-      '<div class="popover"><div class="bg-teal"><div class="popover-arrow"></div><div class="popover-inner"></div></div></div>'
-  });
-
-  /**********************/
-  // Custom borer color //
-  /**********************/
-  $('[data-popup=popover-border]').popover({
-    template:
-      '<div class="popover"><div class="border-orange"><div class="popover-arrow"></div><div class="popover-inner"></div></div></div>'
+  var manualPopover = new bootstrap.Popover(popoverTriggerListMn);
+  popoverTriggerListMn.addEventListener('click', function () {
+    manualPopover.toggle();
   });
 })(window, document, jQuery);

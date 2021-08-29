@@ -57,6 +57,10 @@
   border-radius : 0.357rem;
 }
 
+.dropzone .dz-preview.dz-image-preview {
+  background : transparent !important;
+}
+
 .dropzone .dz-preview .dz-error-message {
   background : #EA5455;
 }
@@ -88,8 +92,13 @@
 }
 
 @media (max-width: 576px) {
+  .dropzone .dz-message {
+    font-size : 1.5rem;
+  }
   .dropzone .dz-message:before {
     top : 15rem;
+    width : 50px;
+    height : 50px;
   }
 }
 

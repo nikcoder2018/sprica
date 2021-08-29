@@ -9,93 +9,116 @@
 (function (window, document, $) {
   'use strict';
 
-  /******************/
-  // Tooltip events //
-  /******************/
+  /* Manual Trigger*/
+  var tooltipTriggerList = document.getElementById('manual-tooltip');
 
-  // onShow event
-  $('#show-tooltip')
-    .tooltip({
-      title: 'Tooltip Show Event',
-      trigger: 'click',
-      placement: 'right'
-    })
-    .on('show.bs.tooltip', function () {
-      alert('Show event fired.');
-    });
+  var manualTooltip = new bootstrap.Tooltip(tooltipTriggerList);
+  tooltipTriggerList.addEventListener('click', function () {
+    manualTooltip.show();
+  });
 
-  // onShown event
-  $('#shown-tooltip')
-    .tooltip({
-      title: 'Tooltip Shown Event',
-      trigger: 'click',
-      placement: 'top'
-    })
-    .on('shown.bs.tooltip', function () {
-      alert('Shown event fired.');
-    });
-
-  // onHide event
-  $('#hide-tooltip')
-    .tooltip({
-      title: 'Tooltip Hide Event',
-      trigger: 'click',
-      placement: 'bottom'
-    })
-    .on('hide.bs.tooltip', function () {
-      alert('Hide event fired.');
-    });
-
-  // onHidden event
-  $('#hidden-tooltip')
-    .tooltip({
-      title: 'Tooltip Hidden Event',
-      trigger: 'click',
-      placement: 'left'
-    })
-    .on('hidden.bs.tooltip', function () {
-      alert('Hidden event fired.');
-    });
+  tooltipTriggerList.addEventListener('mouseleave', function () {
+    manualTooltip.hide();
+  });
 
   /*******************/
   // Tooltip methods //
   /*******************/
 
   // Show method
-  $('#show-method').on('click', function () {
-    $(this).tooltip('show');
+  var showMethod = document.getElementById('show-method');
+
+  var showTooltipMethod = new bootstrap.Tooltip(showMethod);
+  showMethod.addEventListener('click', function () {
+    showTooltipMethod.show();
   });
+
   // Hide method
-  $('#hide-method').on('mouseenter', function () {
-    $(this).tooltip('show');
+  var hideMethod = document.getElementById('hide-method');
+
+  var hideTooltipMethod = new bootstrap.Tooltip(hideMethod);
+  hideMethod.addEventListener('mouseenter', function () {
+    hideTooltipMethod.show();
   });
-  $('#hide-method').on('click', function () {
-    $(this).tooltip('hide');
+
+  hideMethod.addEventListener('click', function () {
+    hideTooltipMethod.hide();
   });
+
   // Toggle method
-  $('#toggle-method').on('click', function () {
-    $(this).tooltip('toggle');
-  });
-  // Dispose method
-  $('#dispose').on('click', function () {
-    $('#dispose-method').tooltip('dispose');
+  var toggleMethod = document.getElementById('toggle-method');
+
+  var toggleTooltipMethod = new bootstrap.Tooltip(toggleMethod);
+  toggleMethod.addEventListener('click', function () {
+    toggleTooltipMethod.toggle();
   });
 
-  /* Trigger*/
-  $('.manual').on('click', function () {
-    $(this).tooltip('show');
-  });
-  $('.manual').on('mouseout', function () {
-    $(this).tooltip('hide');
+  /******************/
+  // Tooltip events //
+  /******************/
+
+  // onShow event
+  var showTooltipTrigger = document.getElementById('show-tooltip');
+
+  var showTooltip = new bootstrap.Tooltip(showTooltipTrigger, {
+    title: 'Tooltip Show Event',
+    trigger: 'click',
+    placement: 'right'
   });
 
-  /* Default template */
-  $('.template').on('click', function () {
-    console.log(
-      '<div class="tooltip" role="tooltip">' +
-        '<div class="tooltip-arrow"></div>' +
-        '<div class="tooltip-inner"></div>' +
-        '</div>'
-    );
+  showTooltipTrigger.addEventListener('show.bs.tooltip', function () {
+    alert('Show event fired.');
+  });
+
+  // onShown event
+  var shownTooltipTrigger = document.getElementById('shown-tooltip');
+
+  var shownTooltip = new bootstrap.Tooltip(shownTooltipTrigger, {
+    title: 'Tooltip Shown Event',
+    trigger: 'click',
+    placement: 'top'
+  });
+
+  shownTooltipTrigger.addEventListener('shown.bs.tooltip', function () {
+    alert('Shown event fired.');
+  });
+
+  // onHide event
+  var hideTooltipTrigger = document.getElementById('hide-tooltip');
+
+  var hideTooltip = new bootstrap.Tooltip(hideTooltipTrigger, {
+    title: 'Tooltip Hide Event',
+    trigger: 'click',
+    placement: 'bottom'
+  });
+
+  hideTooltipTrigger.addEventListener('hide.bs.tooltip', function () {
+    alert('Hide event fired.');
+  });
+
+  // onHidden event
+  var hiddenTooltipTrigger = document.getElementById('hidden-tooltip');
+
+  var hiddenTooltip = new bootstrap.Tooltip(hiddenTooltipTrigger, {
+    title: 'Tooltip Hidden Event',
+    trigger: 'click',
+    placement: 'left'
+  });
+
+  hiddenTooltipTrigger.addEventListener('hidden.bs.tooltip', function () {
+    alert('Hidden event fired.');
+  });
+
+  // onInserted event
+  var insertedTooltipTrigger = document.getElementById('inserted-tooltip');
+
+  var insertedTooltip = new bootstrap.Tooltip(insertedTooltipTrigger, {
+    title: 'Tooltip inserted Event',
+    trigger: 'click',
+    placement: 'left'
+  });
+
+  insertedTooltipTrigger.addEventListener('inserted.bs.tooltip', function () {
+    alert('inserted event fired.');
   });
 })(window, document, jQuery);

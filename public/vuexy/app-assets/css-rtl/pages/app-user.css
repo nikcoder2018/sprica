@@ -3,6 +3,10 @@
   margin-left : 0.5rem;
 }
 
+.app-user-list #basic-icon-default-email-error {
+  display : block;
+}
+
 @media (max-width: 767px) {
   .app-user-list .header-actions .dataTables_length {
     text-align : right;
@@ -67,6 +71,6 @@ html[data-textdirection='rtl'] .app-user-list .dataTables_filter input {
   margin-right : 0.5rem;
 }
 
-html[data-textdirection='rtl'] .app-user-list .dropdown .dropdown-menu.dropdown-menu-right {
+html[data-textdirection='rtl'] .app-user-list .dropdown .dropdown-menu.dropdown-menu-end {
   left : 3.57rem !important;
 }

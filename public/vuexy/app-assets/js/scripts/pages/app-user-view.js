@@ -58,7 +58,7 @@ $(function () {
           render: function (data, type, full, meta) {
             var $invoiceId = full['invoice_id'];
             // Creates full output for row
-            var $rowOutput = '<a class="font-weight-bold" href="' + invoicePreview + '"> #' + $invoiceId + '</a>';
+            var $rowOutput = '<a class="fw-bold" href="' + invoicePreview + '"> #' + $invoiceId + '</a>';
             return $rowOutput;
           }
         },
@@ -79,11 +79,11 @@ $(function () {
                 'Partial Payment': { class: 'bg-light-warning', icon: 'pie-chart' }
               };
             return (
-              "<span data-toggle='tooltip' data-html='true' title='<span>" +
+              "<span data-bs-toggle='tooltip' data-bs-html='true' title='<span>" +
               $invoiceStatus +
-              '<br> <span class="font-weight-bold">Balance:</span> ' +
+              '<br> <span class="fw-bold">Balance:</span> ' +
               $balance +
-              '<br> <span class="font-weight-bold">Due Date:</span> ' +
+              '<br> <span class="fw-bold">Due Date:</span> ' +
               $dueDate +
               "</span>'>" +
               '<div class="avatar avatar-status ' +
@@ -128,12 +128,12 @@ $(function () {
               '<div class="avatar-wrapper">' +
               '<div class="avatar' +
               colorClass +
-              'mr-50">' +
+              'me-50">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
-              '<span class="user-name font-weight-bold text-truncate">' +
+              '<span class="user-name fw-bold text-truncate">' +
               $name +
               '</span>' +
               '<small class="text-truncate text-muted">' +
@@ -177,7 +177,7 @@ $(function () {
             var $balance = full['balance'];
             if ($balance === 0) {
               var $badge_class = 'badge-light-success';
-              return '<span class="badge badge-pill ' + $badge_class + '" text-capitalized> Paid </span>';
+              return '<span class="badge rounded-pill ' + $badge_class + '" text-capitalized> Paid </span>';
             } else {
               return '<span class="d-none">' + $balance + '</span>' + $balance;
             }
@@ -196,32 +196,32 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-flex align-items-center col-actions">' +
-              '<a class="mr-1" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Send Mail">' +
+              '<a class="me-1" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Mail">' +
               feather.icons['send'].toSvg({ class: 'font-medium-1' }) +
               '</a>' +
-              '<a class="mr-1" href="' +
+              '<a class="me-1" href="' +
               invoicePreview +
-              '" data-toggle="tooltip" data-placement="top" title="Preview Invoice">' +
+              '" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview Invoice">' +
               feather.icons['eye'].toSvg({ class: 'font-medium-1' }) +
               '</a>' +
               '<div class="dropdown">' +
-              '<a class="btn btn-sm btn-icon px-0" data-toggle="dropdown">' +
+              '<a class="btn btn-sm btn-icon px-0" data-bs-toggle="dropdown">' +
               feather.icons['more-vertical'].toSvg({ class: 'font-medium-1' }) +
               '</a>' +
-              '<div class="dropdown-menu dropdown-menu-right">' +
-              '<a href="javascript:void(0);" class="dropdown-item">' +
-              feather.icons['download'].toSvg({ class: 'font-small-4 mr-50' }) +
+              '<div class="dropdown-menu dropdown-menu-end">' +
+              '<a href="#" class="dropdown-item">' +
+              feather.icons['download'].toSvg({ class: 'font-small-4 me-50' }) +
               'Download</a>' +
               '<a href="' +
               invoiceEdit +
               '" class="dropdown-item">' +
-              feather.icons['edit'].toSvg({ class: 'font-small-4 mr-50' }) +
+              feather.icons['edit'].toSvg({ class: 'font-small-4 me-50' }) +
               'Edit</a>' +
-              '<a href="javascript:void(0);" class="dropdown-item">' +
-              feather.icons['trash'].toSvg({ class: 'font-small-4 mr-50' }) +
+              '<a href="#" class="dropdown-item">' +
+              feather.icons['trash'].toSvg({ class: 'font-small-4 me-50' }) +
               'Delete</a>' +
-              '<a href="javascript:void(0);" class="dropdown-item">' +
-              feather.icons['copy'].toSvg({ class: 'font-small-4 mr-50' }) +
+              '<a href="#" class="dropdown-item">' +
+              feather.icons['copy'].toSvg({ class: 'font-small-4 me-50' }) +
               'Duplicate</a>' +
               '</div>' +
               '</div>' +
@@ -233,8 +233,8 @@ $(function () {
       order: [[1, 'desc']],
       dom:
         '<"row d-flex justify-content-between align-items-center m-1"' +
-        '<"col-lg-6 d-flex align-items-center"l<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left "B>>' +
-        '<"col-lg-6 d-flex align-items-center justify-content-lg-end flex-wrap pr-lg-1 p-0"f<"invoice_status ml-2">>' +
+        '<"col-lg-6 d-flex align-items-center"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start "B>>' +
+        '<"col-lg-6 d-flex align-items-center justify-content-lg-end flex-wrap pe-lg-1 p-0"f<"invoice_status ms-2">>' +
         '>t' +
         '<"d-flex justify-content-between mx-2 row"' +
         '<"col-sm-12 col-md-6"i>' +
@@ -254,7 +254,7 @@ $(function () {
       buttons: [
         {
           text: 'Add Record',
-          className: 'btn btn-primary btn-add-record ml-2',
+          className: 'btn btn-primary btn-add-record ms-2',
           action: function (e, dt, button, config) {
             window.location = invoiceAdd;
           },
@@ -290,15 +290,14 @@ $(function () {
       },
       initComplete: function () {
         // $('.dataTables_filter').find('.form-control-sm').removeClass('form-control-sm');
-        // $('.dataTables_length .custom-select').removeClass('custom-select-sm').removeClass('form-control-sm');
-        $(document).find('[data-toggle="tooltip"]').tooltip();
+        $(document).find('[data-bs-toggle="tooltip"]').tooltip();
         // Adding role filter once table initialized
         this.api()
           .columns(7)
           .every(function () {
             var column = this;
             var select = $(
-              '<select id="UserRole" class="form-control ml-50 text-capitalize"><option value=""> Select Status </option></select>'
+              '<select id="UserRole" class="form-select ms-50 text-capitalize"><option value=""> Select Status </option></select>'
             )
               .appendTo('.invoice_status')
               .on('change', function () {
@@ -316,7 +315,7 @@ $(function () {
           });
       },
       drawCallback: function () {
-        $(document).find('[data-toggle="tooltip"]').tooltip();
+        $(document).find('[data-bs-toggle="tooltip"]').tooltip();
       }
     });
   }

@@ -114,15 +114,15 @@ $(function () {
       return option.text;
     }
     var $person =
-      '<div class="media align-items-center">' +
-      '<img class="d-block rounded-circle mr-50" src="' +
+      '<div class="d-flex align-items-center">' +
+      '<img class="d-block rounded-circle me-50" src="' +
       $(option.element).data('img') +
       '" height="26" width="26" alt="' +
       option.text +
       '">' +
-      '<div class="media-body"><p class="mb-0">' +
+      '<p class="mb-0">' +
       option.text +
-      '</p></div></div>';
+      '</p></div>';
 
     return $person;
   }
@@ -250,7 +250,8 @@ $(function () {
           Update: 'info'
         };
         $.each(selected, function (index, value) {
-          todoBadge += '<div class="badge badge-pill badge-light-' + badgeColor[value] + ' mr-50">' + value + '</div>';
+          todoBadge +=
+            '<span class="badge rounded-pill badge-light-' + badgeColor[value] + ' me-50">' + value + '</span>';
         });
         // HTML Output
         if (todoTitle != '') {
@@ -260,11 +261,11 @@ $(function () {
               '<div class="todo-title-area">' +
               feather.icons['more-vertical'].toSvg({ class: 'drag-icon' }) +
               '<div class="title-wrapper">' +
-              '<div class="custom-control custom-checkbox">' +
-              '<input type="checkbox" class="custom-control-input" id="customCheck' +
+              '<div class="form-check">' +
+              '<input type="checkbox" class="form-check-input" id="customCheck' +
               checkboxId +
               '" />' +
-              '<label class="custom-control-label" for="customCheck' +
+              '<label class="form-check-label" for="customCheck' +
               checkboxId +
               '"></label>' +
               '</div>' +
@@ -274,10 +275,10 @@ $(function () {
               '</div>' +
               '</div>' +
               '<div class="todo-item-action">' +
-              '<div class="badge-wrapper mr-1">' +
+              '<span class="badge-wrapper me-1">' +
               todoBadge +
-              '</div>' +
-              '<small class="text-nowrap text-muted mr-1">' +
+              '</span>' +
+              '<small class="text-nowrap text-muted me-1">' +
               todoDate +
               '</small>' +
               '<div class="avatar">' +
@@ -304,7 +305,7 @@ $(function () {
   }
 
   // Task checkbox change
-  todoTaskListWrapper.on('change', '.custom-checkbox', function (event) {
+  todoTaskListWrapper.on('change', '.form-check', function (event) {
     var $this = $(this).find('input');
     if ($this.prop('checked')) {
       $this.closest('.todo-item').addClass('completed');
@@ -317,7 +318,7 @@ $(function () {
       $this.closest('.todo-item').removeClass('completed');
     }
   });
-  todoTaskListWrapper.on('click', '.custom-checkbox', function (event) {
+  todoTaskListWrapper.on('click', '.form-check', function (event) {
     event.stopPropagation();
   });
 
@@ -328,11 +329,11 @@ $(function () {
     updateBtns.removeClass('d-none');
     if ($(this).hasClass('completed')) {
       modalTitle.html(
-        '<button type="button" class="btn btn-sm btn-outline-success complete-todo-item waves-effect waves-float waves-light" data-dismiss="modal">Completed</button>'
+        '<button type="button" class="btn btn-sm btn-outline-success complete-todo-item waves-effect waves-float waves-light" data-bs-dismiss="modal">Completed</button>'
       );
     } else {
       modalTitle.html(
-        '<button type="button" class="btn btn-sm btn-outline-secondary complete-todo-item waves-effect waves-float waves-light" data-dismiss="modal">Mark Complete</button>'
+        '<button type="button" class="btn btn-sm btn-outline-secondary complete-todo-item waves-effect waves-float waves-light" data-bs-dismiss="modal">Mark Complete</button>'
       );
     }
     taskTag.val('').trigger('change');

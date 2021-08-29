@@ -93,7 +93,6 @@ $(window).on('load', function () {
         scales: {
           xAxes: [
             {
-              barThickness: 15,
               display: true,
               gridLines: {
                 display: true,
@@ -130,6 +129,7 @@ $(window).on('load', function () {
         datasets: [
           {
             data: [275, 90, 190, 205, 125, 85, 55, 87, 127, 150, 230, 280, 190],
+            barThickness: 15,
             backgroundColor: successColorShade,
             borderColor: 'transparent'
           }
@@ -312,7 +312,6 @@ $(window).on('load', function () {
           yAxes: [
             {
               display: true,
-              barThickness: 15,
               gridLines: {
                 display: false
               },
@@ -331,6 +330,7 @@ $(window).on('load', function () {
         datasets: [
           {
             data: [710, 350, 470, 580, 230, 460, 120],
+            barThickness: 15,
             backgroundColor: window.colors.solid.info,
             borderColor: 'transparent'
           }

@@ -51,7 +51,7 @@
   height: inherit; }
 
 .todo-application .content-area-wrapper .content-right .app-fixed-search {
-  padding: 0.35rem 0.5rem;
+  padding: 0.4215rem 0.5rem;
   border-bottom: 1px solid #ebe9f1;
   background-color: #fff;
   border-top-right-radius: 0.357rem; }
@@ -107,8 +107,10 @@
 
 .todo-application .content-area-wrapper .content-right .todo-task-list-wrapper .todo-task-list li .todo-item-action {
   display: flex;
-  align-items: center;
-  justify-content: space-between; }
+  align-items: center; }
+
+.todo-application .content-area-wrapper .content-right .todo-task-list-wrapper .todo-task-list li .todo-item-action > small {
+  margin-left: auto; }
 
 .todo-application .content-area-wrapper .content-right .todo-task-list-wrapper .todo-task-list li .todo-item-action a {
   cursor: pointer;
@@ -128,13 +130,6 @@
 
 .todo-application .content-area-wrapper .content-right .todo-task-list-wrapper .no-results.show {
   display: block; }
-
-.todo-application .todo-item-action .close {
-  background: transparent !important;
-  box-shadow: none !important;
-  position: unset !important;
-  transform: none !important;
-  transition: none !important; }
 
 .todo-application .todo-item .drag-icon {
   visibility: hidden;

@@ -15,12 +15,17 @@
   min-height: auto;
   background-color: transparent;
   margin: 0;
+  padding: 0 1.75rem;
   color: #6e6b7b;
   font-size: 1.5rem; }
 
+.bs-stepper .bs-stepper-header .step {
+  margin-bottom: .25rem;
+  margin-top: .25rem; }
+
 .bs-stepper .bs-stepper-header .step .step-trigger {
-  padding: 0 1.75rem;
   flex-wrap: nowrap;
+  padding: 0;
   font-weight: normal; }
 
 .bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-box {
@@ -73,12 +78,6 @@
 
 .bs-stepper .bs-stepper-header .step.crossed + .line {
   color: #7367f0; }
-
-.bs-stepper .bs-stepper-header .step:first-child .step-trigger {
-  padding-left: 0; }
-
-.bs-stepper .bs-stepper-header .step:last-child .step-trigger {
-  padding-right: 0; }
 
 .bs-stepper .bs-stepper-content {
   padding: 1.5rem 1.5rem; }
@@ -182,7 +181,7 @@ html[data-textdirection='rtl'] .btn-next i,
 html[data-textdirection='rtl'] .btn-next svg {
   transform: rotate(-180deg); }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .bs-stepper .bs-stepper-header {
     flex-direction: column;
     align-items: flex-start; }

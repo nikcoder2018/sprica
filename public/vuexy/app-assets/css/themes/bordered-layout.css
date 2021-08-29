@@ -1,12 +1,14 @@
 .bordered-layout .header-navbar {
-  box-shadow: none; }
+  box-shadow: none;
+  border: 1px solid #ebe9f1; }
 
 .bordered-layout .header-navbar.floating-nav {
   border: 1px solid #ebe9f1; }
 
 .bordered-layout .header-navbar.fixed-top {
   border-bottom: 1px solid #ebe9f1;
-  background: #f8f8f8; }
+  background: #f8f8f8;
+  box-shadow: none !important; }
 
 .bordered-layout .main-menu {
   border-right: 1px solid #ebe9f1;

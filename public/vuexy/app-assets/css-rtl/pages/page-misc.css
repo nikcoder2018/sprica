@@ -41,3 +41,9 @@
 .misc-wrapper .brand-logo .brand-text {
   font-weight : 600;
 }
+
+@media (max-height: 625px) {
+  .misc-wrapper .misc-inner {
+    margin-top : 4rem;
+  }
+}

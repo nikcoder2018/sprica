@@ -102,13 +102,13 @@ $(function () {
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: feather.icons['thumbs-up'].toSvg({ class: 'font-medium-1 mr-50' }) + 'Great!',
+        confirmButtonText: feather.icons['thumbs-up'].toSvg({ class: 'font-medium-1 me-50' }) + 'Great!',
         confirmButtonAriaLabel: 'Thumbs up, great!',
         cancelButtonText: feather.icons['thumbs-down'].toSvg({ class: 'font-medium-1' }),
         cancelButtonAriaLabel: 'Thumbs down',
         customClass: {
           confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1'
+          cancelButton: 'btn btn-outline-danger ms-1'
         },
         buttonsStyling: false
       });
@@ -355,20 +355,28 @@ $(function () {
       var timerInterval;
       Swal.fire({
         title: 'Auto close alert!',
-        html: 'I will close in <strong></strong> seconds.',
+        html: 'I will close in <b></b> milliseconds.',
         timer: 2000,
-        customClass: {
-          confirmButton: 'btn btn-primary'
-        },
-        buttonsStyling: false,
-        onBeforeOpen: function () {
+        timerProgressBar: true,
+        didOpen: () => {
           Swal.showLoading();
-          timerInterval = setInterval(function () {
-            Swal.getContent().querySelector('strong').textContent = Swal.getTimerLeft();
+          timerInterval = setInterval(() => {
+            const content = Swal.getHtmlContainer();
+            if (content) {
+              const b = content.querySelector('b');
+              if (b) {
+                b.textContent = Swal.getTimerLeft();
+              }
+            }
           }, 100);
         },
-        onClose: function () {
+        willClose: () => {
           clearInterval(timerInterval);
+        }
+      }).then(result => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+          console.log('I was closed by the timer');
         }
       });
     });
@@ -380,7 +388,6 @@ $(function () {
       Swal.fire({
         title: 'Click outside to close!',
         text: 'This is a cool message!',
-        allowOutsideClick: true,
         customClass: {
           confirmButton: 'btn btn-primary'
         },
@@ -392,35 +399,43 @@ $(function () {
   // Question
   if (question.length) {
     question.on('click', function () {
-      Swal.mixin({
+      /* global Swal */
+
+      const steps = ['1', '2', '3'];
+      const swalQueueStep = Swal.mixin({
+        confirmButtonText: 'Forward',
+        cancelButtonText: 'Back',
+        progressSteps: steps,
         input: 'text',
-        confirmButtonText: 'Next &rarr;',
-        showCancelButton: true,
-        progressSteps: ['1', '2', '3'],
-        customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1'
+        inputAttributes: {
+          required: true
         },
-        buttonsStyling: false
-      })
-        .queue([
-          {
-            title: 'Question 1',
-            text: 'Chaining swal2 modals is easy'
-          },
-          'Question 2',
-          'Question 3'
-        ])
-        .then(function (result) {
+        validationMessage: 'This field is required'
+      });
+
+      async function backAndForth() {
+        const values = [];
+        let currentStep;
+
+        for (currentStep = 0; currentStep < steps.length; ) {
+          const result = await new swalQueueStep({
+            title: 'Question ' + steps[currentStep],
+            showCancelButton: currentStep > 0,
+            currentProgressStep: currentStep
+          });
+
           if (result.value) {
-            Swal.fire({
-              title: 'All done!',
-              html: 'Your answers: <pre><code>' + JSON.stringify(result.value) + '</code></pre>',
-              confirmButtonText: 'Lovely!',
-              customClass: { confirmButton: 'btn btn-primary' }
-            });
+            values[currentStep] = result.value;
+            currentStep++;
+          } else if (result.dismiss === 'cancel') {
+            currentStep--;
           }
-        });
+        }
+
+        Swal.fire(JSON.stringify(values));
+      }
+
+      backAndForth();
     });
   }
 
@@ -428,11 +443,11 @@ $(function () {
   if (ajax.length) {
     ajax.on('click', function () {
       Swal.fire({
-        title: 'Search for a user',
+        title: 'Search for a GitHub user',
         input: 'text',
         customClass: {
           confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1'
+          cancelButton: 'btn btn-outline-danger ms-1'
         },
         buttonsStyling: false,
         inputAttributes: {
@@ -441,23 +456,20 @@ $(function () {
         showCancelButton: true,
         confirmButtonText: 'Look up',
         showLoaderOnConfirm: true,
-        preConfirm: function (login) {
-          return fetch('//api.github.com/users/' + login + '')
-            .then(function (response) {
+        preConfirm: login => {
+          return fetch(`//api.github.com/users/${login}`)
+            .then(response => {
               if (!response.ok) {
                 throw new Error(response.statusText);
               }
               return response.json();
             })
-            .catch(function (error) {
-              Swal.showValidationMessage('Request failed:  ' + error + '');
+            .catch(error => {
+              Swal.showValidationMessage(`Request failed: ${error}`);
             });
-        },
-        allowOutsideClick: function () {
-          !Swal.isLoading();
         }
-      }).then(function (result) {
-        if (result.value) {
+      }).then(result => {
+        if (result.isConfirmed) {
           Swal.fire({
             title: '' + result.value.login + "'s avatar",
             imageUrl: result.value.avatar_url,
@@ -481,7 +493,7 @@ $(function () {
         confirmButtonText: 'Yes, delete it!',
         customClass: {
           confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1'
+          cancelButton: 'btn btn-outline-danger ms-1'
         },
         buttonsStyling: false
       }).then(function (result) {
@@ -510,7 +522,7 @@ $(function () {
         confirmButtonText: 'Yes, delete it!',
         customClass: {
           confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1'
+          cancelButton: 'btn btn-outline-danger ms-1'
         },
         buttonsStyling: false
       }).then(function (result) {

@@ -18,7 +18,7 @@ class ControllingController extends Controller
     }
 
     public function data(Request $request){
-        $timelogs = Timelog::with(['tags','project']);
+        $timelogs = Timelog::with(['tags','project', 'user', 'logged_from']);
 
         if($request->user_id){
             $timelogs = $timelogs->where('user_id', $request->user_id);

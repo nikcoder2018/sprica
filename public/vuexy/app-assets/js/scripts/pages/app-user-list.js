@@ -79,14 +79,14 @@ $(function () {
               '<div class="avatar-wrapper">' +
               '<div class="avatar ' +
               colorClass +
-              ' mr-1">' +
+              ' me-1">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
               '<a href="' +
               userView +
-              '" class="user_name text-truncate"><span class="font-weight-bold">' +
+              '" class="user_name text-truncate"><span class="fw-bold">' +
               $name +
               '</span></a>' +
               '<small class="emp_post text-muted">@' +
@@ -103,11 +103,11 @@ $(function () {
           render: function (data, type, full, meta) {
             var $role = full['role'];
             var roleBadgeObj = {
-              Subscriber: feather.icons['user'].toSvg({ class: 'font-medium-3 text-primary mr-50' }),
-              Author: feather.icons['settings'].toSvg({ class: 'font-medium-3 text-warning mr-50' }),
-              Maintainer: feather.icons['database'].toSvg({ class: 'font-medium-3 text-success mr-50' }),
-              Editor: feather.icons['edit-2'].toSvg({ class: 'font-medium-3 text-info mr-50' }),
-              Admin: feather.icons['slack'].toSvg({ class: 'font-medium-3 text-danger mr-50' })
+              Subscriber: feather.icons['user'].toSvg({ class: 'font-medium-3 text-primary me-50' }),
+              Author: feather.icons['settings'].toSvg({ class: 'font-medium-3 text-warning me-50' }),
+              Maintainer: feather.icons['database'].toSvg({ class: 'font-medium-3 text-success me-50' }),
+              Editor: feather.icons['edit-2'].toSvg({ class: 'font-medium-3 text-info me-50' }),
+              Admin: feather.icons['slack'].toSvg({ class: 'font-medium-3 text-danger me-50' })
             };
             return "<span class='text-truncate align-middle'>" + roleBadgeObj[$role] + $role + '</span>';
           }
@@ -119,7 +119,7 @@ $(function () {
             var $status = full['status'];
 
             return (
-              '<span class="badge badge-pill ' +
+              '<span class="badge rounded-pill ' +
               statusObj[$status].class +
               '" text-capitalized>' +
               statusObj[$status].title +
@@ -135,22 +135,22 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="btn-group">' +
-              '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+              '<a class="btn btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown">' +
               feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
               '</a>' +
-              '<div class="dropdown-menu dropdown-menu-right">' +
+              '<div class="dropdown-menu dropdown-menu-end">' +
               '<a href="' +
               userView +
               '" class="dropdown-item">' +
-              feather.icons['file-text'].toSvg({ class: 'font-small-4 mr-50' }) +
+              feather.icons['file-text'].toSvg({ class: 'font-small-4 me-50' }) +
               'Details</a>' +
               '<a href="' +
               userEdit +
               '" class="dropdown-item">' +
-              feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) +
+              feather.icons['archive'].toSvg({ class: 'font-small-4 me-50' }) +
               'Edit</a>' +
               '<a href="javascript:;" class="dropdown-item delete-record">' +
-              feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
+              feather.icons['trash-2'].toSvg({ class: 'font-small-4 me-50' }) +
               'Delete</a></div>' +
               '</div>' +
               '</div>'
@@ -161,8 +161,8 @@ $(function () {
       order: [[2, 'desc']],
       dom:
         '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-        '<"col-lg-12 col-xl-6" l>' +
-        '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+        '<"col-sm-12 col-md-4 col-lg-6" l>' +
+        '<"col-sm-12 col-md-8 col-lg-6 ps-xl-75 ps-0"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end align-items-center flex-sm-nowrap flex-wrap me-1"<"me-1"f>B>>' +
         '>t' +
         '<"d-flex justify-content-between mx-2 row mb-1"' +
         '<"col-sm-12 col-md-6"i>' +
@@ -179,8 +179,8 @@ $(function () {
           text: 'Add New User',
           className: 'add-new btn btn-primary mt-50',
           attr: {
-            'data-toggle': 'modal',
-            'data-target': '#modals-slide-in'
+            'data-bs-toggle': 'modal',
+            'data-bs-target': '#modals-slide-in'
           },
           init: function (api, node, config) {
             $(node).removeClass('btn-secondary');
@@ -226,7 +226,7 @@ $(function () {
           .every(function () {
             var column = this;
             var select = $(
-              '<select id="UserRole" class="form-control text-capitalize mb-md-0 mb-2"><option value=""> Select Role </option></select>'
+              '<select id="UserRole" class="form-select text-capitalize mb-md-0 mb-2"><option value=""> Select Role </option></select>'
             )
               .appendTo('.user_role')
               .on('change', function () {
@@ -248,7 +248,7 @@ $(function () {
           .every(function () {
             var column = this;
             var select = $(
-              '<select id="UserPlan" class="form-control text-capitalize mb-md-0 mb-2"><option value=""> Select Plan </option></select>'
+              '<select id="UserPlan" class="form-select text-capitalize mb-md-0 mb-2"><option value=""> Select Plan </option></select>'
             )
               .appendTo('.user_plan')
               .on('change', function () {
@@ -270,7 +270,7 @@ $(function () {
           .every(function () {
             var column = this;
             var select = $(
-              '<select id="FilterTransaction" class="form-control text-capitalize mb-md-0 mb-2xx"><option value=""> Select Status </option></select>'
+              '<select id="FilterTransaction" class="form-select text-capitalize mb-md-0 mb-2xx"><option value=""> Select Status </option></select>'
             )
               .appendTo('.user_status')
               .on('change', function () {
@@ -333,7 +333,7 @@ $(function () {
 
   // To initialize tooltip with body container
   $('body').tooltip({
-    selector: '[data-toggle="tooltip"]',
+    selector: '[data-bs-toggle="tooltip"]',
     container: 'body'
   });
 });

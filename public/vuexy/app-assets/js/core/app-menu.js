@@ -226,7 +226,7 @@
 
       // Dropdown submenu on small screen on click
       // --------------------------------------------------
-      $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
+      $('ul.dropdown-menu [data-bs-toggle=dropdown]').on('click', function (event) {
         if ($(this).siblings('ul.dropdown-menu').length > 0) {
           event.preventDefault();
         }
@@ -544,7 +544,7 @@
 
         // Dropdown submenu on small screen on click
         // --------------------------------------------------
-        $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
+        $('ul.dropdown-menu [data-bs-toggle=dropdown]').on('click', function (event) {
           event.preventDefault();
           event.stopPropagation();
           $(this).parent().siblings().removeClass('open');
@@ -967,6 +967,12 @@
       $.app.nav.container.find('.open').removeClass('open');
     }
   };
+
+  // On href=# click page refresh issue resolve
+  //? User should remove this code for their project to enable # click
+  $(document).on('click', 'a[href="#"]', function (e) {
+    e.preventDefault();
+  });
 })(window, document, jQuery);
 
 // We listen to the resize event

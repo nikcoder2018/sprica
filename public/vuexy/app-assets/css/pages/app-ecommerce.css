@@ -8,7 +8,7 @@
 .ecommerce-application .sidebar-shop {
   margin-top: 0.85rem;
   width: 260px;
-  z-index: 14; }
+  z-index: 998; }
 
 .ecommerce-application .sidebar-shop .filter-heading {
   margin-bottom: 1.75rem; }
@@ -316,9 +316,6 @@
 .ecommerce-application .checkout-options .coupons input::placeholder {
   color: #6e6b7b;
   font-weight: 600; }
-
-.ecommerce-application .checkout-options .coupons .input-group-append {
-  margin: 0; }
 
 .ecommerce-application .checkout-options .coupons .input-group-text {
   height: auto;

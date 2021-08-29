@@ -4,7 +4,7 @@
   <div class="auth-wrapper auth-v2">
     <div class="auth-inner row m-0">
         <!-- Brand logo--><a class="brand-logo" href="javascript:void(0);">
-            <img style="text-align:center; width: 73%; background: #fff" src="{{asset('dist/img/logo-auth.jpg')}}">
+            <img style="text-align:center; width: 10%; background: #fff" src="{{asset('dist/img/logo-auth.jpg')}}">
         </a>
         <!-- /Brand logo-->
         <!-- Left Text-->

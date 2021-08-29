@@ -1,5 +1,5 @@
 /*=========================================================================================
-    File Name: wizard-steps.js
+    File Name: form-wizard.js
     Description: wizard steps page specific js
     ----------------------------------------------------------------------------------------
     Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template

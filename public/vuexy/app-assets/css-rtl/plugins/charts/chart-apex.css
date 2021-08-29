@@ -22,12 +22,40 @@
   border-color : #EBE9F1;
 }
 
-.apexcharts-canvas .apexcharts-xaxistooltip:after, .apexcharts-canvas .apexcharts-xaxistooltip:before, .apexcharts-canvas .apexcharts-yaxistooltip:after, .apexcharts-canvas .apexcharts-yaxistooltip:before {
+.apexcharts-canvas .apexcharts-xaxistooltip-bottom:before {
+  border-bottom-color : #EBE9F1;
+}
+
+.apexcharts-canvas .apexcharts-xaxistooltip-bottom::after {
   border-bottom-color : #F8F8F8;
 }
 
+.apexcharts-canvas .apexcharts-xaxistooltip-top:before {
+  border-top-color : #EBE9F1;
+}
+
+.apexcharts-canvas .apexcharts-xaxistooltip-top::after {
+  border-top-color : #F8F8F8;
+}
+
+.apexcharts-canvas .apexcharts-yaxistooltip-left:before {
+  border-right-color : #EBE9F1;
+}
+
+.apexcharts-canvas .apexcharts-yaxistooltip-left:after {
+  border-right-color : #F8F8F8;
+}
+
+.apexcharts-canvas .apexcharts-yaxistooltip-right:before {
+  border-left-color : #EBE9F1;
+}
+
+.apexcharts-canvas .apexcharts-yaxistooltip-right:after {
+  border-left-color : #F8F8F8;
+}
+
 .apexcharts-canvas .apexcharts-text, .apexcharts-canvas .apexcharts-tooltip-text, .apexcharts-canvas .apexcharts-datalabel-label, .apexcharts-canvas .apexcharts-datalabel {
-  font-family : 'Montserrat', Helvetica, Arial, serif !important;
+  font-family : var(--bs-font-sans-serif) !important;
   fill : #6E6B7B;
   font-weight : 400;
   -webkit-filter : none;
@@ -106,13 +134,41 @@
   color : #FFFFFF;
 }
 
+.dark-layout .apexcharts-canvas .apexcharts-xaxistooltip-bottom:before {
+  border-bottom-color : #3B4253;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-xaxistooltip-bottom::after {
+  border-bottom-color : #161D31;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-xaxistooltip-top:before {
+  border-top-color : #3B4253;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-xaxistooltip-top::after {
+  border-top-color : #161D31;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-yaxistooltip-left:before {
+  border-right-color : #3B4253;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-yaxistooltip-left:after {
+  border-right-color : #161D31;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-yaxistooltip-right:before {
+  border-left-color : #3B4253;
+}
+
+.dark-layout .apexcharts-canvas .apexcharts-yaxistooltip-right:after {
+  border-left-color : #161D31;
+}
+
 .dark-layout .apexcharts-canvas .apexcharts-xaxistooltip, .dark-layout .apexcharts-canvas .apexcharts-yaxistooltip {
   background : #161D31;
   border-color : #3B4253;
-}
-
-.dark-layout .apexcharts-canvas .apexcharts-xaxistooltip:after, .dark-layout .apexcharts-canvas .apexcharts-xaxistooltip:before, .dark-layout .apexcharts-canvas .apexcharts-yaxistooltip:after, .dark-layout .apexcharts-canvas .apexcharts-yaxistooltip:before {
-  border-bottom-color : #3B4253;
 }
 
 .dark-layout .apexcharts-canvas .apexcharts-xaxistooltip .apexcharts-xaxistooltip-text, .dark-layout .apexcharts-canvas .apexcharts-xaxistooltip .apexcharts-yaxistooltip-text, .dark-layout .apexcharts-canvas .apexcharts-yaxistooltip .apexcharts-xaxistooltip-text, .dark-layout .apexcharts-canvas .apexcharts-yaxistooltip .apexcharts-yaxistooltip-text {

@@ -10,28 +10,59 @@
 (function (window, document, $) {
   'use strict';
 
-  var onShowEvent = $('#onshow'),
-    onShownEvent = $('#onshown'),
-    onHideEvent = $('#onhide'),
-    onHiddenEvent = $('#onhidden');
+  /******************/
+  // Modal events //
+  /******************/
 
   // onShow event
-  onShowEvent.on('show.bs.modal', function () {
-    alert('onShow event fired.');
+  var showModalTrigger = document.getElementById('onshow');
+
+  var showModal = new bootstrap.Modal(showModalTrigger, {
+    title: 'Modal Show Event',
+    trigger: 'click',
+    placement: 'right'
+  });
+
+  showModalTrigger.addEventListener('show.bs.modal', function () {
+    alert('Show event fired.');
   });
 
   // onShown event
-  onShownEvent.on('shown.bs.modal', function () {
-    alert('onShown event fired.');
+  var shownModalTrigger = document.getElementById('onshown');
+
+  var shownModal = new bootstrap.Modal(shownModalTrigger, {
+    title: 'Modal Shown Event',
+    trigger: 'click',
+    placement: 'right'
+  });
+
+  shownModalTrigger.addEventListener('shown.bs.modal', function () {
+    alert('Shown event fired.');
   });
 
   // onHide event
-  onHideEvent.on('hide.bs.modal', function () {
-    alert('onHide event fired.');
+  var hideModalTrigger = document.getElementById('onhide');
+
+  var hideModal = new bootstrap.Modal(hideModalTrigger, {
+    title: 'Modal Hide Event',
+    trigger: 'click',
+    placement: 'right'
+  });
+
+  hideModalTrigger.addEventListener('hide.bs.modal', function () {
+    alert('Hide event fired.');
   });
 
   // onHidden event
-  onHiddenEvent.on('hidden.bs.modal', function () {
-    alert('onHidden event fired.');
+  var hiddenModalTrigger = document.getElementById('onhidden');
+
+  var hiddenModal = new bootstrap.Modal(hiddenModalTrigger, {
+    title: 'Modal Hidden Event',
+    trigger: 'click',
+    placement: 'right'
+  });
+
+  hiddenModalTrigger.addEventListener('hidden.bs.modal', function () {
+    alert('Hidden event fired.');
   });
 })(window, document, jQuery);

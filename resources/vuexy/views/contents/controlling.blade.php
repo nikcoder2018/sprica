@@ -41,8 +41,8 @@
             </div>
             <div class="col-md-3 form-group">
                 <label>Confirmed</label>
-                <select class="form-control filters filter-confirmation text-capitalize mb-md-0 mb-2xx">
-                    <option value=""> All </option>
+                <select class="select2 hide-search form-control filters filter-confirmation text-capitalize mb-md-0 mb-2xx">
+                    <option value="all"> All </option>
                     <option value="1"> Yes </option>
                     <option value="0"> No </option>
                 </select>
@@ -57,11 +57,13 @@
                 <thead class="thead-light">
                     <tr>
                         <th></th>
+                        <th>Employee</th>
                         <th>Date</th>
                         <th>Duration</th>
                         <th>Project</th>
                         <th>Expenses</th>
                         <th>Confirmed</th>
+                        <th>Logged From</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

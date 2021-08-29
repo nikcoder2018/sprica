@@ -44,7 +44,7 @@ window.colors = {
   if ($.fn.dataTable) {
     $.extend($.fn.dataTable.ext.classes, {
       sFilterInput: 'form-control',
-      sLengthSelect: 'custom-select form-control'
+      sLengthSelect: 'form-select'
     });
   }
 
@@ -52,7 +52,7 @@ window.colors = {
     var rtl;
     var compactMenu = false;
 
-    if ($body.hasClass('menu-collapsed')) {
+    if ($body.hasClass('menu-collapsed') || localStorage.getItem('menuCollapsed') === 'true') {
       compactMenu = true;
     }
 
@@ -68,7 +68,7 @@ window.colors = {
 
     // Navigation configurations
     var config = {
-      speed: 300 // set speed to expand / collpase menu
+      speed: 300 // set speed to expand / collapse menu
     };
     if ($.app.nav.initialized === false) {
       $.app.nav.init(config);
@@ -79,8 +79,12 @@ window.colors = {
     });
 
     // Tooltip Initialization
-    $('[data-toggle="tooltip"]').tooltip({
-      container: 'body'
+    // $('[data-bs-toggle="tooltip"]').tooltip({
+    //   container: 'body'
+    // });
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
     // Collapsible Card
@@ -196,11 +200,6 @@ window.colors = {
         }
       }
     }
-
-    //Custom File Input
-    $('.custom-file-input').on('change', function (e) {
-      $(this).siblings('.custom-file-label').html(e.target.files[0].name);
-    });
 
     /* Text Area Counter Set Start */
 
@@ -370,19 +369,21 @@ window.colors = {
       }, 50);
     }
 
+    // Save menu collapsed status in localstorage
+    if ($body.hasClass('menu-expanded') || $body.hasClass('menu-open')) {
+      localStorage.setItem('menuCollapsed', false);
+    } else {
+      localStorage.setItem('menuCollapsed', true);
+    }
+
     // Hides dropdown on click of menu toggle
-    // $('[data-toggle="dropdown"]').dropdown('hide');
+    // $('[data-bs-toggle="dropdown"]').dropdown('hide');
 
     return false;
   });
 
   // Add Children Class
   $('.navigation').find('li').has('ul').addClass('has-sub');
-
-  $('.carousel').carousel({
-    interval: 2000
-  });
-
   // Update manual scroller when window is resized
   $(window).resize(function () {
     $.app.menu.manualScroller.updateHeight();
@@ -508,12 +509,12 @@ window.colors = {
         arrList[i].firstChild.href +
         '>' +
         '<div class="d-flex justify-content-start align-items-center">' +
-        feather.icons[iconName].toSvg({ class: 'mr-75 ' + className }) +
+        feather.icons[iconName].toSvg({ class: 'me-75 ' + className }) +
         '<span>' +
-        arrList[i].firstChild.dataset.originalTitle +
+        arrList[i].firstChild.dataset.bsOriginalTitle +
         '</span>' +
         '</div>' +
-        feather.icons['star'].toSvg({ class: 'text-warning bookmark-icon float-right' }) +
+        feather.icons['star'].toSvg({ class: 'text-warning bookmark-icon float-end' }) +
         '</a>' +
         '</li>';
     }
@@ -608,7 +609,7 @@ window.colors = {
           $bookmarkhtmlList = '',
           $pageList =
             '<li class="d-flex align-items-center">' +
-            '<a href="javascript:void(0)">' +
+            '<a href="#">' +
             '<h6 class="section-label mt-75 mb-0">Pages</h6>' +
             '</a>' +
             '</li>',
@@ -632,7 +633,7 @@ window.colors = {
                 $arrList = '';
               // Loop to check if current seach value match with the bookmarks already there in navbar
               for (var j = 0; j < arrList.length; j++) {
-                if (data.listItems[i].name === arrList[j].firstChild.dataset.originalTitle) {
+                if (data.listItems[i].name === arrList[j].firstChild.dataset.bsOriginalTitle) {
                   activeClass = ' text-warning';
                   break;
                 } else {
@@ -640,7 +641,7 @@ window.colors = {
                 }
               }
 
-              $bookmarkIcon = feather.icons['star'].toSvg({ class: 'bookmark-icon float-right' + activeClass });
+              $bookmarkIcon = feather.icons['star'].toSvg({ class: 'bookmark-icon float-end' + activeClass });
             }
             // Search list item start with entered letters and create list
             if (data.listItems[i].name.toLowerCase().indexOf(value) == 0 && a < 5) {
@@ -657,7 +658,7 @@ window.colors = {
                 data.listItems[i].url +
                 '>' +
                 '<div class="d-flex justify-content-start align-items-center">' +
-                feather.icons[data.listItems[i].icon].toSvg({ class: 'mr-75 ' }) +
+                feather.icons[data.listItems[i].icon].toSvg({ class: 'me-75 ' }) +
                 '<span>' +
                 data.listItems[i].name +
                 '</span>' +
@@ -675,14 +676,14 @@ window.colors = {
                 $arrList = '';
               // Loop to check if current search value match with the bookmarks already there in navbar
               for (var j = 0; j < arrList.length; j++) {
-                if (data.listItems[i].name === arrList[j].firstChild.dataset.originalTitle) {
+                if (data.listItems[i].name === arrList[j].firstChild.dataset.bsOriginalTitle) {
                   activeClass = ' text-warning';
                 } else {
                   activeClass = '';
                 }
               }
 
-              $bookmarkIcon = feather.icons['star'].toSvg({ class: 'bookmark-icon float-right' + activeClass });
+              $bookmarkIcon = feather.icons['star'].toSvg({ class: 'bookmark-icon float-end' + activeClass });
             }
             // Search list item not start with letters and create list
             if (
@@ -703,7 +704,7 @@ window.colors = {
                 data.listItems[i].url +
                 '>' +
                 '<div class="d-flex justify-content-start align-items-center">' +
-                feather.icons[data.listItems[i].icon].toSvg({ class: 'mr-75 ' }) +
+                feather.icons[data.listItems[i].icon].toSvg({ class: 'me-75 ' }) +
                 '<span>' +
                 data.listItems[i].name +
                 '</span>' +
@@ -753,12 +754,12 @@ window.colors = {
               arrList[i].firstChild.href +
               '>' +
               '<div class="d-flex justify-content-start align-items-center">' +
-              feather.icons[iconName].toSvg({ class: 'mr-75 ' }) +
+              feather.icons[iconName].toSvg({ class: 'me-75 ' }) +
               '<span>' +
-              arrList[i].firstChild.dataset.originalTitle +
+              arrList[i].firstChild.dataset.bsOriginalTitle +
               '</span>' +
               '</div>' +
-              feather.icons['star'].toSvg({ class: 'text-warning bookmark-icon float-right' }) +
+              feather.icons['star'].toSvg({ class: 'text-warning bookmark-icon float-end' }) +
               '</a>' +
               '</li>';
           }
@@ -815,7 +816,7 @@ window.colors = {
       $(this).removeClass('text-warning');
       var arrList = $('ul.nav.navbar-nav.bookmark-icons li');
       for (var i = 0; i < arrList.length; i++) {
-        if (arrList[i].firstChild.dataset.originalTitle == $(this).parent()[0].innerText) {
+        if (arrList[i].firstChild.dataset.bsOriginalTitle == $(this).parent()[0].innerText) {
           arrList[i].remove();
         }
       }
@@ -837,14 +838,14 @@ window.colors = {
         '<li class="nav-item d-none d-lg-block">' +
         '<a class="nav-link" href="' +
         $url +
-        '" data-toggle="tooltip" data-placement="top" title="" data-original-title="' +
+        '" data-bs-toggle="tooltip" data-bs-placement="bottom" title="' +
         $name +
         '">' +
         feather.icons[iconName].toSvg({ class: 'ficon' }) +
         '</a>' +
         '</li>';
       $('ul.nav.bookmark-icons').append($listItem);
-      $('[data-toggle="tooltip"]').tooltip();
+      $('[data-bs-toggle="tooltip"]').tooltip();
     }
   });
 
@@ -939,7 +940,7 @@ window.colors = {
 
   // Click event to scroll to top
   $('.scroll-top').on('click', function () {
-    $('html, body').animate({ scrollTop: 0 }, 1000);
+    $('html, body').animate({ scrollTop: 0 }, 75);
   });
 
   function getCurrentLayout() {
@@ -1056,7 +1057,7 @@ if (typeof jQuery.validator === 'function') {
         element.attr('type') === 'checkbox'
       ) {
         error.insertAfter(element.parent());
-      } else if (element.hasClass('custom-control-input')) {
+      } else if (element.hasClass('form-check-input')) {
         error.insertAfter(element.parent().siblings(':last'));
       } else {
         error.insertAfter(element);

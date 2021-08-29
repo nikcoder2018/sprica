@@ -16,11 +16,13 @@ class Controlling extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user' => $this->user->name,
             'date' => Carbon::parse($this->start_date)->format('d.m.Y D'),
             'duration' => $this->duration,
             'project' => $this->project->title,
             'expenses' => $this->expenses->title,
-            'confirmation' => $this->confirmation
+            'confirmation' => $this->confirmation,
+            'logged_from' => $this->logged_from != null ? $this->logged_from->name : ''
         ];
     }
 }

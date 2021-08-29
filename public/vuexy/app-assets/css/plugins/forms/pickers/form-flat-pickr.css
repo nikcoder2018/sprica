@@ -50,6 +50,9 @@
 .flatpickr-calendar .flatpickr-current-month span.cur-month {
   font-weight: 300; }
 
+.flatpickr-time {
+  height: 2.714rem; }
+
 .flatpickr-time input:hover,
 .flatpickr-time .flatpickr-am-pm:hover,
 .flatpickr-time input:focus,

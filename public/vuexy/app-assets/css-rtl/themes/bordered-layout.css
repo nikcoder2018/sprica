@@ -1,5 +1,6 @@
 .bordered-layout .header-navbar {
   box-shadow : none;
+  border : 1px solid #EBE9F1;
 }
 
 .bordered-layout .header-navbar.floating-nav {
@@ -9,6 +10,7 @@
 .bordered-layout .header-navbar.fixed-top {
   border-bottom : 1px solid #EBE9F1;
   background : #F8F8F8;
+  box-shadow : none !important;
 }
 
 .bordered-layout .main-menu {
