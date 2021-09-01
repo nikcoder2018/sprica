@@ -82,26 +82,26 @@
     }
 
     /***** Navbar Color Options *****/
-    // $('#customizer-navbar-colors .color-box').on('click', function() {
-    //     var $this = $(this);
-    //     $this.siblings().removeClass('selected');
-    //     $this.addClass('selected');
-    //     var navbarColor = $this.data('navbar-color');
-    //     // changes navbar colors
-    //     if (navbarColor) {
-    //         body
-    //             .find(navbar)
-    //             .removeClass('bg-primary bg-secondary bg-success bg-danger bg-info bg-warning bg-dark')
-    //             .addClass(navbarColor + ' navbar-dark');
-    //     } else {
-    //         body
-    //             .find(navbar)
-    //             .removeClass('bg-primary bg-secondary bg-success bg-danger bg-info bg-warning bg-dark navbar-dark');
-    //     }
-    //     if (html.hasClass('dark-layout')) {
-    //         navbar.addClass('navbar-dark');
-    //     }
-    // });
+    $('#customizer-navbar-colors .color-box').on('click', function() {
+        var $this = $(this);
+        $this.siblings().removeClass('selected');
+        $this.addClass('selected');
+        var navbarColor = $this.data('navbar-color');
+        // changes navbar colors
+        if (navbarColor) {
+            body
+                .find(navbar)
+                .removeClass('bg-primary bg-secondary bg-success bg-danger bg-info bg-warning bg-dark')
+                .addClass(navbarColor + ' navbar-dark');
+        } else {
+            body
+                .find(navbar)
+                .removeClass('bg-primary bg-secondary bg-success bg-danger bg-info bg-warning bg-dark navbar-dark');
+        }
+        if (html.hasClass('dark-layout')) {
+            navbar.addClass('navbar-dark');
+        }
+    });
 
     /***** Navbar Type *****/
     if (body.hasClass('horizontal-menu')) {
