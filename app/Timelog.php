@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Timelog extends Model
 {
     protected $table = "timelogs";
-    protected $fillable = ['user_id', 'project_id','task_id','expenses_id', 'start_date', 'start_time', 'end_date', 'end_time', 'duration', 'break', 'confirmation', 'payable', 'code', 'tags','note'];
+    protected $fillable = ['user_id', 'project_id','task_id','expenses_id', 'start_date', 'start_time', 'end_date', 'end_time', 'duration', 'break', 'confirmation', 'payable', 'code', 'tags','note', 'logged_from'];
 
     protected $dates = ['created_at', 'updated_at'];
     

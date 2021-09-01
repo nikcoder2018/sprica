@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use App\User;
 class Controlling extends JsonResource
 {
     /**
@@ -14,6 +15,7 @@ class Controlling extends JsonResource
      */
     public function toArray($request)
     {
+        $logged_from = User::find($this->logged_from);
         return [
             'id' => $this->id,
             'user' => $this->user->name,
@@ -22,7 +24,7 @@ class Controlling extends JsonResource
             'project' => $this->project->title,
             'expenses' => $this->expenses->title,
             'confirmation' => $this->confirmation,
-            'logged_from' => $this->logged_from != null ? $this->logged_from->name : ''
+            'logged_from' => $logged_from ? $logged_from->name : '' 
         ];
     }
 }

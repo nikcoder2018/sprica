@@ -48,8 +48,9 @@ class TimeTrackingController extends Controller
     {
         $end_date = $request->end_date !== null ? $request->end_date : $request->start_date;
         $end_time = $request->end_time !== null ? $request->end_time : Carbon::parse($request->start_date)->addHours($request->duration)->toTimeString();
+        $employee_id = $request->has('employee') ? $request->employee : auth()->user()->id;
         $timelog = Timelog::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => $employee_id,
             'start_date' => $request->start_date,
             'start_time' => Carbon::parse($request->start_date)->toTimeString(),
             'end_date' => $end_date,
@@ -72,6 +73,7 @@ class TimeTrackingController extends Controller
     {
         $end_date = $request->end_date !== null ? $request->end_date : $request->start_date;
         $end_time = $request->end_time !== null ? $request->end_time : Carbon::parse($request->start_date)->addHours($request->duration)->toTimeString();
+        
         $timelog = Timelog::find($request->id);
         $timelog->start_date = $request->start_date;
         $timelog->start_time = Carbon::parse($request->start_date)->toTimeString();

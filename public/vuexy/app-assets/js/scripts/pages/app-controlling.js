@@ -16,7 +16,13 @@ $(function() {
         URL = '/controlling',
         API_TOKEN = $('[name=api-token]').attr('content'),
         filters = $('.filters'),
-        datePickr = $('.flatpickr-date');
+        datePickr = $('.flatpickr-date'),
+        startDatePickr = $("input[name=start_date]"),
+        startTimePickr = $("input[name=start_time]"),
+        endDatePickr = $("input[name=end_date]"),
+        endTimePickr = $("input[name=end_time]"),
+        new_timelog_modal = "#new-timelog-modal",
+        edit_timelog_modal = "#edit-timelog-modal";
 
     var dtControlling = dtControllingTable.DataTable({
         ajax: {
@@ -94,7 +100,20 @@ $(function() {
             searchPlaceholder: 'Search..'
         },
         // Buttons with Dropdown
-        buttons: [],
+        buttons: [{
+            text: feather.icons['plus'].toSvg({ class: 'mr-50 font-small-4' }) + 'Record Time',
+            className: 'new-record btn btn-primary',
+            attr: {
+                'data-toggle': 'modal',
+                'data-target': '#modals-slide-in'
+            },
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
+            },
+            action: function(e, dt, button, config) {
+                $(new_timelog_modal).modal("show");
+            },
+        }],
         // For responsive popup
         responsive: {
             details: {
@@ -147,4 +166,334 @@ $(function() {
         });
     }
 
+    $(new_timelog_modal).on("submit", "form", function(e) {
+        e.preventDefault();
+        var form = this;
+        $.ajax({
+            url: $(this).attr("action"),
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(resp) {
+                if (resp.success) {
+                    $(new_timelog_modal).modal("hide");
+                    $(form)[0].reset();
+
+                    toastr["success"](resp.msg, "Success!", {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl,
+                    });
+
+                    dtControlling.ajax.reload();
+                }
+            },
+        });
+    });
+
+    $(edit_timelog_modal).on("submit", "form", function(e) {
+        e.preventDefault();
+        var form = this;
+        $.ajax({
+            url: $(this).attr("action"),
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(resp) {
+                if (resp.success) {
+                    $(edit_timelog_modal).modal("hide");
+                    $(form)[0].reset();
+
+                    toastr["success"](resp.msg, "Success!", {
+                        closeButton: true,
+                        tapToDismiss: false,
+                        rtl: isRtl,
+                    });
+
+                    dtTimelog.ajax.reload();
+                }
+            },
+        });
+    });
+
+    const initStartDatePickr = (defaultDate) => {
+        if (startDatePickr.length) {
+            const config = {
+                disableMobile: true,
+                enableTime: true,
+                time_24hr: true,
+                defaultDate: ((dayjs) => {
+                    dayjs = dayjs.hour(userDefaultStartTime[0]);
+                    dayjs = dayjs.minute(userDefaultStartTime[1]);
+
+                    return dayjs.toDate();
+                })(dayjs(new Date())),
+                onChange: (selectedDates, dateStr, instanc) => {
+                    if ($(new_timelog_modal).hasClass("show")) {
+                        var end_date = $(new_timelog_modal)
+                            .find("input[name=end_date]")
+                            .val();
+
+                        if (
+                            end_date === undefined &&
+                            $(new_timelog_modal).find("input[name=end_time]")
+                            .length > 0
+                        ) {
+                            end_date = dayjs(
+                                $(new_timelog_modal)
+                                .find("input[name=end_time]")
+                                .val(),
+                                "HH:mm"
+                            );
+                        } else {
+                            end_date = dayjs(end_date || new Date());
+                        }
+
+                        const hours = end_date.hour() - dayjs(dateStr).hour();
+
+                        $(new_timelog_modal)
+                            .find("input[name=duration]")
+                            .val(Math.floor(hours));
+                        fetchHours();
+                    }
+                    if ($(edit_timelog_modal).hasClass("show")) {
+                        var end_date = $(edit_timelog_modal)
+                            .find("input[name=end_date]")
+                            .val();
+
+                        if (
+                            end_date === undefined &&
+                            $(edit_timelog_modal).find("input[name=end_time]")
+                            .length > 0
+                        ) {
+                            end_date = dayjs(
+                                $(edit_timelog_modal)
+                                .find("input[name=end_time]")
+                                .val(),
+                                "HH:mm"
+                            );
+                        } else {
+                            end_date = dayjs(end_date || new Date());
+                        }
+
+                        const hours = end_date.hour() - dayjs(dateStr).hour();
+
+                        $(edit_timelog_modal)
+                            .find("input[name=duration]")
+                            .val(Math.floor(hours));
+                        fetchHours();
+                    }
+                },
+            };
+
+            if (defaultDate) {
+                config.defaultDate = defaultDate;
+            }
+
+            startDatePickr.flatpickr(config);
+        }
+    };
+
+    initStartDatePickr();
+
+    var startTimeClickCount = 0,
+        startTime = 0;
+    if (startTimePickr.length) {
+        startTimePickr.each(function() {
+            $(this).flatpickr({
+                disableMobile: true,
+                enableTime: true,
+                noCalendar: true,
+                defaultHour: 7,
+                time_24hr: true,
+                onChange: (selectedDates, timeStr, instance) => {
+                    startTimeClickCount++;
+                    if (startTimeClickCount == 1) startTime = 7;
+                    else startTime = timeStr;
+                    if ($(new_timelog_modal).hasClass("show")) {
+                        var start_date = $(new_timelog_modal)
+                            .find("input[name=start_date]")
+                            .val();
+                        var end_time = $(new_timelog_modal)
+                            .find("input[name=end_time]")
+                            .val();
+
+                        var start = moment(start_date + " " + startTime);
+                        var end;
+                        if (typeof end_date != "undefined") {
+                            end = moment(end_date + " " + end_time);
+                        } else {
+                            end = moment(start_date + " " + end_time);
+                        }
+
+                        var duration = moment.duration(end.diff(start));
+
+                        var hours = duration.asHours();
+                        $(new_timelog_modal)
+                            .find("input[name=duration]")
+                            .val(hours);
+                    }
+                    if ($(edit_timelog_modal).hasClass("show")) {
+                        var start_date = $(edit_timelog_modal)
+                            .find("input[name=start_date]")
+                            .val();
+                        var end_time = $(edit_timelog_modal)
+                            .find("input[name=end_time]")
+                            .val();
+
+                        var start = moment(start_date + " " + startTime);
+                        var end;
+                        if (typeof end_date != "undefined") {
+                            end = moment(end_date + " " + end_time);
+                        } else {
+                            end = moment(start_date + " " + end_time);
+                        }
+                        var duration = moment.duration(end.diff(start));
+
+                        var hours = duration.asHours();
+                        $(edit_timelog_modal)
+                            .find("input[name=duration]")
+                            .val(hours);
+                    }
+                },
+            });
+        });
+    }
+
+    const initEndDatePickr = (defaultDate) => {
+        if (endDatePickr.length) {
+            const config = {
+                disableMobile: true,
+                enableTime: true,
+                time_24hr: true,
+                onChange: (selectedDates, dateStr, instanc) => {
+                    if ($(new_timelog_modal).hasClass("show")) {
+                        var start_date = $(new_timelog_modal)
+                            .find("input[name=start_date]")
+                            .val();
+
+                        var start = moment(start_date);
+                        var end = moment(dateStr);
+
+                        var duration = moment.duration(end.diff(start));
+
+                        var hours = duration.asHours();
+                        $(new_timelog_modal)
+                            .find("input[name=duration]")
+                            .val(Math.floor(hours));
+                        fetchHours();
+                    }
+                    if ($(edit_timelog_modal).hasClass("show")) {
+                        var start_date = $(edit_timelog_modal)
+                            .find("input[name=start_date]")
+                            .val();
+
+                        var start = moment(start_date);
+                        var end = moment(dateStr);
+
+                        var duration = moment.duration(end.diff(start));
+
+                        var hours = duration.asHours();
+                        $(edit_timelog_modal)
+                            .find("input[name=duration]")
+                            .val(Math.floor(hours));
+                        fetchHours();
+                    }
+                },
+            };
+
+            if (defaultDate) {
+                config.defaultDate = defaultDate;
+            }
+
+            endDatePickr.flatpickr(config);
+        }
+    };
+
+    initEndDatePickr();
+
+    var endTimeClickCount = 0,
+        endTime = 0;
+
+    const initEndTimePickr = (defaultHour = 22, defaultMinute = 0) => {
+        if (endTimePickr.length) {
+            endTimePickr.each(function() {
+                $(this).flatpickr({
+                    disableMobile: true,
+                    enableTime: true,
+                    noCalendar: true,
+                    defaultHour,
+                    defaultMinute,
+                    time_24hr: true,
+                    onChange: (selectedDates, timeStr, instance) => {
+                        endTimeClickCount++;
+                        if (endTimeClickCount == 1) {
+                            endTime = 22;
+                        } else {
+                            const fragments = timeStr.split(":");
+                            endTime = fragments[0];
+                        }
+
+                        if ($(new_timelog_modal).hasClass("show")) {
+                            var start_date = $(new_timelog_modal)
+                                .find("input[name=start_date]")
+                                .val();
+
+                            const hours = Math.ceil(
+                                Number(endTime) -
+                                Number(dayjs(start_date).hour())
+                            );
+
+                            $(new_timelog_modal)
+                                .find("input[name=duration]")
+                                .val(hours);
+                            fetchHours();
+                        }
+                        if ($(edit_timelog_modal).hasClass("show")) {
+                            var start_date = $(edit_timelog_modal)
+                                .find("input[name=start_date]")
+                                .val();
+
+                            const fragments = timeStr.split(":");
+
+                            const hours = Math.ceil(
+                                Number(fragments[0]) -
+                                Number(dayjs(start_date).hour())
+                            );
+
+                            $(edit_timelog_modal)
+                                .find("input[name=duration]")
+                                .val(hours);
+                            fetchHours();
+                        }
+                    },
+                });
+            });
+        }
+    };
+
+    initEndTimePickr();
+
+    $(new_timelog_modal)
+        .find("input[name=duration]")
+        .on("keyup", function() {
+            var duration = $(this).val();
+            var start = $(new_timelog_modal)
+                .find("input[name=start_date]")
+                .val();
+            var end = moment(start)
+                .add(duration, "hours")
+                .format(moment.HTML5_FMT.TIME);
+            $(new_timelog_modal).find("input[name=end_time]").val(end);
+        });
+    $(edit_timelog_modal)
+        .find("input[name=duration]")
+        .on("keyup", function() {
+            var duration = $(this).val();
+            var start = $(edit_timelog_modal)
+                .find("input[name=start_date]")
+                .val();
+            var end = moment(start)
+                .add(duration, "hours")
+                .format(moment.HTML5_FMT.TIME);
+            $(edit_timelog_modal).find("input[name=end_time]").val(end);
+        });
 });
