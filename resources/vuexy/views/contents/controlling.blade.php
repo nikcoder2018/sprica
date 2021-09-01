@@ -1,7 +1,10 @@
 @extends('layouts.main')
 
 @section('vendors_css')
-<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/datatables.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/dataTables.bootstrap5.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/buttons.bootstrap5.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/tables/datatable/rowGroup.bootstrap4.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/forms/select/select2.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset(env('APP_THEME','default').'/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css')}}">
 @endsection
@@ -12,7 +15,7 @@
 @endsection
 
 @section('header')
-<div class="content-header-left col-md-9 col-12 mb-2">
+<div class="content-header-left col-12 mb-2">
     @include('partials.breadcrumbs', ['title' => $title])
 </div>
 @endsection
