@@ -411,21 +411,21 @@
                 });
             })();
 
-            (() => {
-                let running = false;
-                $('.color-box').click(function() {
-                    if (!running) {
-                        running = true;
-                    } else {
-                        return;
-                    }
-                    $.post("{{ route('user.settings.store') }}", {
-                        key: 'navbar-color',
-                        value: $(this).attr('data-color'),
-                        "_token": "{{ csrf_token() }}",
-                    }, () => (running = false));
-                });
-            })();
+            // (() => {
+            //     let running = false;
+            //     $('.color-box').click(function() {
+            //         if (!running) {
+            //             running = true;
+            //         } else {
+            //             return;
+            //         }
+            //         $.post("{{ route('user.settings.store') }}", {
+            //             key: 'navbar-color',
+            //             value: $(this).attr('data-color'),
+            //             "_token": "{{ csrf_token() }}",
+            //         }, () => (running = false));
+            //     });
+            // })();
         }
 
         const sync = (done) => {
