@@ -101,7 +101,7 @@
 
 <body class="horizontal-layout horizontal-menu  navbar-floating footer-static  " data-open="hover" data-menu="horizontal-menu" data-col="">
 
-    <div id="main-content-wrapper" class="d-none">
+    <div id="main-content-wrapper">
         @include('partials.header')
         @include('partials.menu')
 
@@ -120,7 +120,7 @@
         </div>
         <!-- END: Content-->
 
-        @include('partials.customizer')
+        {{-- @include('partials.customizer') --}}
 
         <div class="sidenav-overlay"></div>
         <div class="drag-target"></div>
