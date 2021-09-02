@@ -440,9 +440,9 @@
                     if (key === 'footer-layout') {
                         $(`#footer-type-${value}`).click();
                     }
-                    if (key === 'navbar-color') {
-                        $(`.color-box.${value}`).click();
-                    }
+                    // if (key === 'navbar-color') {
+                    //     $(`.color-box.${value}`).click();
+                    // }
                     if (key === 'layout-mode') {
                         $(`#layout-width-${value}`).click();
                     }
